@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register User</title>
+  </head>
+  <body>
+    <h1>Register User</h1>
+    <form name="REG" action="insert.php" method="post">
+      <div>
+        Name:
+        <div>
+          <input
+            type="text"
+            name="vName"
+            id="vName"
+            placeholder="Input the name of user"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        Email:
+        <div>
+          <input
+            type="text"
+            name="vEmail"
+            id="vEmail"
+            placeholder="Input your e-mail"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        Phone:
+        <div>
+          <input
+            type="number"
+            name="vPhone"
+            id="vPhonw"
+            placeholder="Input your Phone Number"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        Adress:
+        <div>
+          <input
+            type="text"
+            name="vAdress"
+            id="vAdress"
+            placeholder="Input your Adress"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+        ZIP Code:
+        <div>
+          <input
+            type="number"
+            name="vPostal"
+            id="vPostal"
+            placeholder="Input your ZIP code"
+            required
+          />
+        </div>
+      </div>
+
+      <div>
+      Sex:
+      <div><input type="radio" name="rSex" id="rSex" value="1">Female</div>
+      <div><input type="radio" name="rSex" id="rSex" value="2">Male</div>
+      <div><input type="radio" name="rSex" id="rSex" value="3" checked>Therian</div>
+      <div><input type="radio" name="rSex" id="rSex" value="4">Other</div>
+      </div>
+
+      <div>
+      Hobbies:
+      <div><input type="checkbox" name="cMusic" id="cMusic" value="1">Listen to Music</div>
+      <div><input type="checkbox" name="cMovies" id="cMovies" value="1">Watch Movies</div>
+      <div><input type="checkbox" name="cGames" id="cGames" value="1">Play Video Games</div>
+      <div><input type="checkbox" name="cRun" id="cRun" value="1">Touch Grass</div>
+      </div>
+
+      <div>
+      Academic Program:
+      <div><select name="program" id="program">
+      <option value="1">Systems Engineer</option>
+      <option value="2">Multimedia Engineer</option>
+      <option value="3">Data Engineer</option>
+      </select></div>
+      </div>
+
+      <div>
+        <br />
+        <input type="submit" value="Save" name="sSave" />
+      </div>
+    </form>
+  </body>
+</html>
