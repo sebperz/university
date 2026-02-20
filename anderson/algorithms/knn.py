@@ -1,4 +1,4 @@
-from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 import numpy
 
 # Training data: [height, weight, foot_size] -> gender
@@ -15,13 +15,13 @@ measurements = numpy.array([
 labels = numpy.array(['hombre', 'hombre', 'hombre', 'hombre', 'mujer', 'mujer', 'mujer', 'mujer'])
 
 # Train
-tree = DecisionTreeClassifier(random_state=42)
-tree.fit(measurements, labels)
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(measurements, labels)
 
 # Predict
 sample = numpy.array([[6, 130, 8]])
-prediction = tree.predict(sample)[0]
-proba = tree.predict_proba(sample)[0]
+prediction = knn.predict(sample)[0]
+proba = knn.predict_proba(sample)[0]
 # proba[0] = hombre | proba[1] = mujer
 
 print(f"Prediction: {prediction}")

@@ -22,6 +22,7 @@ naive_bayers.fit(measurements, labels)
 sample = numpy.array([[6, 130, 8]])
 prediction = naive_bayers.predict(sample)[0]
 proba = naive_bayers.predict_proba(sample)[0]
+# proba[0] = hombre | proba[1] = mujer
 
 print(f"Prediction: {prediction}")
 print(f"Probabilities: hombre={proba[0]:.4f}, mujer={proba[1]:.4f}")
