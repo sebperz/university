@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura Semantica HTML5</title>
+</head>
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td colspan="2">
+            <!-- INICIO HEADER -->
+            <header>
+                <fieldset>
+                    <legend>ETIQUETA: &lt;header&gt; ... &lt;/header&gt;</legend>
+                    
+                    <h1>Documentacion Tecnica: Etiqueta HEADER</h1>
+                    
+                    <p><strong>Definicion:</strong> Elemento de bloque que representa contenido introductorio o de navegacion auxiliar. Tipicamente contiene titulos, subtitulos, logotipos, formularios de busqueda o datos de autor.</p>
+                    
+                    <p><strong>Ubicacion en documento:</strong> Puede anidarse como hijo directo de &lt;body&gt; (encabezado global) o dentro de &lt;article&gt; y &lt;section&gt; (encabezados contextuales).</p>
+                    
+                    <p><strong>Restricciones:</strong> No debe descender de &lt;footer&gt;, &lt;address&gt; u otro &lt;header&gt;.</p>
+                    
+                    <p><strong>Etiquetas de apertura y cierre:</strong></p>
+                    <pre>&lt;header&gt; ...contenido... &lt;/header&gt;</pre>
+                </fieldset>
+            </header>
+            <!-- FIN HEADER -->
+        </td>
+    </tr>
+    
+    <tr>
+        <td colspan="2">
+            <!-- INICIO NAV -->
+            <nav>
+                <fieldset>
+                    <legend>ETIQUETA: &lt;nav&gt; ... &lt;/nav&gt;</legend>
+                    
+                    <h2>Documentacion Tecnica: Etiqueta NAV</h2>
+                    
+                    <p><strong>Definicion:</strong> Seccion de navegacion principal que enlaza a otras paginas o secciones dentro del documento actual. Exclusiva para bloques de enlaces de navegacion significativos.</p>
+                    
+                    <p><strong>Contenido permitido:</strong> Elementos de flujo. Tipicamente listas ordenadas (&lt;ol&gt;) o desordenadas (&lt;ul&gt;) conteniendo elementos &lt;li&gt; con enlaces &lt;a&gt;.</p>
+                    
+                    <p><strong>Criterio de uso:</strong> No todos los grupos de enlaces requieren &lt;nav&gt;. Reservar para navegacion principal, tablas de contenido, indices y menus de seccion.</p>
+                    
+                    <p><strong>Estructura:</strong></p>
+                    <pre>&lt;nav&gt;
+    &lt;ul&gt;
+        &lt;li&gt;&lt;a href="#seccion1"&gt;Seccion 1&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href="#seccion2"&gt;Seccion 2&lt;/a&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/nav&gt;</pre>
+
+                    <p><strong>Implementacion funcional:</strong></p>
+                    <ul>
+                        <li><a href="#main-content">Navegar a MAIN</a></li>
+                        <li><a href="#section-content">Navegar a SECTION</a></li>
+                        <li><a href="#article-content">Navegar a ARTICLE</a></li>
+                    </ul>
+                </fieldset>
+            </nav>
+            <!-- FIN NAV -->
+        </td>
+    </tr>
+    
+    <tr>
+        <td width="70%" valign="top">
+            <!-- INICIO MAIN -->
+            <main id="main-content">
+                <fieldset>
+                    <legend>ETIQUETA: &lt;main&gt; ... &lt;/main&gt;</legend>
+                    
+                    <h2>Documentacion Tecnica: Etiqueta MAIN</h2>
+                    
+                    <p><strong>Definicion:</strong> Contenido dominante del &lt;body&gt; del documento. Representa el contenido unico y no repetitivo de la pagina, excluyendo bloques que se repiten en multiples documentos (navegacion, pies de pagina, barras laterales, logos).</p>
+                    
+                    <p><strong>Restricciones formales:</strong></p>
+                    <ul>
+                        <li>Debe ser unico en el documento</li>
+                        <li>No debe ser descendiente de &lt;article&gt;, &lt;aside&gt;, &lt;footer&gt;, &lt;header&gt; o &lt;nav&gt;</li>
+                        <li>No debe tener atributo hidden</li>
+                    </ul>
+                    
+                    <p><strong>Accesibilidad:</strong> Los lectores de pantalla pueden utilizar &lt;main&gt; como punto de referencia para saltar directamente al contenido esencial (atajo de teclado tipico: tecla "M").</p>
+                    
+                    <p><strong>Estructura:</strong></p>
+                    <pre>&lt;main&gt;
+    [Contenido unico y especifico de la pagina]
+&lt;/main&gt;</pre>
+                    
+                    <!-- INICIO SECTION -->
+                    <section id="section-content">
+                        <fieldset>
+                            <legend>ETIQUETA: &lt;section&gt; ... &lt;/section&gt;</legend>
+                            
+                            <h3>Documentacion Tecnica: Etiqueta SECTION</h3>
+                            
+                            <p><strong>Definicion:</strong> Contenedor generico para agrupar contenido tematicamente relacionado. Representa una seccion generica de un documento o aplicacion.</p>
+                            
+                            <p><strong>Requisito obligatorio:</strong> Cada &lt;section&gt; debe contener al menos un encabezado (&lt;h1&gt;-&lt;h6&gt;) como hijo directo o indirecto que identifique la tematica de la seccion.</p>
+                            
+                            <p><strong>Diferenciacion con &lt;article&gt;:</strong> &lt;section&gt; agrupa contenido tematico; &lt;article&gt; agrupa contenido autocontenido. Un &lt;article&gt; puede contener multiples &lt;section&gt;, y viceversa.</p>
+                            
+                            <p><strong>Estructura:</strong></p>
+                            <pre>&lt;section&gt;
+    &lt;h2&gt;Titulo de la seccion&lt;/h2&gt;
+    [Contenido relacionado tematicamente]
+&lt;/section&gt;</pre>
+                            
+                            <!-- INICIO ARTICLE -->
+                            <article id="article-content">
+                                <fieldset>
+                                    <legend>ETIQUETA: &lt;article&gt; ... &lt;/article&gt;</legend>
+                                    
+                                    <h4>Documentacion Tecnica: Etiqueta ARTICLE</h4>
+                                    
+                                    <p><strong>Definicion:</strong> Composicion autocontenida en un documento, pagina, aplicacion o sitio, destinada a ser distribuida o reutilizada de forma independiente.</p>
+                                    
+                                    <p><strong>Casos de uso tipicos:</strong></p>
+                                    <ul>
+                                        <li>Entradas de foro</li>
+                                        <li>Articulos de revista o periodico</li>
+                                        <li>Entradas de blog</li>
+                                        <li>Tarjetas de producto</li>
+                                        <li>Comentarios enviados por usuarios</li>
+                                        <li>Widgets interactivos</li>
+                                    </ul>
+                                    
+                                    <p><strong>Autonomia semantica:</strong> El contenido de un &lt;article&gt; debe tener sentido completo incluso cuando se extrae del contexto del documento principal.</p>
+                                    
+                                    <p><strong>Estructura:</strong></p>
+                                    <pre>&lt;article&gt;
+    &lt;header&gt;
+        &lt;h1&gt;Titulo del articulo&lt;/h1&gt;
+    &lt;/header&gt;
+    [Contenido autocontenido]
+    &lt;footer&gt;Metadatos del articulo&lt;/footer&gt;
+&lt;/article&gt;</pre>
+                                </fieldset>
+                            </article>
+                            <!-- FIN ARTICLE -->
+                            
+                        </fieldset>
+                    </section>
+                    <!-- FIN SECTION -->
+                    
+                </fieldset>
+            </main>
+            <!-- FIN MAIN -->
+        </td>
+        
+        <td width="30%" valign="top">
+            <!-- INICIO ASIDE -->
+            <aside>
+                <fieldset>
+                    <legend>ETIQUETA: &lt;aside&gt; ... &lt;/aside&gt;</legend>
+                    
+                    <h3>Documentacion Tecnica: Etiqueta ASIDE</h3>
+                    
+                    <p><strong>Definicion:</strong> Representa una seccion de una pagina que consiste en contenido tangencialmente relacionado con el contenido que lo rodea, pero que podria considerarse separado de ese contenido.</p>
+                    
+                    <p><strong>Posicionamiento:</strong> Frecuentemente presentado como barras laterales o llamadas destacadas. Semanticamente representa contenido complementario no esencial para la comprension del documento principal.</p>
+                    
+                    <p><strong>Tipos de contenido apropiados:</strong></p>
+                    <ul>
+                        <li>Barras laterales explicativas</li>
+                        <li>Publicidad</li>
+                        <li>Grupos de enlaces de navegacion auxiliar</li>
+                        <li>Perfiles de autor</li>
+                        <li>Datos relacionados</li>
+                        <li>Citas extensas (blockquotes contextuales)</li>
+                    </ul>
+                    
+                    <p><strong>Relacion con &lt;main&gt;:</strong> No debe estar anidado dentro de &lt;main&gt; cuando representa contenido tangencial global. Puede anidarse dentro de &lt;article&gt; para contenido relacionado especifico del articulo.</p>
+                    
+                    <p><strong>Estructura:</strong></p>
+                    <pre>&lt;aside&gt;
+    [Contenido complementario]
+&lt;/aside&gt;</pre>
+                    
+                    <hr>
+                    
+                    <p><strong>Nota de implementacion:</strong> En este documento, &lt;aside&gt; se posiciona lateralmente mediante estructura de tabla HTML, demostrando visualmente su naturaleza de contenido tangencial sin uso de hojas de estilo CSS.</p>
+                </fieldset>
+            </aside>
+            <!-- FIN ASIDE -->
+        </td>
+    </tr>
+    
+    <tr>
+        <td colspan="2">
+            <!-- INICIO FOOTER -->
+            <footer>
+                <fieldset>
+                    <legend>ETIQUETA: &lt;footer&gt; ... &lt;/footer&gt;</legend>
+                    
+                    <h2>Documentacion Tecnica: Etiqueta FOOTER</h2>
+                    
+                    <p><strong>Definicion:</strong> Elemento que representa el pie de pagina para su seccion de contenido raiz mas cercana o para el elemento &lt;body&gt;. Tipicamente contiene informacion sobre el autor, enlaces a documentos relacionados, datos de copyright o informacion de licencia.</p>
+                    
+                    <p><strong>Ambito de aplicacion:</strong> Puede aplicarse a &lt;body&gt; (pie global), &lt;article&gt; (metadatos del articulo), &lt;section&gt; (metadatos de seccion), entre otros.</p>
+                    
+                    <p><strong>Contenido tipico:</strong></p>
+                    <ul>
+                        <li>Informacion de autoría</li>
+                        <li>Enlaces a terminos legales</li>
+                        <li>Informacion de contacto</li>
+                        <li>Mapas del sitio</li>
+                        <li>Enlaces a redes sociales</li>
+                        <li>Documentos relacionados</li>
+                    </ul>
+                    
+                    <p><strong>Restricciones:</strong> No debe ser descendiente de &lt;header&gt;, &lt;address&gt; u otro &lt;footer&gt;.</p>
+                    
+                    <p><strong>Estructura:</strong></p>
+                    <pre>&lt;footer&gt;
+    &lt;p&gt;&amp;copy; [Año] [Entidad]. Todos los derechos reservados.&lt;/p&gt;
+    [Enlaces relacionados o metadatos]
+&lt;/footer&gt;</pre>
+                    
+                    <hr>
+                    
+                    <p><strong>Ejemplo de informacion del Footer, Metadatos del documento:</strong></p>
+                    <p>Especificacion: HTML5 Living Standard<br>
+                    Fecha de generacion: Febrero de 2026<br>
+                    Validacion: Estructura semantica conforme a W3C HTML5 Specification</p>
+                </fieldset>
+            </footer>
+            <!-- FIN FOOTER -->
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
