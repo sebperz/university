@@ -1,0 +1,1 @@
+# Patron de Disenio: Proxy
