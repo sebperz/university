@@ -1,0 +1,112 @@
+<html>
+
+<head>
+    <title>Calculator 3000</title>
+    <meta charset="utf-8">
+    <script type="text/javascript">
+
+        function printScreen(txt) {
+            document.getElementById('screen').value = document.getElementById('screen').value + txt;
+        }
+
+        function operation(oper) {
+            switch (oper) {
+                case 'Addition': {
+                    document.getElementById('oper').value = 'Addition';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+                case 'Substraction': {
+                    document.getElementById('oper').value = 'Substraction';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+                case 'Multiplication': {
+                    document.getElementById('oper').value = 'Multiplication';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+                case 'Division': {
+                    document.getElementById('oper').value = 'Division';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+            }
+        }
+
+        function answer() {
+            switch (document.getElementById('oper').value) {
+                case "Addition": {
+                    ans = parseFloat(document.getElementById('preValue').value) + parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+                case "Substraction": {
+                    ans = parseFloat(document.getElementById('preValue').value) - parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+                case "Multiplication": {
+                    ans = parseFloat(document.getElementById('preValue').value) * parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+                case "Division": {
+                    ans = parseFloat(document.getElementById('preValue').value) % parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+            }
+        }
+
+        function clear(){
+            document.getElementById('screen').value = "";
+        }
+    </script>
+</head>
+
+<body>
+    <center><h1>CALCULATOR 3000</h1></center>
+    <center><i><p style="color:grey">solo opera enteros</p></i></center>
+
+    <table border="1" align="center">
+        <tr>
+            <td colspan="4"><input type="text" id="screen"></td>
+        </tr>
+        <tr>
+            <td align="center"><input type="button" id="btn1" value="1" onclick="javascript:printScreen(1);"></td>
+            <td align="center"><input type="button" id="btn2" value="2" onclick="javascript:printScreen(2);"></td>
+            <td align="center"><input type="button" id="btn3" value="3" onclick="javascript:printScreen(3);"></td>
+            <td align="center"><input type="button" id="btnAdd" value="+" onclick="javascript:operation('Addition');"></td>
+        </tr>
+        <tr>
+            <td align="center"><input type="button" id="btn4" value="4" onclick="javascript:printScreen(4);"></td>
+            <td align="center"><input type="button" id="btn5" value="5" onclick="javascript:printScreen(5);"></td>
+            <td align="center"><input type="button" id="btn6" value="6" onclick="javascript:printScreen(6);"></td>
+            <td align="center"><input type="button" id="btnSub" value="-" onclick="javascript:operation('Substraction');"></td>
+        </tr>
+        <tr>
+            <td align="center"><input type="button" id="btn7" value="7" onclick="javascript:printScreen(7);"></td>
+            <td align="center"><input type="button" id="btn8" value="8" onclick="javascript:printScreen(8);"></td>
+            <td align="center"><input type="button" id="btn9" value="9" onclick="javascript:printScreen(9);"></td>
+            <td align="center"><input type="button" id="btnMul" value="*" onclick="javascript:operation('Multiplication');"></td>
+        </tr>
+        <tr>
+            <td align="center"><input type="button" id="btnC" value="C" onclick="javascript:clear();"></td>
+            <td align="center"><input type="button" id="btn0" value="0" onclick="javascript:printScreen(0);"></td>
+            <td align="center"><input type="button" id="btnAns" value="=" onclick="javascript:answer();"></td>
+            <td align="center"><input type="button" id="btnDiv" value="/" onclick="javascript:operation('Division');"></td>
+        </tr>
+
+        <!-- Variables -->
+        <input type="hidden" id="oper">
+        <input type="hidden" id="preValue">
+
+    </table>
+</body>
+
+</html>
