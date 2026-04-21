@@ -4,7 +4,7 @@ def calculate_m(a,b):
     return (b+a)/2
 
 def evaluate(x:float):
-    return -25.0 + 82*x -90*x*x + 44*x*x*x -8*x*x*x*x + 0.7*x*x*x*x*x
+    return math.log(x*x)-0.7
 
 def swap_variables(a:float,m:float,b:float):
     fa = evaluate(a)
@@ -20,7 +20,7 @@ def calculate_error(a,b):
 #values
 target_error = 0.1
 a=0.5
-b=1.0
+b=2.0
 
 while(True):
     m=calculate_m(a,b)

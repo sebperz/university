@@ -1,0 +1,103 @@
+<html>
+
+<head>
+    <title>Calculator 3000</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='calcStyle.css') }}">
+    <script type="text/javascript">
+
+        function printScreen(txt) {
+            document.getElementById('screen').value = document.getElementById('screen').value + txt;
+        }
+
+        function operation(oper) {
+            switch (oper) {
+                case 'Addition': {
+                    document.getElementById('oper').value = 'Addition';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+                case 'Substraction': {
+                    document.getElementById('oper').value = 'Substraction';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+                case 'Multiplication': {
+                    document.getElementById('oper').value = 'Multiplication';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+                case 'Division': {
+                    document.getElementById('oper').value = 'Division';
+                    document.getElementById('preValue').value = document.getElementById('screen').value;
+                    document.getElementById('screen').value = "";
+                    break;
+                }
+            }
+        }
+
+        function answer() {
+            switch (document.getElementById('oper').value) {
+                case "Addition": {
+                    ans = parseFloat(document.getElementById('preValue').value) + parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+                case "Substraction": {
+                    ans = parseFloat(document.getElementById('preValue').value) - parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+                case "Multiplication": {
+                    ans = parseFloat(document.getElementById('preValue').value) * parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+                case "Division": {
+                    ans = parseFloat(document.getElementById('preValue').value) / parseFloat(document.getElementById('screen').value);
+                    document.getElementById('screen').value = ans;
+                    break;
+                }
+            }
+        }
+
+        function clearScreen(){
+            document.getElementById('screen').value = "";
+        }
+    </script>
+</head>
+
+<body>
+    <h1>CALCULATOR 3000</h1>
+    <p class="subtitle">solo opera enteros</p>
+
+    <div class="calculator">
+        <input type="text" id="screen" readonly>
+        <div class="buttons">
+            <input type="button" value="1" onclick="printScreen(1)">
+            <input type="button" value="2" onclick="printScreen(2)">
+            <input type="button" value="3" onclick="printScreen(3)">
+            <input type="button" value="+" onclick="operation('Addition')">
+            <input type="button" value="4" onclick="printScreen(4)">
+            <input type="button" value="5" onclick="printScreen(5)">
+            <input type="button" value="6" onclick="printScreen(6)">
+            <input type="button" value="-" onclick="operation('Substraction')">
+            <input type="button" value="7" onclick="printScreen(7)">
+            <input type="button" value="8" onclick="printScreen(8)">
+            <input type="button" value="9" onclick="printScreen(9)">
+            <input type="button" value="*" onclick="operation('Multiplication')">
+            <input type="button" value="C" onclick="clearScreen()">
+            <input type="button" value="0" onclick="printScreen(0)">
+            <input type="button" value="=" onclick="answer()">
+            <input type="button" value="/" onclick="operation('Division')">
+        </div>
+        <input type="hidden" id="oper">
+        <input type="hidden" id="preValue">
+    </div>
+</body>
+
+</html>
+
