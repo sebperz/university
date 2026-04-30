@@ -1,0 +1,16 @@
+{
+  "inscripciones": [
+    {
+      "apellidos": "asjdkljasdlkfjsadklfjskdlafjklsadjfkljdsaklfjsklaj",
+      "nombres": "jfsdaklfjsakljfklasdjfkljsdaklfjlaksfjklasjdfkljas",
+      "correo": "a@a.a",
+      "telefono": "0123456789",
+      "programa": "Ingeniería Industrial",
+      "jornada": "Diurna",
+      "comentarios": "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789",
+      "timestamp": "2026-04-28T00:34:19.078Z",
+      "id": "cmVb9l_5wKE"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}

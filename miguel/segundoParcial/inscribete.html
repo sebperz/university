@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USB - Inscríbete</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>USB</h1>
+    <nav>
+      <a href="/index.html">Inicio</a>
+      <a href="/error">Programas Académicos</a>
+      <a href="/error">Nuestra Universidad</a>
+      <a href="/error">Contacto</a>
+      <a href="/inscribete.html">Inscríbete</a>
+    </nav>
+  </header>
+  <main>
+    <div class="form-container">
+      <h2 style="margin-bottom:1.5rem; text-align:center;">Formulario de Inscripción</h2>
+      <form id="inscripcion-form">
+        <div class="form-group">
+          <label for="apellidos">Apellidos</label>
+          <input type="text" id="apellidos" placeholder="Ingrese Apellidos completos" maxlength="50">
+          <div class="error-message" id="error-apellidos"></div>
+        </div>
+        <div class="form-group">
+          <label for="nombres">Nombres</label>
+          <input type="text" id="nombres" placeholder="Ingrese nombres completos" maxlength="50">
+          <div class="error-message" id="error-nombres"></div>
+        </div>
+        <div class="form-group">
+          <label for="correo">Correo Electrónico</label>
+          <input type="text" id="correo" placeholder="ejemplo@correo.com" maxlength="50">
+          <div class="error-message" id="error-correo"></div>
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input type="text" id="telefono" placeholder="Ingrese su numero de telefono" maxlength="50">
+          <div class="error-message" id="error-telefono"></div>
+        </div>
+        <div class="form-group">
+          <label for="programa">Programa Académico de interés</label>
+          <select id="programa">
+            <option value="" disabled selected>Selecciona el programa academico de mas Interes</option>
+            <option value="Ingeniería Industrial">Ingeniería Industrial</option>
+            <option value="Ingeniería Mecánica">Ingeniería Mecánica</option>
+            <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+            <option value="Ingeniería Multimedia">Ingeniería Multimedia</option>
+          </select>
+          <div class="error-message" id="error-programa"></div>
+        </div>
+        <div class="form-group">
+          <label for="jornada">Jornada preferida</label>
+          <select id="jornada">
+            <option value="" disabled selected>Seleccione su horario de preferencia</option>
+            <option value="Diurna">Diurna</option>
+            <option value="Nocturna">Nocturna</option>
+          </select>
+          <div class="error-message" id="error-jornada"></div>
+        </div>
+        <div class="form-group">
+          <label for="comentarios">Comentarios</label>
+          <textarea id="comentarios" placeholder="Cuéntanos qué te interesa sobre la USB"></textarea>
+          <div class="char-counter" id="comentarios-counter">0/200</div>
+          <div class="error-message" id="error-comentarios"></div>
+        </div>
+        <button type="submit" class="submit-btn">Enviar Inscripción</button>
+        <div class="success-message" id="success-message"></div>
+      </form>
+    </div>
+  </main>
+  <footer>
+    <p>USB 2026 | Vigilada Ministerio de Educación</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
