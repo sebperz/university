@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gráficos Estadísticos — Ingenierías</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;color:#333;padding:2rem 1rem;max-width:820px;margin:0 auto}
+h1{text-align:center;font-weight:600;font-size:1.5rem;margin-bottom:.25rem}
+.subtitle{text-align:center;color:#666;margin-bottom:2.5rem;font-size:.9rem}
+.chart-section{background:#fff;border-radius:10px;padding:1.5rem;margin-bottom:2rem;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.chart-section h2{font-size:1.05rem;font-weight:500;margin-bottom:.75rem;color:#444}
+canvas{width:100%!important;max-height:340px}
+.guide{background:#fff;border-radius:10px;padding:1.5rem 1.75rem;margin-bottom:2rem;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.guide h2{font-size:1.1rem;font-weight:600;margin-bottom:1rem}
+.guide h3{font-size:.95rem;font-weight:600;margin:1.25rem 0 .5rem;color:#555}
+.guide p,.guide li{font-size:.88rem;line-height:1.6;color:#444}
+.guide ul{padding-left:1.25rem}
+.guide code{background:#f0f0f0;padding:.1rem .4rem;border-radius:4px;font-size:.82rem;color:#c0392b}
+.guide pre{background:#f7f7f7;padding:.75rem 1rem;border-radius:6px;font-size:.82rem;overflow-x:auto;margin:.5rem 0;color:#333}
+.guide hr{border:none;border-top:1px solid #eee;margin:1.25rem 0}
+</style>
+</head>
+<body>
+
+<h1>Gráficos Estadísticos — Ingenierías</h1>
+<p class="subtitle">Evolución de ingresantes, graduados y deserción (2010–2020)</p>
+
+<div class="guide">
+<h2>Guía rápida — Chart.js</h2>
+
+<h3>1. Incluir la librería</h3>
+<p>Agrega el script de Chart.js en el <code>&lt;head&gt;</code> desde un CDN:</p>
+<pre>&lt;script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"&gt;&lt;/script&gt;</pre>
+
+<h3>2. Crear un <code>&lt;canvas&gt;</code></h3>
+<p>Cada gráfico necesita su propio elemento <code>&lt;canvas&gt;</code> con un <code>id</code> único:</p>
+<pre>&lt;canvas id="chart-ingresantes"&gt;&lt;/canvas&gt;</pre>
+
+<h3>3. Preparar los datos</h3>
+<p>Los datos se organizan en un array de objetos. Cada objeto tiene la carrera, el año y los valores de cada métrica:</p>
+<pre>const datos = [
+  { c: "Ing. Sistemas",  a: 2010, i: 180, g: 130, d: 22 },
+  { c: "Ing. Mecánica",  a: 2010, i: 90,  g: 65,  d: 10 },
+  { c: "Ing. Industrial", a: 2010, i: 110, g: 80,  d: 13 },
+  // ...
+];</pre>
+
+<h3>4. Configurar y crear el gráfico</h3>
+<p>Chart.js recibe 3 cosas: el elemento canvas, el tipo de gráfico y un objeto con <code>labels</code>, <code>datasets</code> y <code>options</code>:</p>
+<pre>new Chart(document.getElementById('chart-ingresantes'), {
+  type: 'line',
+  data: {
+    labels: years,                    // [2010, 2011, ..., 2020]
+    datasets: [                       // una serie por carrera
+      { label: 'Ing. Sistemas',  data: [180, 195, ...], borderColor: '#4A90D9' },
+      { label: 'Ing. Mecánica',  data: [90,  95,  ...], borderColor: '#E67E22' },
+      { label: 'Ing. Industrial', data: [110, 115, ...], borderColor: '#27AE60' },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom' } },
+    scales: {
+      x: { title: { display: true, text: 'Año' } },
+      y: { beginAtZero: true }
+    }
+  }
+});</pre>
+
+<hr>
+
+<p><strong>Resumen:</strong> con esos 4 pasos (CDN, canvas, datos, <code>new Chart(...)</code>) ya tienes gráficos interactivos listos. Chart.js soporta line, bar, pie, doughnut, radar y más — solo cambia <code>type</code> y ajusta los datos.</p>
+</div>
+
+<div class="chart-section"><h2>Ingresantes por año</h2><canvas id="chart-ingresantes"></canvas></div>
+<div class="chart-section"><h2>Graduados por año</h2><canvas id="chart-graduados"></canvas></div>
+<div class="chart-section"><h2>Deserción por año</h2><canvas id="chart-desercion"></canvas></div>
+
+<script>
+const datos = [
+{c:"Ing. Sistemas",a:2010,i:180,g:85,d:18},{c:"Ing. Sistemas",a:2011,i:190,g:90,d:20},{c:"Ing. Sistemas",a:2012,i:200,g:95,d:22},
+{c:"Ing. Sistemas",a:2013,i:195,g:100,d:21},{c:"Ing. Sistemas",a:2014,i:210,g:105,d:24},{c:"Ing. Sistemas",a:2015,i:215,g:110,d:25},
+{c:"Ing. Sistemas",a:2016,i:205,g:112,d:26},{c:"Ing. Sistemas",a:2017,i:195,g:108,d:24},{c:"Ing. Sistemas",a:2018,i:210,g:105,d:22},
+{c:"Ing. Sistemas",a:2019,i:220,g:112,d:21},{c:"Ing. Sistemas",a:2020,i:200,g:108,d:18},
+{c:"Ing. Mecánica",a:2010,i:85,g:38,d:8},{c:"Ing. Mecánica",a:2011,i:90,g:42,d:9},{c:"Ing. Mecánica",a:2012,i:95,g:45,d:10},
+{c:"Ing. Mecánica",a:2013,i:100,g:48,d:11},{c:"Ing. Mecánica",a:2014,i:105,g:50,d:12},{c:"Ing. Mecánica",a:2015,i:110,g:55,d:13},
+{c:"Ing. Mecánica",a:2016,i:105,g:52,d:14},{c:"Ing. Mecánica",a:2017,i:95,g:48,d:12},{c:"Ing. Mecánica",a:2018,i:100,g:45,d:10},
+{c:"Ing. Mecánica",a:2019,i:108,g:48,d:9},{c:"Ing. Mecánica",a:2020,i:92,g:42,d:8},
+{c:"Ing. Industrial",a:2010,i:105,g:50,d:10},{c:"Ing. Industrial",a:2011,i:110,g:55,d:11},{c:"Ing. Industrial",a:2012,i:118,g:58,d:12},
+{c:"Ing. Industrial",a:2013,i:125,g:62,d:14},{c:"Ing. Industrial",a:2014,i:130,g:65,d:15},{c:"Ing. Industrial",a:2015,i:135,g:68,d:16},
+{c:"Ing. Industrial",a:2016,i:128,g:66,d:17},{c:"Ing. Industrial",a:2017,i:120,g:62,d:15},{c:"Ing. Industrial",a:2018,i:130,g:60,d:13},
+{c:"Ing. Industrial",a:2019,i:140,g:65,d:12},{c:"Ing. Industrial",a:2020,i:125,g:58,d:11}
+];
+
+const colores = {"Ing. Sistemas":"#4A90D9","Ing. Mecánica":"#E67E22","Ing. Industrial":"#27AE60"};
+const carreras = [...new Set(datos.map(d=>d.c))].sort();
+const years = [...new Set(datos.map(d=>d.a))].sort();
+
+function buildDatasets(metric){
+  const key = {ingresantes:'i',graduados:'g',desercion:'d'}[metric];
+  return carreras.map(c=>({
+    label:c,
+    data:years.map(y=>{const e=datos.find(d=>d.c===c&&d.a===y);return e?e[key]:0}),
+    borderColor:colores[c],
+    backgroundColor:colores[c]+'18',
+    tension:.3,
+    fill:false,
+    pointRadius:3
+  }));
+}
+
+const opts = {
+  responsive:true,
+  maintainAspectRatio:true,
+  plugins:{legend:{position:'bottom',labels:{boxWidth:12,usePointStyle:true,padding:16}}},
+  scales:{
+    x:{title:{display:true,text:'Año',font:{size:12}},grid:{display:false}},
+    y:{beginAtZero:true,grid:{color:'#eee'},title:{display:true,text:'Estudiantes',font:{size:12}}}
+  }
+};
+
+new Chart(document.getElementById('chart-ingresantes'),{type:'line',data:{labels:years,datasets:buildDatasets('ingresantes')},options:opts});
+new Chart(document.getElementById('chart-graduados'),{type:'line',data:{labels:years,datasets:buildDatasets('graduados')},options:opts});
+new Chart(document.getElementById('chart-desercion'),{type:'line',data:{labels:years,datasets:buildDatasets('desercion')},options:opts});
+</script>
+</body>
+</html>
