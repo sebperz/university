@@ -1,0 +1,284 @@
+Actividad: Fundamentos de Compiladores y Análisis Léxico/Sintáctico
+=====================================================================
+
+1. Fases del Compilador
+-----------------------
+Diferencia fundamental: el Análisis Sintáctico (Parsing) verifica que la secuencia de tokens
+cumpla la estructura/reglas de la gramática (la FORMA del programa), mientras que el Análisis
+Semántico verifica que el programa tenga un SIGNIFICADO correcto (tipos, declaraciones previas,
+alcance de variables, compatibilidad de operaciones).
+
+Razón de la diferencia: el parser trabaja solo con la forma (¿es válida la secuencia de tokens
+según la gramática?) sin saber qué significan los nombres ni los tipos. El analizador semántico
+ya necesita información de contexto (tabla de símbolos, tipos) que el parser no maneja.
+
+--- Error detectado por el analizador sintáctico en Rust ---
+Código:
+    fn main() {
+        let x = (5 + 3;
+    }
+
+Error que produce el compilador de Rust (rustc):
+    error: mismatched closing delimiter: `}`
+     --> src/main.rs:2:13
+      |
+    1 | fn main() {
+      |           - closing delimiter possibly meant for this
+    2 |     let x = (5 + 3;
+      |             ^ unclosed delimiter
+    3 | }
+      | ^ mismatched closing delimiter
+
+Razón: falta el paréntesis de cierre, por lo que la cadena de tokens no forma una expresión
+válida según la gramática. El parser detecta el delimitador sin cerrar y aborta ANTES de
+cualquier análisis semántico.
+
+--- Error detectado por el analizador semántico en Rust ---
+Código:
+    fn main() {
+        let x: i32 = "hola";
+    }
+
+Error que produce rustc:
+    error[E0308]: mismatched types
+     --> src/main.rs:2:18
+      |
+    2 |     let x: i32 = "hola";
+      |            ---   ^^^^^^ expected `i32`, found `&str`
+      |            |
+      |            expected due to this
+
+Razón: sintácticamente la línea es correcta (la gramática permite esa asignación), pero el
+analizador semántico detecta que el tipo de "hola" (&str) no es compatible con el tipo
+declarado (i32). La estructura es válida, el significado (los tipos) no.
+
+Otro ejemplo semántico (variable no declarada):
+    fn main() {
+        let x = y + 1;
+    }
+
+    error[E0425]: cannot find value `y` in this scope
+     --> src/main.rs:2:13
+      |
+    2 |     let x = y + 1;
+      |             ^ not found in this scope
+
+Razón: "y" nunca fue declarada; es un error de contexto (tabla de símbolos), no de forma.
+
+
+2. Expresiones Regulares (Análisis Léxico)
+------------------------------------------
+Reglas de los identificadores:
+  1) Deben comenzar con letra mayúscula.
+  2) Pueden contener letras (mayúsculas o minúsculas), dígitos y guiones bajos (_).
+  3) No pueden terminar con guion bajo.
+
+Armemos la expresión regular paso a paso:
+
+Paso 1 — El primer carácter es una mayúscula:
+    [A-Z]
+  Los corchetes significan "un solo carácter de este grupo". A-Z = cualquier letra mayúscula
+  de la A a la Z. Ya cubrimos la regla 1.
+
+Paso 2 — Lo que sigue puede ser letra, dígito o "_":
+    [A-Za-z0-9_]
+  Dentro de los corchetes están todos los permitidos: A-Z (mayúsculas), a-z (minúsculas),
+  0-9 (dígitos) y _ (guion bajo). Esto representa "un carácter cualquiera de los permitidos".
+
+Paso 3 — Puede haber cero o más de esos caracteres en el medio:
+    [A-Za-z0-9_]*
+  El "*" significa "cero o más". Entonces el medio del identificador puede tener cualquier
+  cantidad de letras/dígitos/guiones bajos (incluso ninguno). Cubre la regla 2.
+
+  Problema: hasta aquí `[A-Z][A-Za-z0-9_]*` aceptaría "Foo_", que TERMINA en "_".
+  ¡Eso viola la regla 3! Necesitamos impedir que el último carácter sea "_".
+
+Paso 4 — El último carácter, si existe, no puede ser "_":
+    [A-Za-z0-9]
+  Es el mismo grupo del paso 2 pero SIN el "_": solo letra o dígito. Así forzamos que lo
+  último nunca sea un guion bajo.
+
+Paso 5 — Juntar el medio con el final:
+    [A-Za-z0-9_]*[A-Za-z0-9]
+  "cero o más caracteres del medio" seguidos de "un último carácter sin _".
+  Ej: "Foo_bar1" -> medio "oo_ba" (con *) + final "r1".
+
+Paso 6 — ¿Y si el identificador es una sola letra mayúscula, como "A"?
+  Entonces la parte "medio + final" no aparece. La hacemos opcional con ( ... )?, donde
+  "?" significa "0 o 1 vez":
+    ([A-Za-z0-9_]*[A-Za-z0-9])?
+
+Resultado final:
+    [A-Z]([A-Za-z0-9_]*[A-Za-z0-9])?
+
+Ejemplos:
+    "A"        -> acepta (mayúscula sola; la parte opcional no aparece)
+    "Foo"      -> acepta ([A-Z] + "oo")
+    "Foo_bar1" -> acepta (medio "oo_ba" + final "r1")
+    "Foo_"     -> rechaza (termina en "_": el final exige letra o dígito)
+    "foo"      -> rechaza (no empieza con mayúscula)
+    "_Bar"     -> rechaza (no empieza con letra mayúscula)
+
+
+3. Autómatas Finitos (DFA) — número par de 'a' sobre Σ={a,b}
+-----------------------------------------------------------
+Armemos el autómata paso a paso:
+
+Paso 1 — ¿Qué información necesito recordar?
+  Solo me importa si el número de 'a' leídas es PAR o IMPAR, no la cantidad exacta.
+
+Paso 2 — ¿Cuántos estados necesito?
+  Dos: q0 = "he leído un número PAR de 'a'" y q1 = "he leído un número IMPAR de 'a'".
+
+Paso 3 — Estado inicial:
+  q0, porque antes de leer cualquier símbolo hay 0 'a', y 0 es par.
+
+Paso 4 — Estado de aceptación:
+  q0, porque queremos aceptar justamente las cadenas con número par de 'a'.
+
+Paso 5 — Transiciones. ¿Qué hago al leer cada símbolo?
+  - Leo 'a': cambia la paridad (par <-> impar).
+        q0 --a--> q1    (de par paso a impar)
+        q1 --a--> q0    (de impar paso a par)
+  - Leo 'b': no cambia el número de 'a', así que me quedo en el mismo estado.
+        q0 --b--> q0
+        q1 --b--> q1
+
+Resumen:
+    Estados:      q0 (par, inicial y de aceptación), q1 (impar)
+    Transiciones: q0 --a--> q1 ; q1 --a--> q0 ; q0 --b--> q0 ; q1 --b--> q1
+
+Ejemplos:
+    "bb"  -> q0 (0 a's, par)  -> ACEPTA
+    "aba" -> q0 (2 a's, par)  -> ACEPTA
+    "aab" -> q1 (1 a, impar)  -> RECHAZA
+    "a"   -> q1 (1 a, impar)  -> RECHAZA
+
+
+4. Ambigüedad
+-------------
+El enunciado imprime la gramática así: S → S − S ∣ num S → S − S ∣ num
+
+Creemos que ese string está REPETIDO (un error de transcripción/extracción del documento) y que
+la gramática real es una sola regla. Justificación:
+  - En BNF, cada producción tiene exactamente UN símbolo de definición ("::=" o "→") y sus
+    alternativas van separadas por "|" (Backus, 1959; Naur, 1963; Aho, Lam, Sethi & Ullman,
+    2006, secc. 2.2). El string muestra DOS flechas "→" seguidas y sin separador, lo que
+    indica una duplicación y no dos reglas intencionales.
+  - La convención usual es escribir los no terminales en mayúscula y los terminales en
+    minúscula (Hopcroft, Motwani & Ullman, 2006, cap. 5). Con ella, "numS" se leería como dos
+    símbolos (num + S) que no tienen cabida en el ejemplo.
+  - S → S − S | num es el ejemplo canónico de gramática ambigua por operador binario sin
+    asociatividad (Aho et al., 2006, secc. 4.3; Knuth, 1965), justo lo que el ejercicio pide.
+
+Bajo esa suposición, desarrollamos el ejercicio con:
+
+La gramática: S → S − S | num
+
+Armemos el análisis paso a paso:
+
+Paso 1 — ¿Qué reglas tiene?
+  Dos: una recursiva S → S − S (un S puede ser "otro S menos otro S") y una base S → num.
+
+Paso 2 — ¿Dónde está el problema?
+  En la regla recursiva, el símbolo S aparece en AMBOS lados del "−". Entonces, cuando hay
+  más de una resta, no hay una única forma de aplicar la regla.
+
+Paso 3 — Cadena de ejemplo: num − num − num.
+  Empezamos con S → S − S. ¿Cuál de los dos S expandimos con otra resta?
+    Opción A — expandir el S de la IZQUIERDA:
+        S → S − S → (S − S) − S → (num − num) − num
+    Opción B — expandir el S de la DERECHA:
+        S → S − S → S − (S − S) → num − (num − num)
+
+Paso 4 — Conclusión:
+  Las dos opciones producen la MISMA cadena (num − num − num) pero con distinto agrupamiento,
+  es decir, DOS árboles de derivación distintos. Como una misma cadena tiene más de un árbol
+  de derivación posible, la gramática es ambigua.
+
+  Por qué importa: el compilador no sabría cuál árbol elegir para interpretar la cadena.
+  En aritmética la resta a izquierda es el convenio, pero la gramática no lo especifica,
+  así que la ambigüedad rompe la interpretación única.
+
+
+---- SEGUNDA RESPUESTA: análisis literal del string (sin asumir error) ----
+Enunciado tal como aparece: S → S − S ∣ num S → S − S ∣ num
+
+Paso 1 — Tokenización según la convención estándar (mayúscula = no terminal,
+         minúscula = terminal):
+    S            -> no terminal (y símbolo inicial)
+    →            -> metasímbolo "se define como"
+    ∣            -> metasímbolo "o" (alternativa)
+    num          -> terminal
+    −            -> terminal (operador resta)
+
+Paso 2 — Hallazgo clave: hay DOS flechas "→" en el string.
+    S → S − S ∣ num S → S − S ∣ num
+        ↑             ↑
+      flecha 1      flecha 2
+  En notación formal cada producción tiene UNA sola flecha. Al haber dos, el string
+  se interpreta literalmente como DOS producciones pegadas sin separador:
+    P1:  S → S − S ∣ num S
+    P2:  S → S − S ∣ num
+
+Paso 3 — Gramática resultante (uniendo alternativas):
+    S → S − S | num S | num
+  Nota: la alternativa S − S de P2 queda duplicada (redundante), pero S → num es la
+  ÚNICA regla base. De hecho P1 sola (S → S − S | num S) no tiene caso base y generaría
+  el lenguaje VACÍO: nunca se logra eliminar el último S.
+
+Paso 4 — Significado de las reglas:
+    S → S − S   : resta binaria (recursiva, S a ambos lados del −)
+    S → num S   : "num" concatenado con otro S (recursiva a derecha)
+    S → num     : caso base (terminal)
+  La diferencia con la gramática pretendida es S → num S, que introduce una
+  CONCATENACIÓN implícita: permite juntar varios num sin operador.
+
+Paso 5 — Lenguaje generado:
+  S → num y S → num S producen secuencias de uno o más num (num, num num, num num num...).
+  S → S − S añade restas sobre esas secuencias. Resultado: un lenguaje ESTRICTAMENTE más
+  grande que el original; por ejemplo "num num − num" no es derivable con S → S − S | num
+  pero sí con esta gramática.
+
+Paso 6 — ¿Es ambigua esta gramática? Sí, y más que la original. Dos fuentes:
+  (a) La clásica por S − S: "num − num − num" sigue teniendo dos árboles
+      (num − num) − num  y  num − (num − num).
+  (b) Una nueva por la interacción num S + S − S: la cadena "num num − num" tiene dos árboles:
+        Árbol A: (num num) − num            Árbol B: num (num − num)
+              S                                  S
+             /|\                                / \
+            S − S                             num  S
+           / \   \                               /|\
+         num  S  num                            S − S
+              |                                 |   |
+             num                               num num
+        Derivación A: S ⇒ S − S ⇒ num S − S ⇒ num num − S ⇒ num num − num
+        Derivación B: S ⇒ num S ⇒ num (S − S) ⇒ num (num − num)
+
+Paso 7 — Posibles errores detectados (y por qué creemos que es un error):
+  1) Duplicación de la regla (el más probable): S → S − S | num aparece dos veces seguidas.
+  2) Ausencia de separador entre producciones (falta un salto de línea o un punto).
+  3) Confusión visual entre "−" (resta, U+2212) y "→" (flecha): el signo menos se parece a
+     la flecha, lo que lleva a leer "S → S → S" en lugar de "S → S − S".
+  4) Ambigüedad de tokenización: "numS" puede leerse como num + S (dos símbolos) o como un
+     token único; se resolvió con la convención mayúscula/minúscula.
+
+  (La justificación con citas de por qué creemos que el string está repetido se desarrolla
+  en el párrafo inicial de este punto 4.)
+
+Referencias:
+  - Backus, J. W. (1959). The syntax and semantics of the proposed international algebraic
+    language of the Zurich ACM-GAMM Conference. Proc. ICIP, 125–132.
+  - Naur, P. (Ed.) (1963). Revised Report on the Algorithmic Language ALGOL 60. CACM 6(1), 1–17.
+  - Knuth, D. E. (1965). On the translation of languages from left to right. Information and
+    Control, 8(6), 607–639.
+  - Aho, A. V., Lam, M. S., Sethi, R., & Ullman, J. D. (2006). Compilers: Principles, Techniques,
+    and Tools (2.ª ed.). Addison-Wesley.
+  - Hopcroft, J. E., Motwani, R., & Ullman, J. D. (2006). Introduction to Automata Theory,
+    Languages, and Computation (3.ª ed.). Pearson.
+
+Conclusión de la segunda respuesta: si se toma el string al pie de la letra, no describe la
+gramática pretendida sino una distinta (con concatenación implícita), de lenguaje más grande
+y con ambigüedades adicionales. El análisis riguroso, junto con las convenciones de notación
+y las referencias citadas, respalda que la lectura correcta es la única regla S → S − S | num
+y que la duplicación es un error de transcripción/extracción del documento.
