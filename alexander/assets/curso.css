@@ -1,0 +1,179 @@
+:root {
+  --ink: #1a1a1a;
+  --muted: #6b6b6b;
+  --accent: #b5412e;
+  --accent-soft: #f6e9e6;
+  --paper: #fdfcf9;
+  --rule: #e2ddd3;
+  --code-bg: #f4f1ea;
+  --green: #4a7a4a;
+  --green-bg: #eef4ee;
+  --max-w: 42rem;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  padding: 2rem 1.25rem 5rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, "Times New Roman", serif;
+  font-size: 1.06rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: var(--max-w); margin: 0 auto; }
+
+nav.course-nav {
+  max-width: var(--max-w);
+  margin: 0 auto 2.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+}
+nav.course-nav a { color: var(--muted); text-decoration: none; border-bottom: 1px solid transparent; }
+nav.course-nav a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+nav.course-nav .crumbs { color: var(--muted); }
+nav.course-nav .crumbs strong { color: var(--ink); font-weight: 600; }
+
+h1 {
+  font-size: 2.1rem;
+  line-height: 1.15;
+  margin: 0 0 0.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+h2 {
+  font-size: 1.45rem;
+  margin: 2.75rem 0 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--rule);
+  font-weight: 700;
+}
+h3 { font-size: 1.12rem; margin: 1.75rem 0 0.4rem; font-weight: 700; }
+p { margin: 0.6rem 0; }
+.lede { font-size: 1.18rem; color: var(--muted); line-height: 1.5; margin: 0 0 0.5rem; }
+.kicker {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.72rem;
+  color: var(--accent);
+  margin: 0 0 0.4rem;
+  font-weight: 600;
+}
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+strong { font-weight: 700; }
+small { font-size: 0.85rem; }
+ul, ol { margin: 0.6rem 0; padding-left: 1.4rem; }
+li { margin: 0.35rem 0; }
+
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.9rem 1.4rem;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  font-style: italic;
+}
+blockquote p { margin: 0.3rem 0; }
+blockquote cite { display: block; margin-top: 0.5rem; font-style: normal; font-size: 0.85rem; color: var(--muted); }
+
+code, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+code { background: var(--code-bg); padding: 0.1em 0.35em; border-radius: 3px; font-size: 0.9em; }
+pre { background: var(--code-bg); padding: 1rem 1.25rem; border-radius: 6px; overflow-x: auto; line-height: 1.5; font-size: 0.9rem; }
+pre code { background: none; padding: 0; }
+
+.box {
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin: 1.5rem 0;
+  background: #fff;
+}
+.box-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+.figure { margin: 1.75rem 0; }
+.figure img, .figure svg { max-width: 100%; height: auto; }
+.figcaption { font-size: 0.85rem; color: var(--muted); margin-top: 0.4rem; }
+table { border-collapse: collapse; width: 100%; margin: 1.25rem 0; font-size: 0.96rem; }
+th, td { border-bottom: 1px solid var(--rule); padding: 0.5rem 0.6rem; text-align: left; vertical-align: top; }
+th { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; }
+
+.callout { border-radius: 8px; padding: 1rem 1.4rem; margin: 1.5rem 0; }
+.callout.warn { background: #fdf3e7; border-left: 3px solid #c7741e; }
+.callout.info { background: var(--accent-soft); border-left: 3px solid var(--accent); }
+.callout.tip { background: var(--green-bg); border-left: 3px solid var(--green); }
+.callout p { margin: 0.35rem 0; }
+.callout .callout-label {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; font-weight: 600; margin-bottom: 0.35rem;
+}
+.callout.warn .callout-label { color: #c7741e; }
+.callout.info .callout-label { color: var(--accent); }
+.callout.tip .callout-label { color: var(--green); }
+
+.quiz { border: 1px solid var(--rule); border-radius: 8px; background: #fff; padding: 1.25rem 1.5rem; margin: 1.75rem 0; }
+.quiz h3 { margin-top: 0; font-size: 1rem; }
+.quiz .option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 0.6rem 0.9rem;
+  margin: 0.45rem 0;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.quiz .option:hover { border-color: var(--accent); }
+.quiz .option.correct { background: var(--green-bg); border-color: var(--green); }
+.quiz .option.wrong { background: #fdf0ef; border-color: #c2503c; }
+.quiz .option:disabled { cursor: default; }
+.quiz .feedback { font-size: 0.9rem; margin-top: 0.6rem; min-height: 1.4em; }
+.quiz .feedback.ok { color: var(--green); }
+.quiz .feedback.bad { color: #c2503c; }
+
+.flip-card { margin: 1.25rem 0; }
+.flip-card details { border: 1px solid var(--rule); border-radius: 8px; background: #fff; padding: 0.9rem 1.3rem; }
+.flip-card summary { cursor: pointer; font-weight: 600; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 0.9rem; }
+.flip-card details[open] summary { margin-bottom: 0.6rem; }
+
+footer {
+  margin-top: 4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+footer .followup {
+  background: var(--accent-soft);
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin-bottom: 1.5rem;
+  color: var(--ink);
+}
+
+@media print {
+  body { padding: 0; background: #fff; font-size: 11pt; }
+  nav.course-nav { display: none; }
+  a { color: inherit; text-decoration: none; }
+  h2 { break-after: avoid; }
+  .quiz .option { break-inside: avoid; }
+  footer { break-before: auto; }
+}
