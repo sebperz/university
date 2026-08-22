@@ -1,0 +1,295 @@
+/* teach.css — shared stylesheet for the compilers course lessons.
+   Tufte-inspired: serif body, narrow measure, quiet color, prints well. */
+
+:root {
+  --ink: #1a1a1a;
+  --paper: #fffff8;
+  --muted: #6a6a6a;
+  --accent: #a01d1d;
+  --accent-soft: #f4e8e8;
+  --line: #d8d4c8;
+  --code-bg: #f5f2e9;
+  --ok: #1d6f2f;
+  --bad: #a01d1d;
+}
+
+* { box-sizing: border-box; }
+
+html { font-size: 17px; }
+
+body {
+  margin: 0;
+  padding: 2.5rem 1rem 4rem 1rem;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+/* ---------- typography ---------- */
+
+h1, h2, h3, h4 {
+  font-family: "Trebuchet MS", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.25;
+  margin: 0 0 0.6rem 0;
+  font-weight: 600;
+}
+
+h1 { font-size: 1.7rem; margin-top: 0; }
+h2 {
+  font-size: 1.25rem;
+  margin-top: 2.5rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--line);
+}
+h3 { font-size: 1.05rem; margin-top: 1.8rem; }
+
+p { margin: 0.7rem 0; }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+strong { font-weight: 700; }
+
+em { font-style: italic; }
+
+/* ---------- metadata header ---------- */
+
+header.lesson {
+  border-bottom: 3px double var(--line);
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+}
+
+header.lesson .kicker {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin: 0 0 0.4rem 0;
+}
+
+header.lesson .meta {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 0.4rem 0 0 0;
+}
+
+/* ---------- callouts ---------- */
+
+.callout {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 0.8rem 1rem;
+  margin: 1.2rem 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.callout .label {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+/* ---------- code ---------- */
+
+code, pre {
+  font-family: "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+}
+
+code {
+  background: var(--code-bg);
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+pre code { background: none; padding: 0; }
+
+/* ---------- tables ---------- */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1rem 0;
+  font-size: 0.95rem;
+}
+
+th, td {
+  border: 1px solid var(--line);
+  padding: 0.4rem 0.7rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  background: var(--code-bg);
+}
+
+/* ---------- pipeline diagram ---------- */
+
+.pipeline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0.4rem;
+  margin: 1.2rem 0;
+}
+
+.pipeline .stage {
+  flex: 1 1 auto;
+  min-width: 5.5rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 0.5rem 0.4rem;
+  text-align: center;
+  background: var(--paper);
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+
+.pipeline .stage .arrow {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- quiz ---------- */
+
+.quiz { margin: 1.5rem 0; }
+
+.quiz .question {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  margin: 1rem 0;
+}
+
+.quiz .q-text {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0 0 0.6rem 0;
+}
+
+.quiz .option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 0.92rem;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0.45rem 0.7rem;
+  margin: 0.35rem 0;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.quiz .option:hover:not(:disabled) { border-color: var(--accent); }
+
+.quiz .option:disabled { cursor: default; }
+
+.quiz .option.correct {
+  background: #e7f3e8;
+  border-color: var(--ok);
+}
+
+.quiz .option.incorrect {
+  background: #f7e7e7;
+  border-color: var(--bad);
+}
+
+.quiz .option.hidden { display: none; }
+
+.quiz .feedback {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.85rem;
+  margin: 0.5rem 0 0 0;
+  color: var(--muted);
+}
+
+.quiz .feedback.ok { color: var(--ok); }
+.quiz .feedback.bad { color: var(--bad); }
+
+.quiz button.check {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.85rem;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  border-radius: 3px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 0.6rem;
+}
+
+.quiz button.check:hover { background: var(--accent); }
+
+/* ---------- exercise ---------- */
+
+.exercise {
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  padding: 1rem 1.2rem;
+  margin: 1.4rem 0;
+  background: #fffdf5;
+}
+
+.exercise .label {
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ---------- footer ---------- */
+
+footer.lesson {
+  margin-top: 3rem;
+  border-top: 3px double var(--line);
+  padding-top: 1rem;
+  font-size: 0.9rem;
+}
+
+footer.lesson p { margin: 0.4rem 0; }
+
+/* ---------- print ---------- */
+
+@media print {
+  body { padding: 0.5in; background: #fff; }
+  .quiz .option { border-color: #999; }
+  .quiz .option.correct { background: #e7f3e8 !important; -webkit-print-color-adjust: exact; }
+  .quiz .option.incorrect { background: #f7e7e7 !important; -webkit-print-color-adjust: exact; }
+  a { color: var(--ink); text-decoration: underline; }
+  pre { white-space: pre-wrap; }
+}

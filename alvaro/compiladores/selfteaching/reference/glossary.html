@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glossary — Compilers</title>
+  <link rel="stylesheet" href="../assets/teach.css">
+</head>
+<body>
+  <main>
+    <header class="lesson">
+      <p class="kicker">Reference</p>
+      <h1>Glossary of Compiler Terms</h1>
+      <p class="meta">The working vocabulary of this course. Spanish course terms are shown in <em>italics</em>.</p>
+    </header>
+
+    <p>Compilers are described with a very specific vocabulary. When you can name the parts precisely, the formal material (grammars, automata, parsing theory) stops being intimidating and becomes a set of definitions you already speak. This page is the glossary every lesson adheres to — if a word is used in a lesson, its definition is here.</p>
+
+    <h2>What the compiler is</h2>
+
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr>
+        <td><strong>Compiler</strong></td>
+        <td>A program that translates a <em>source program</em> written in one language into an equivalent program in another language (usually machine or byte code). <em>Compilador</em></td>
+      </tr>
+      <tr>
+        <td><strong>Interpreter</strong></td>
+        <td>A program that executes a source program directly, without translating it to another language first. Our project builds an interpreter for its first phase. <em>Intérprete</em></td>
+      </tr>
+      <tr>
+        <td><strong>Source program</strong></td>
+        <td>The text the programmer writes. The input to the whole pipeline. <em>Programa fuente</em></td>
+      </tr>
+      <tr>
+        <td><strong>Target program</strong></td>
+        <td>The output of a compiler: machine code, bytecode, or another language. <em>Programa objeto</em></td>
+      </tr>
+      <tr>
+        <td><strong>Front end</strong></td>
+        <td>The phases that depend only on the <em>source</em> language: lexing, parsing, semantic analysis. Language-independent of the target. <em>Fase frontal</em></td>
+      </tr>
+      <tr>
+        <td><strong>Back end</strong></td>
+        <td>The phases that depend on the <em>target</em>: code generation and optimization. <em>Fase final</em></td>
+      </tr>
+    </table>
+
+    <h2>Phase 1 — Lexical analysis</h2>
+
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr>
+        <td><strong>Lexical analysis</strong></td>
+        <td>The phase that reads the source text and groups characters into <em>tokens</em>. It is the "spellchecker" of the compiler. <em>Análisis léxico</em></td>
+      </tr>
+      <tr>
+        <td><strong>Scanner / lexer / tokenizer</strong></td>
+        <td>The component that performs lexical analysis. Reads characters one at a time. <em>Analizador léxico</em></td>
+      </tr>
+      <tr>
+        <td><strong>Token</strong></td>
+        <td>A categorized unit of meaning: a keyword, identifier, number, operator, or punctuation. Tokens carry a type and often a value. <em>Componente léxico / token</em></td>
+      </tr>
+      <tr>
+        <td><strong>Lexeme</strong></td>
+        <td>The actual characters in the source that a token was made from. "The lexeme is <code>x</code>, the token type is <code>IDENTIFIER</code>." <em>Lexema</em></td>
+      </tr>
+      <tr>
+        <td><strong>Regular expression</strong></td>
+        <td>A compact notation describing a set of strings. Used to specify which lexemes each token type accepts. <em>Expresión regular</em></td>
+      </tr>
+      <tr>
+        <td><strong>DFA (deterministic finite automaton)</strong></td>
+        <td>A state machine with exactly one transition per input symbol per state. Used to recognize tokens efficiently; every regex can be converted to a DFA. <em>Autómata finito determinista (AFD)</em></td>
+      </tr>
+      <tr>
+        <td><strong>NFA (nondeterministic finite automaton)</strong></td>
+        <td>A state machine where a symbol may trigger zero, one, or many transitions. Easier to build from a regex; converted to a DFA for execution. <em>Autómata finito no determinista (AFN)</em></td>
+      </tr>
+    </table>
+
+    <h2>Phase 2 — Syntax analysis</h2>
+
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr>
+        <td><strong>Syntax analysis / parsing</strong></td>
+        <td>The phase that checks whether the sequence of tokens matches the rules of the <em>grammar</em>. It answers: "is this the right <em>shape</em>?" It does not care what names mean. <em>Análisis sintáctico</em></td>
+      </tr>
+      <tr>
+        <td><strong>Parser</strong></td>
+        <td>The component that performs syntax analysis, building a parse tree (or detecting a syntax error). <em>Analizador sintáctico</em></td>
+      </tr>
+      <tr>
+        <td><strong>Grammar</strong></td>
+        <td>A formal set of rules (productions) describing the valid structure of programs. <em>Gramática</em></td>
+      </tr>
+      <tr>
+        <td><strong>Production / rule</strong></td>
+        <td>A single grammar rule of the form <code>head → body</code>: "this non-terminal can be replaced by this sequence of symbols." <em>Producción</em></td>
+      </tr>
+      <tr>
+        <td><strong>Terminal</strong></td>
+        <td>A symbol that cannot be expanded further — it is a concrete token (<code>num</code>, <code>+</code>, <code>(</code>). <em>Símbolo terminal</em></td>
+      </tr>
+      <tr>
+        <td><strong>Non-terminal</strong></td>
+        <td>A symbol that must be expanded by some production (written as a name like <code>S</code>, <code>Expr</code>). <em>No terminal</em></td>
+      </tr>
+      <tr>
+        <td><strong>Start symbol</strong></td>
+        <td>The non-terminal from which every derivation begins; the root of every parse tree. <em>Símbolo inicial</em></td>
+      </tr>
+      <tr>
+        <td><strong>Derivation</strong></td>
+        <td>A sequence of production applications that turns the start symbol into a concrete string of terminals. <em>Derivación</em></td>
+      </tr>
+      <tr>
+        <td><strong>Parse tree</strong></td>
+        <td>A tree recording how a string was derived from the grammar: root = start symbol, leaves = terminals. <em>Árbol de derivación / sintáctico</em></td>
+      </tr>
+      <tr>
+        <td><strong>Ambiguity</strong></td>
+        <td>A grammar is ambiguous if some string has two different parse trees. Bad: the compiler cannot choose a unique meaning. <em>Ambigüedad</em></td>
+      </tr>
+      <tr>
+        <td><strong>Recursive descent</strong></td>
+        <td>A hand-written parsing technique: one function per non-terminal, calling each other recursively. The style we use in our project. <em>Descenso recursivo</em></td>
+      </tr>
+      <tr>
+        <td><strong>AST (abstract syntax tree)</strong></td>
+        <td>A condensed version of the parse tree that keeps only the structure needed for later phases — drops punctuation like parentheses. <em>Árbol de sintaxis abstracta</em></td>
+      </tr>
+    </table>
+
+    <h2>Phase 3 — Semantic analysis</h2>
+
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr>
+        <td><strong>Semantic analysis</strong></td>
+        <td>The phase that checks the <em>meaning</em>: types, that names are declared, that operations are legal. Shape can be right while meaning is wrong. <em>Análisis semántico</em></td>
+      </tr>
+      <tr>
+        <td><strong>Symbol table</strong></td>
+        <td>The data structure mapping declared names to their attributes (type, scope, etc.). The semantic analyst's memory. <em>Tabla de símbolos</em></td>
+      </tr>
+      <tr>
+        <td><strong>Type checking</strong></td>
+        <td>Verifying that operations are applied to compatible types (<code>i32 = "hola"</code> fails here). <em>Comprobación de tipos</em></td>
+      </tr>
+      <tr>
+        <td><strong>Scope</strong></td>
+        <td>The region of a program in which a name is visible. Managing scope is a key symbol-table job. <em>Ámbito</em></td>
+      </tr>
+    </table>
+
+    <h2>Phase 4 — Code generation</h2>
+
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr>
+        <td><strong>Code generation</strong></td>
+        <td>The phase that emits the target program (machine code, bytecode, or another language) from the analyzed program. <em>Generación de código</em></td>
+      </tr>
+      <tr>
+        <td><strong>Optimization</strong></td>
+        <td>Rewriting the generated program to run faster or use less memory without changing its meaning. Out of scope for now. <em>Optimización</em></td>
+      </tr>
+      <tr>
+        <td><strong>Bytecode</strong></td>
+        <td>A compact, low-level instruction set executed by a virtual machine rather than hardware. Common for interpreted languages. <em>Código de bytes</em></td>
+      </tr>
+    </table>
+
+    <h2>Source &amp; related</h2>
+
+    <ul>
+      <li><a href="https://craftinginterpreters.com/contents.html">Crafting Interpreters — contents</a>. Our project mirrors its structure chapter by chapter.</li>
+      <li><a href="https://www.reddit.com/r/Compilers/">r/Compilers</a> — community for troubleshooting and sanity checks.</li>
+    </ul>
+
+    <p>Course definitions follow Aho, Lam, Sethi &amp; Ullman, <em>Compilers: Principles, Techniques, and Tools</em> (2nd ed.), chapters 1–4.</p>
+
+    <footer class="lesson">
+      <p><strong>Next:</strong> <a href="../lessons/0001-the-compiler-pipeline.html">Lesson 1 — The Compiler Pipeline</a></p>
+      <p>Stuck or curious? Ask your teaching agent — anything here can be expanded on demand.</p>
+    </footer>
+  </main>
+</body>
+</html>

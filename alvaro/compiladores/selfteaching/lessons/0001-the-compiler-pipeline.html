@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lesson 1 — The Compiler Pipeline</title>
+  <link rel="stylesheet" href="../assets/teach.css">
+  <script src="../assets/quiz.js" defer></script>
+</head>
+<body>
+  <main>
+    <header class="lesson">
+      <p class="kicker">Lesson 1</p>
+      <h1>The Compiler Pipeline</h1>
+      <p class="meta">First map, then move. 15 minutes · ties to course "Actividad 1" · <a href="../reference/glossary.html">glossary</a></p>
+    </header>
+
+    <p>Before writing any code, you need the map. A compiler is not one magic program — it is a <strong>pipeline</strong> of small phases, each transforming the program into a form the next phase can work with. Every phase in this course and every brick of our Python interpreter is one of these stages. Learn the map once and every later lesson is just "we're building stage N."</p>
+
+    <h2>The map</h2>
+
+    <div class="pipeline">
+      <div class="stage">Source text<br><span class="arrow">↓</span></div>
+      <div class="stage">Lexer<br>characters → tokens<span class="arrow">↓</span></div>
+      <div class="stage">Parser<br>tokens → AST<span class="arrow">↓</span></div>
+      <div class="stage">Semantic analysis<br>check meaning<span class="arrow">↓</span></div>
+      <div class="stage">Evaluator / codegen<br>run or emit</div>
+    </div>
+
+    <p>The four stages are split into two groups. The first three are the <strong>front end</strong> — they only care about the <em>source</em> language and look the same for every compiler. The last is the <strong>back end</strong> — it cares about what you're compiling <em>to</em>.</p>
+
+    <h3>Stage 1 — Lexical analysis <em>(análisis léxico)</em></h3>
+    <p>The lexer reads characters one by one and groups them into <strong>tokens</strong>. It answers "what are these words?" The text <code>1 + 22</code> becomes the tokens <code>NUMBER("1")</code>, <code>PLUS("+")</code>, <code>NUMBER("22")</code>. Note the two-part structure: a <strong>token type</strong> (what kind of thing it is) and a <strong>lexeme</strong> (the actual characters). This is also where regular expressions and DFAs from your course live.</p>
+
+    <h3>Stage 2 — Syntax analysis / parsing <em>(análisis sintáctico)</em></h3>
+    <p>The parser checks that the <em>sequence</em> of tokens follows the grammar. It answers "is this the right <strong>shape</strong>?" It produces a tree of the program's structure — the <strong>AST</strong>. This is where grammars, productions, and ambiguity from your course live.</p>
+
+    <h3>Stage 3 — Semantic analysis <em>(análisis semántico)</em></h3>
+    <p>The semantic analyzer checks <strong>meaning</strong>: types, declared names, legal operations. Shape can be perfect while meaning is broken. This is where symbol tables and type checking live.</p>
+
+    <div class="callout">
+      <span class="label">The distinction your course will test</span>
+      <p><strong>Syntax</strong> checks the <em>form</em>; <strong>semantics</strong> checks the <em>meaning</em>. From your "Actividad 1": <code>let x = (5 + 3;</code> is a <em>syntax</em> error (shape is wrong — an unclosed parenthesis), while <code>let x: i32 = "hola";</code> is a <em>semantic</em> error (shape is fine, but the types clash).</p>
+    </div>
+
+    <h3>Stage 4 — Evaluator / code generation <em>(generación de código)</em></h3>
+    <p>Finally the program actually runs or becomes machine code. Interpreters evaluate the AST directly; compilers emit a target program. Our project starts as an <strong>interpreter</strong> — simpler, and the concepts carry over.</p>
+
+    <h2>Why this matters for our project</h2>
+    <p>We will build the interpreter <em>in this exact order</em>, mirroring <a href="https://craftinginterpreters.com/introduction.html">Crafting Interpreters</a>, the best project-based book on this topic. Each lesson adds exactly one stage to our Python project. Today you build the first brick: a lexer.</p>
+
+    <h2>Check your map</h2>
+
+    <div class="quiz">
+      <div class="question">
+        <p class="q-text">Which phase turns characters into tokens?</p>
+        <button class="option" data-correct>Lexical analysis</button>
+        <button class="option">Syntax analysis</button>
+        <button class="option">Semantic analysis</button>
+        <button class="option">Code generation</button>
+        <p class="feedback"></p>
+      </div>
+      <div class="question">
+        <p class="q-text">A grammar is ambiguous when…</p>
+        <button class="option">Many tokens are found</button>
+        <button class="option" data-correct>One string, two trees</button>
+        <button class="option">No parse tree exists</button>
+        <button class="option">All rules are recursive</button>
+        <p class="feedback"></p>
+      </div>
+      <div class="question">
+        <p class="q-text">Why does <code>let x: i32 = "hola";</code> fail?</p>
+        <button class="option">Wrong program shape</button>
+        <button class="option" data-correct>Types are wrong</button>
+        <button class="option">Grammar rejected it</button>
+        <button class="option">Lexer broke early</button>
+        <p class="feedback"></p>
+      </div>
+    </div>
+
+    <h2>Project kickoff — your first brick</h2>
+
+    <div class="exercise">
+      <span class="label">Exercise 1 · the lexer</span>
+      <p>Create a folder for the project (inside this workspace, e.g. <code>./project/</code>) and save this file as <code>lexer.py</code>. Then run it with <code>python3 lexer.py</code>:</p>
+      <pre><code>TOKEN_TYPES = ("NUMBER", "PLUS", "MINUS", "STAR", "SLASH", "LPAREN", "RPAREN", "EOF")
+
+class Token:
+    def __init__(self, type_, lexeme):
+        self.type = type_
+        self.lexeme = lexeme
+    def __repr__(self):
+        return f"Token({self.type}, {self.lexeme!r})"
+
+class Lexer:
+    def __init__(self, source):
+        self.source = source
+        self.pos = 0
+
+    def make_token(self, type_, lexeme):
+        if type_ not in TOKEN_TYPES:
+            raise SyntaxError(f"Unknown token type {type_!r}")
+        return Token(type_, lexeme)
+
+    def next_token(self):
+        while self.pos &lt; len(self.source) and self.source[self.pos].isspace():
+            self.pos += 1
+        if self.pos &gt;= len(self.source):
+            return self.make_token("EOF", "")
+        c = self.source[self.pos]
+        if c.isdigit():
+            start = self.pos
+            while self.pos &lt; len(self.source) and self.source[self.pos].isdigit():
+                self.pos += 1
+            return self.make_token("NUMBER", self.source[start:self.pos])
+        symbols = {"+": "PLUS", "-": "MINUS", "*": "STAR", "/": "SLASH",
+                   "(": "LPAREN", ")": "RPAREN"}
+        if c in symbols:
+            self.pos += 1
+            return self.make_token(symbols[c], c)
+        raise SyntaxError(f"Unexpected character {c!r} at position {self.pos}")
+
+    def tokenize(self):
+        tokens = []
+        while True:
+            t = self.next_token()
+            tokens.append(t)
+            if t.type == "EOF":
+                return tokens
+
+for t in Lexer("1 + 22 * (3 - 4)").tokenize():
+    print(t)</code></pre>
+      <p><strong>Your win for today:</strong> you should see eight real tokens followed by <code>Token(EOF, '')</code>. Notice how <code>22</code> became one <code>NUMBER</code> token, not two — that's the lexeme grouping working.</p>
+      <p><strong>Then modify:</strong> add <code>";": "SEMICOLON"</code> to the <code>symbols</code> dictionary and a <code>;</code> to the test string. Then add "SEMICOLON" to <code>symbols</code> but <strong>don't</strong> add <code>"SEMICOLON"</code> to <code>TOKEN_TYPES</code> — run it. You should get <code>SyntaxError: Unknown token type 'SEMICOLON'</code>.</p>
+      <p><strong>Why does that error make sense?</strong> <code>TOKEN_TYPES</code> is the <em>fixed vocabulary</em> of the whole pipeline — the parser (next lesson) switches on exactly these strings to build the tree. If the lexer could mint new token types at runtime without declaring them, it would silently break the parser later. Real compilers enforce this with an enum. That is why token types exist.</p>
+      <p>If you tried this before and saw no error, that's because the first version of this exercise never actually checked <code>TOKEN_TYPES</code> — it was dead code. The <code>make_token</code> method above fixes that, and is a genuine design improvement for the project.</p>
+    </div>
+
+    <h2>Read this next</h2>
+    <p><a href="https://craftinginterpreters.com/introduction.html">Crafting Interpreters, Chapter 1 — Introduction</a>. Short, and it frames everything we're doing. The next lesson turns your lexer into a proper little scanner that understands more of a real language.</p>
+
+    <footer class="lesson">
+      <p><strong>Vocabulary:</strong> every term here is in the <a href="../reference/glossary.html">glossary</a>. If one is missing, tell your teaching agent and it will be added.</p>
+      <p><strong>Ask away:</strong> stuck on the exercise, or want the "why" behind any stage? Your teaching agent will explain anything in this lesson until it clicks.</p>
+    </footer>
+  </main>
+</body>
+</html>
