@@ -1,0 +1,185 @@
+SCOPE DEFINITION - RESEARCH PROJECT
+Session date: 2026-08-25
+Type: Systematic review (PRISMA 2020) with quantitative synthesis (meta-regression),
+potentially graduating to a "meta-analysis" label if the course/supervisor requires it.
+
+================================================================================
+1. TOPIC
+================================================================================
+The coding and software-engineering capability of LOCALLY-RUNNABLE large
+language models (LLMs), and how that capability has evolved over time relative
+to the frontier.
+
+================================================================================
+2. POPULATION (INCLUSION CRITERIA) - "Local model" definition
+================================================================================
+Feasibility-defined, self-hosted models. A locally-runnable model is one whose
+Q4_K_M (GGUF) weights plus modest KV cache fit within consumer hardware, fully
+resident (no SSD/CPU streaming), at usable speed.
+
+- Primary budget:     16 GB VRAM at Q4_K_M   (mainstream tier, ~26% of consumers,
+                      largest single tier per Steam Hardware Survey 2026)
+- Upper envelope:     24 GB VRAM              (captures Qwen3-Coder-30B-A3B and
+                                              32B dense; ~5% power-user tier)
+- Sensitivity band:   8 GB VRAM
+- Apple Silicon:      unified memory up to ~48 GB admitted on equivalent terms
+- Quantization floor: Q4_K_M (sub-Q4, e.g. Q2/Q3 or SSD-streamed large MoE, excluded)
+- Speed floor:        >= 15-20 tokens/second fully resident on a representative
+                      16-24 GB consumer GPU (or 24-48 GB Apple unified memory)
+
+Models admitted (representative): Qwen2.5-Coder 7/14/32B, Qwen3 4-32B,
+Qwen3-Coder-30B-A3B (24 GB), Llama 3.1/3.2 8B, Mistral 7B/8B/Small-24B,
+Gemma 3 4B/12B/27B, DeepSeek-R1-Distill 7/14/32B, Phi-4 / Phi-4-mini.
+
+Models EXCLUDED: Llama 3.3 70B, Llama 3.1 405B, Llama 4 Scout/Maverick,
+Mistral Large 123B, DeepSeek-R1-Distill-70B, GLM-4.5-Air, data-center-scale MoEs
+(e.g. DeepSeek V3/R1 671B), any model requiring >24 GB VRAM / >48 GB unified
+memory or SSD streaming to run.
+
+================================================================================
+3. RESEARCH QUESTION
+================================================================================
+FORMAL (PICOS-style):
+  Among locally-runnable LLMs (consumer-hardware feasibility constraint),
+  how has coding and software-engineering benchmark performance evolved
+  across model release dates from 2023 to 2026, and how large is the remaining
+  gap to the best closed proprietary models?
+
+Components:
+- CORE RQ (primary):  How has the coding/SWE ability of locally-runnable models
+                      improved over time (by release date)?
+- SECONDARY RQ:       How large is the current gap between the best local models
+                      and the closed frontier?
+- DISCUSSION ONLY:    "Is the future of AI in the hands of local models?" --
+                      answered via the trend slope + feasibility analysis, not
+                      as a primary outcome.
+
+================================================================================
+4. OUTCOMES (BENCHMARKS)
+================================================================================
+Primary - code generation family:
+  HumanEval, HumanEval+, MBPP, MBPP+, LiveCodeBench, BigCodeBench
+Secondary - software-engineering family:
+  SWE-bench Verified (+ SWE-bench Pro where data exists)
+
+Time window:
+  Codegen: 2023-2026
+  SWE:     2024-2026
+  Search cutoff: ~July 2026
+
+================================================================================
+5. DESIGN & REPORTING
+================================================================================
+- Systematic review per PRISMA 2020 with quantitative synthesis
+  (mixed-effects meta-regression on benchmark scores).
+- Can graduate to a "meta-analysis" label if the course/supervisor demands it;
+  reported rigorously either way (random effects, clustering by model and
+  benchmark, cluster-robust variance, dependence caveat documented).
+- Protocol pre-registered on OSF.
+- Reporting checklists: PRISMA 2020 + PRISMA-S (search reporting).
+- Full appendix: PRISMA flow diagram, search strings, screening forms,
+  risk-of-bias tables, extraction forms.
+- Dual screening with a co-reviewer.
+
+================================================================================
+6. ARCHITECTURE (HOW THE TWO EVIDENCE STREAMS COMBINE)
+================================================================================
+Literature-first (classic SR-with-synthesis shape):
+  1) PRISMA search produces the screened corpus of studies that evaluate
+     >=1 feasible-local model on >=1 pre-specified benchmark.
+  2) Extract model x benchmark x evaluation scores from each included study.
+  3) Benchmark leaderboards SUPPLEMENT and VERIFY extractions:
+     Epoch AI Benchmarking Hub CSV, LiveBench snapshots, SWE-bench Verified
+     official leaderboard, EvalPlus leaderboard (LLM Stats, Artificial Analysis
+     used as secondary/cross-check sources).
+  4) Quantitative synthesis runs on the merged dataset.
+Leaderboards/benchmark repos are documented as DATA SOURCES (gray literature
+appendix), not screened as studies.
+
+================================================================================
+7. EVIDENCE POLICY
+================================================================================
+- Data points admissible from public benchmark data + peer-reviewed evaluations.
+- Every row tagged with provenance:
+    * source type
+    * self-reported vs independently run
+    * contamination-resistant benchmark or not
+- Sensitivity analysis restricted to independently-verified scores only.
+- No artificial cap on study count: inclusion levers are relevance filters;
+  include every study that passes.
+
+================================================================================
+8. COMPARISON DESIGN (THE CENTRAL FIGURE)
+================================================================================
+Three-line design:
+  1) Feasible-local set   (the population defined in section 2)
+  2) All-open-weight, feasibility-blind  (incl. data-center-scale open models,
+     e.g. DeepSeek giants -- the line Epoch/WeirdML already track)
+  3) Closed proprietary frontier (best closed models per benchmark)
+
+This decomposes the gap into:
+  open-vs-closed (already studied)  +  FEASIBILITY PENALTY (our contribution).
+
+Frontier anchor methodology: ENVELOPE-OF-BEST.
+  At each date, frontier = the best closed-model score per benchmark;
+  local gap = distance of the best feasible-local envelope to the closed
+  frontier envelope, per benchmark per date. No composite black-box index.
+
+Qwen treatment: NEUTRAL. No special handling; the best models win on the data.
+If Qwen dominates, that is a result, not advocacy.
+
+================================================================================
+9. SEARCH STRATEGY
+================================================================================
+Full standard database set:
+  Scopus, Web of Science, IEEE Xplore, ACM Digital Library, arXiv,
+  ACL Anthology
+  Gap-fillers: Semantic Scholar, Google Scholar
+Deduplicate across sources. Search strings + per-database syntax documented
+in the PRISMA-S appendix.
+
+Inclusion levers (pre-specified, pre-registered):
+  1) Pre-specified outcome benchmark list (section 4)
+  2) >=1 feasible-local model per included study
+  3) Hard time window (section 4)
+
+================================================================================
+10. RISK-OF-BIAS TOOL
+================================================================================
+Tailored appraisal of each included evaluation on five items:
+  1) Independent run vs self-reported
+  2) Harness/version transparency
+  3) Benchmark contamination-resistance
+  4) Sample/compute adequacy
+  5) Reporting completeness
+Quality flags feed the sensitivity analyses.
+
+================================================================================
+11. SYNTHESIS MODEL
+================================================================================
+- Mixed-effects meta-regression on 0-100 normalized benchmark scores.
+- Predictors: release date (the slope IS the headline: how fast local models
+  are improving), log params, hardware band (8/16/24 GB), benchmark family.
+- Random effects clustered by model and by benchmark.
+- Gap metric: distance from best feasible-local envelope to closed-frontier
+  envelope, per benchmark per date.
+- Sensitivity analyses:
+    * independently-verified scores only
+    * contamination-resistant benchmarks only
+    * each hardware band separately
+
+================================================================================
+12. PUBLICATION TARGET
+================================================================================
+Course paper written to PUBLISHABLE STANDARD (complete PRISMA appendix, full
+methods, reproducible data/repo). Outlet decision deferred until after the
+course (default next step: arXiv preprint).
+
+================================================================================
+13. NEXT STEPS (when requested)
+================================================================================
+1) Protocol skeleton: PRISMA items, per-database search strings, screening and
+   extraction forms, OSF pre-registration text.
+2) PRISMA flow diagram, risk-of-bias tables, data extraction sheets.
+3) Quantitative synthesis implementation (meta-regression code + dataset merge
+   from Epoch CSV / LiveBench / SWE-bench / EvalPlus).
