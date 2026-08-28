@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 5 — El Rol del Arquitecto y las Leyes Clave</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Lección 5 de 6 · Video 5</p>
+<h1>El Rol Estratégico del Arquitecto y las Leyes Clave</h1>
+<p class="meta">≈ 15 min · Requiere las <a href="0004-trade-offs.html">lecciones 1–4</a> · <a href="../reference/glosario.html">Glosario del curso</a></p>
+
+<div class="callout">
+<span class="label">Tu win de hoy</span>
+Vas a poder <strong>citar las tres leyes de la arquitectura con autor, año y enunciado textual</strong> (Conway 1968, Postel 1981, Tesler ~1984) y explicar sus implicaciones prácticas. Las citas textuales son prácticamente preguntas de examen garantizadas.
+</div>
+
+<h2>1. El rol del arquitecto: más allá del código</h2>
+<p>Mito a derribar: el arquitecto <strong>no es</strong> un programador senior que dejó de escribir código para dibujar diagramas. La experiencia técnica es indispensable, pero el rol real es <strong>estratégico y de liderazgo</strong>, con tres responsabilidades:</p>
+<ol>
+  <li><strong>Tomador de decisiones clave:</strong> define los cimientos y la estructura general del sistema, qué estilos usar y la integración de tecnologías.</li>
+  <li><strong>Comunicador incansable:</strong> puente indispensable entre la visión del negocio y el equipo de ingeniería; documenta decisiones y crea diagramas comprensibles para que todos avancen en la misma dirección.</li>
+  <li><strong>Gestor del riesgo técnico:</strong> identifica fallos de seguridad, riesgos de rendimiento o límites de escalabilidad <strong>proactivamente en diseño</strong>, mucho antes de que se conviertan en "incendios" difíciles de apagar en producción.</li>
+</ol>
+
+<h2>2. Las tres leyes fundamentales</h2>
+
+<h3>⚖️ La Ley de Conway (Melvin Conway, 1968)</h3>
+<blockquote>"Las organizaciones que diseñan sistemas están limitadas a producir diseños que son copias de las estructuras de comunicación de estas organizaciones." — <a href="https://www.melconway.com/Home/Committees_Paper.html">"How Do Committees Invent?", Datamation, 1968</a></blockquote>
+<p><strong>En la práctica:</strong> si una empresa divide rígidamente sus equipos en frontend y backend, el sistema final reflejará inevitablemente esa separación, aunque no sea la mejor solución técnica. Si quieres una arquitectura modular y cohesiva, <strong>reestructura los equipos</strong> y alinéalos con esa visión. (<a href="https://martinfowler.com/bliki/ConwaysLaw.html">Análisis moderno de Fowler</a>.)</p>
+
+<h3>⚖️ La Ley de Postel / Principio de Robustez (Jon Postel, 1981)</h3>
+<blockquote>"Sé conservador y estricto con lo que envías, y liberal y tolerante con lo que aceptas." — <a href="https://www.rfc-editor.org/info/rfc793">RFC 793 (TCP), IETF, 1981</a></blockquote>
+<p><strong>En la práctica:</strong> todo servicio <strong>emisor</strong> debe enviar datos con el formato más claro, limpio y apegado a la norma; el <strong>receptor</strong> debe diseñarse con flexibilidad para aceptar pequeñas desviaciones sin caerse. Resultado: sistemas altamente estables frente al cambio. <em>Matiz moderno:</em> la tolerancia excesiva puede crear riesgos de seguridad (<a href="https://cacm.acm.org/practice/the-robustness-principle-reconsidered">Allman, CACM</a>).</p>
+
+<h3>⚖️ La Ley de Tesler / Conservación de la Complejidad (Larry Tesler, ~1984)</h3>
+<blockquote>"Toda aplicación cuenta con un nivel mínimo de complejidad inherente que no es posible eliminar; lo único que se puede hacer es trasladarlo de un lugar a otro." — <a href="https://www.nomodes.com/larry-tesler-consulting/complexity-law">formulación original de Tesler</a></blockquote>
+<p><strong>En la práctica:</strong> si simplificas radicalmente la UI de una pantalla, toda esa complejidad conceptual se traslada de forma invisible a la <strong>lógica de negocio del backend</strong>. El rol del arquitecto es <strong>decir consciente y justificadamente dónde vive la complejidad</strong>.</p>
+
+<h2>3. Tabla de memorización</h2>
+<table>
+<thead><tr><th>Ley</th><th>Enunciado / Principio</th><th>Implicación para el arquitecto</th></tr></thead>
+<tbody>
+<tr><td><strong>Conway</strong></td><td>La estructura del sistema tiende a copiar la estructura de comunicación de la organización.</td><td>Alinear los equipos con la visión estructural (ej. equipos por flujos) para lograr diseño modular.</td></tr>
+<tr><td><strong>Postel (Robustez)</strong></td><td>Estricto con lo que envías; tolerante con lo que recibes de otros componentes.</td><td>El emisor sigue un formato claro y estricto; el receptor tolera pequeñas variaciones sin romper el flujo.</td></tr>
+<tr><td><strong>Tesler (Conservación)</strong></td><td>La complejidad inherente no se elimina; solo se traslada de un lugar a otro.</td><td>Decidir dónde vive la complejidad: si se simplifica la UI, se traslada al backend.</td></tr>
+</tbody>
+</table>
+<p class="cite">Versión imprimible con los matices históricos: <a href="../reference/leyes-arquitectura.html">chuleta de leyes</a>.</p>
+
+<div class="callout">
+<span class="label">Conclusión del rol y leyes</span>
+Las decisiones del arquitecto impactarán el software y a la organización <strong>durante años</strong>. Entender y aplicar estas leyes universales brinda una ventaja enorme para diseñar sistemas inteligentes, duraderos, estables y alineados con las realidades humanas y operacionales.
+</div>
+
+<h2>4. Ponte a prueba</h2>
+<div class="quiz"
+     data-title="Quiz Lección 5 — Rol y Leyes"
+     data-quiz='[
+      {"q":"¿Quién formuló la Ley de Conway y en qué año?",
+       "options":["Jon Postel en 1981","Larry Tesler en 1984","Melvin Conway en 1968","Fred Brooks en 1975"],
+       "correct":2,
+       "why":"Melvin Conway, en How Do Committees Invent? (Datamation, abril de 1968). El nombre ley de Conway lo popularizó Fred Brooks en The Mythical Man-Month."},
+      {"q":"La Ley de Conway dice que el diseño del sistema copia…",
+       "options":["La tecnología dominante del mercado","La estructura de comunicación de la organización","El presupuesto asignado al proyecto","La jerarquía salarial de los equipos"],
+       "correct":1,
+       "why":"Cita textual: las organizaciones que diseñan sistemas están limitadas a producir diseños que son copias de las estructuras de comunicación de estas organizaciones."},
+      {"q":"Ley de Postel: sé conservador con lo que ___ y tolerante con lo que ___.",
+       "options":["Aceptas, envías","Documentas, ejecutas","Envías, aceptas","Compilas, despliegas"],
+       "correct":2,
+       "why":"Conservador y estricto con lo que envías (formato claro, apegado a norma); liberal y tolerante con lo que aceptas (el receptor soporta pequeñas desviaciones sin caerse)."},
+      {"q":"La Ley de Tesler establece que la complejidad inherente…",
+       "options":["Se elimina con buenas interfaces","Crece con cada nuevo usuario","Se reduce automatizando procesos","No se elimina, solo se traslada"],
+       "correct":3,
+       "why":"Toda aplicación tiene un mínimo de complejidad inherente imposible de eliminar: solo se puede mover de un lugar a otro del sistema."},
+      {"q":"Si simplificas radicalmente la UI de una pantalla, según Tesler la complejidad va a…",
+       "options":["El navegador del usuario final","La lógica de negocio del backend","La base de datos del sistema","El documento de requisitos"],
+       "correct":1,
+       "why":"La complejidad conceptual de la interfaz se traslada de forma invisible e inmediata a la lógica de negocio en el backend. El arquitecto debe decidir dónde conviene que viva."},
+      {"q":"Las tres grandes responsabilidades del arquitecto son: decidir, comunicar y…",
+       "options":["Programar el código crítico","Contratar al equipo técnico","Documentar cada clase escrita","Gestionar el riesgo técnico"],
+       "correct":3,
+       "why":"Tomador de decisiones clave + comunicador incansable + gestión del riesgo técnico (detectar fallos de seguridad, rendimiento o escalabilidad en diseño, no en producción)."}
+     ]'></div>
+
+<h2>5. Recuperación sin pistas</h2>
+<div class="recall">
+<span class="label">Práctica de retención (3 min, de memoria)</span>
+<ol>
+  <li>Escribe cada ley con su formato de examen: <strong>nombre → autor → año → enunciado</strong>.</li>
+  <li>Inventa un ejemplo propio de la Ley de Conway (una organización que conozcas).</li>
+  <li>Explica la Ley de Tesler con la analogía de la pantalla simplificada.</li>
+</ol>
+Verifica con la <a href="../reference/leyes-arquitectura.html">chuleta de leyes</a>.
+</div>
+
+<h2>Fuente principal recomendada</h2>
+<p class="sources">📄 <a href="https://www.melconway.com/Home/pdf/committees.pdf">Conway, M. E. — "How Do Committees Invent?" (Datamation, 1968) — PDF original gratuito</a>. Es corto, sorprendente y la fuente primaria exacta. Complementos igual de gratuitos: <a href="https://www.rfc-editor.org/info/rfc793">RFC 793 (Postel)</a> y la <a href="https://www.nomodes.com/larry-tesler-consulting/complexity-law">página oficial de Tesler</a>.</p>
+
+<div class="lesson-nav">
+  <a href="0004-trade-offs.html">← Lección 4: Trade-offs</a>
+  <a href="0006-el-plano-de-la-casa.html">Lección 6: El Plano →</a>
+</div>
+
+<p class="footer-note">¿Quieres que te haga un simulacro de preguntas de examen sobre las leyes? <strong>Pídeselo a tu tutor (este agente)</strong>. Referencias: <a href="../reference/leyes-arquitectura.html">chuleta de leyes</a> · <a href="../reference/glosario.html">glosario</a></p>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

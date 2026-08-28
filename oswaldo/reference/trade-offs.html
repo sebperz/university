@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia — Trade-offs</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Documento de referencia · Video 4</p>
+<h1>Trade-offs — chuleta</h1>
+<p class="meta">Compresión de la <a href="../lessons/0004-trade-offs.html">Lección 4</a>. Fuentes: <a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447">Richards &amp; Ford</a> ("todo en arquitectura es un trade-off") · material de Codmind.</p>
+
+<h2>1. Definición</h2>
+<div class="callout">
+<span class="label">¿Qué es un trade-off?</span>
+Situación técnica donde, al optar por <strong>mejorar un atributo de calidad</strong>, debemos <strong>renunciar o perjudicar de forma necesaria a otro</strong>. Es la aceptación de que no podemos tener todo al máximo nivel al mismo tiempo. Analogía del viaje: emocionante, seguro y económico — no se maximizan los tres a la vez. Entender esto distingue a un verdadero arquitecto técnico de un programador senior.
+</div>
+
+<h2>2. Los 5 trade-offs clásicos (tabla de examen)</h2>
+<table>
+<thead><tr><th>Compromiso</th><th>Atributo priorizado</th><th>Atributo sacrificado</th><th>Descripción del balance</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Rendimiento vs. Mantenibilidad</strong></td>
+<td>Rendimiento (velocidad)</td>
+<td>Mantenibilidad</td>
+<td>Optimizar a bajo nivel y usar algoritmos complejos acelera la ejecución pero hace el código difícil de mantener (un bug puede tardar el triple y traer errores nuevos).</td>
+</tr>
+<tr>
+<td><strong>Seguridad vs. Usabilidad</strong></td>
+<td>Seguridad (MFA, claves complejas)</td>
+<td>Usabilidad (UX)</td>
+<td>MFA constante, contraseñas complejas mensuales y cierres de sesión frustran al usuario, inducen errores o abandonos.</td>
+</tr>
+<tr>
+<td><strong>Escalabilidad vs. Simplicidad</strong></td>
+<td>Escalabilidad</td>
+<td>Simplicidad</td>
+<td>Microservicios escalan componentes de forma independiente pero multiplican la complejidad operativa frente a un monolito.</td>
+</tr>
+<tr>
+<td><strong>Costo vs. Disponibilidad</strong></td>
+<td>Disponibilidad (99.99%)</td>
+<td>Costo</td>
+<td>Alta disponibilidad exige redundancia, replicación continua y balanceo global: solo se justifica si cada minuto caído cuesta millones (banca). En un sistema interno, 99% a fracción del costo es adecuado.</td>
+</tr>
+<tr>
+<td><strong>Flexibilidad vs. Velocidad de Entrega</strong></td>
+<td>Flexibilidad</td>
+<td>Velocidad de entrega</td>
+<td>Diseño abstracto y genérico (capas de abstracción, interfaces genéricas, motores de reglas) facilita el futuro pero retrasa la salida al mercado; el diseño rígido entrega rápido pero es difícil de pivotar.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>3. Cómo gestionarlos (proceso de 5 pasos)</h2>
+<ol>
+  <li><strong>Entender profundamente el negocio:</strong> reunirse con stakeholders; ¿la prioridad es costo, seguridad o salir rápido al mercado?</li>
+  <li><strong>Priorizar atributos explícitamente:</strong> clasificarlos formalmente (app médica → seguridad y consistencia de datos por encima de la velocidad).</li>
+  <li><strong>Documentar cada trade-off:</strong> registrar el porqué (ej. "elegimos BD relacional por consistencia sobre escalabilidad horizontal") para que futuros equipos no deshagan decisiones justificadas.</li>
+  <li><strong>Uso consistente de patrones:</strong> cada estilo (capas, microservicios, eventos) trae trade-offs inherentes; usarlos de forma consistente facilita el entendimiento.</li>
+  <li><strong>Reevaluar en el ciclo de vida:</strong> los trade-offs no están escritos en piedra (año 1: monolito para salir rápido; año 3: microservicios para escalar). La reevaluación periódica es mandatoria.</li>
+</ol>
+
+<div class="callout">
+<span class="label">Regla de oro de los trade-offs</span>
+No existen soluciones de software perfectas en el mundo real. Solo existen <strong>soluciones adecuadas para un contexto de negocio específico</strong> y un conjunto de prioridades debidamente <strong>analizadas, negociadas y documentadas</strong>.
+</div>
+
+<p class="footer-note"><a href="../lessons/0004-trade-offs.html">Lección 4: Trade-offs</a> · <a href="atributos-calidad.html">Atributos de calidad</a> · <a href="glosario.html">Glosario</a></p>
+
+</body>
+</html>

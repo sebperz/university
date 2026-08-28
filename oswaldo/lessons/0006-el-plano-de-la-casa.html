@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 6 — ¿Qué es la Arquitectura? El Plano de la Casa</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Lección 6 de 6 · Video 6</p>
+<h1>¿Qué es la Arquitectura? Guía Práctica para Desarrolladores</h1>
+<p class="meta">≈ 12 min · Cierre del curso: integra las <a href="0001-arquitectura-en-capas.html">lecciones 1–5</a> · <a href="../reference/glosario.html">Glosario del curso</a></p>
+
+<div class="callout">
+<span class="label">Tu win de hoy</span>
+Vas a poder explicar <strong>la analogía del plano de la casa</strong> y las <strong>4 razones</strong> para diseñar la arquitectura desde el primer día — la síntesis conceptual que suele cerrar los exámenes de este curso.
+</div>
+
+<h2>1. La arquitectura no es un concepto lejano</h2>
+<p>Para quien empieza, la arquitectura suena a concepto abstracto, confuso, lleno de diagramas exóticos. La realidad: <strong>ya haces arquitectura cada vez que escribes código</strong>. El problema es que muchas veces lo haces de forma <em>completamente inconsciente</em> — y ahí se siembran las bases de futuros dolores de cabeza técnicos.</p>
+
+<h2>2. La analogía del plano de la casa</h2>
+<p>Nadie levantaría muros sin una idea clara del diseño. Primero, el arquitecto tradicional dibuja un <strong>plano general</strong>: ubicación de habitaciones, el esqueleto, cómo se comunican las estancias, por dónde pasan las tuberías, el cableado y el drenaje.</p>
+<p>El plano <strong>no indica la ubicación exacta de cada tornillo o cable interno</strong> — eso es el detalle de bajo nivel. Pero sí establece la <strong>estructura de alto nivel</strong> indispensable para que la casa sea habitable, segura y agradable.</p>
+
+<table>
+<thead><tr><th>🏠 En la casa</th><th>💻 En el software</th></tr></thead>
+<tbody>
+<tr><td>El plano general (alto nivel)</td><td>La arquitectura: ¿monolito robusto, microservicios distribuidos o diseño desacoplado por eventos? Cómo se comunican los componentes, dónde residen las BD, qué tecnologías sustentan cada bloque.</td></tr>
+<tr><td>La ubicación de cada tornillo (bajo nivel)</td><td>El diseño de bajo nivel: ¿usar un <code>switch</code> o un <code>if</code>? ¿Cómo nombrar variables?</td></tr>
+</tbody>
+</table>
+
+<h2>3. Por qué diseñarla desde el primer día (4 razones)</h2>
+<ol>
+  <li><strong>Alineación integral con el negocio:</strong> si el producto debe soportar millones de usuarios simultáneos, esa escalabilidad <strong>debe concebirse desde el esqueleto</strong>; es inviable agregarla en fases tardías como un simple botón de la interfaz.</li>
+  <li><strong>Garantía de atributos de calidad:</strong> la seguridad de los datos financieros, la rapidez de las consultas o la estabilidad ante fallos <strong>no se improvisan sobre el código</strong>: se planifican, garantizan y diseñan desde las bases (<a href="0002-atributos-de-calidad.html">Lección 2</a>).</li>
+  <li><strong>Mitigación de riesgos y ahorro financiero:</strong> corregir un fallo arquitectónico en fases iniciales es infinitamente más barato. Resolverlo con el sistema en producción puede ser extremadamente costoso, caótico y, en el peor caso, provocar el <strong>fracaso completo del proyecto</strong>.</li>
+  <li><strong>Facilitar la comunicación del equipo:</strong> como el plano lo entienden el dueño, el electricista y el ingeniero civil, una buena arquitectura provee un <strong>lenguaje técnico común</strong> y una visión unificada para desarrolladores, gerentes de producto, administradores y stakeholders.</li>
+</ol>
+
+<div class="callout">
+<span class="label">Takeaway final del curso</span>
+La arquitectura de software no es un lujo técnico ni una disciplina reservada para unos pocos iluminados: es <strong>el esqueleto que sostiene tu aplicación hoy</strong> y que determinará su capacidad de crecimiento mañana. Planificarla conscientemente transforma tu código en un sistema <strong>robusto, profesional, escalable y duradero en el tiempo</strong>.
+</div>
+
+<h2>4. Ponte a prueba (quiz final del curso)</h2>
+<div class="quiz"
+     data-title="Quiz Lección 6 — El Plano de la Casa"
+     data-quiz='[
+      {"q":"La arquitectura es al software lo que el plano es a…",
+       "options":["La decoración del salón","La construcción de la casa","El mobiliario del interior","El jardín de la propiedad"],
+       "correct":1,
+       "why":"El plano establece la estructura de alto nivel (habitaciones, esqueleto, tuberías) igual que la arquitectura establece la estructura de alto nivel del sistema. Los tornillos y cables internos son el diseño de bajo nivel."},
+      {"q":"¿Cuál de estas decisiones NO es de arquitectura (alto nivel)?",
+       "options":["Si construir monolito o microservicios","Si usar un switch o un if","Dónde residen las bases de datos","Qué tecnologías sustentan cada bloque"],
+       "correct":1,
+       "why":"Elegir entre switch e if, o la nomenclatura de variables, es diseño de bajo nivel. La arquitectura decide estilo general, comunicación de componentes, ubicación de datos y tecnologías por bloque."},
+      {"q":"Razón 1 para diseñar la arquitectura desde el día 1:",
+       "options":["Impresionar a los stakeholders","Reducir el código que se escribe","Alinear la escalabilidad con el negocio","Evitar escribir documentación"],
+       "correct":2,
+       "why":"Si el negocio exige soportar millones de usuarios, esa capacidad de escalamiento debe concebirse desde el esqueleto del sistema: agregarla tarde es inviable, como un botón no se agrega así."},
+      {"q":"Los atributos de calidad como la seguridad de los datos se…",
+       "options":["Se agregan al final de cada proyecto","Los resuelve el equipo de pruebas","Dependen del navegador del usuario","Diseñan desde las bases, no se improvisan"],
+       "correct":3,
+       "why":"Propiedades como seguridad, rapidez o estabilidad no se improvisan sobre el código: se planifican, garantizan y diseñan desde las bases de la estructura arquitectónica."},
+      {"q":"Encontrar un fallo arquitectónico cuando el sistema ya vive en producción es…",
+       "options":["Barato gracias a herramientas modernas","Irrelevante si las pruebas pasaron","Extremadamente costoso, caótico y arriesgado","Normal y fácil de corregir rápido"],
+       "correct":2,
+       "why":"En diseño es infinitamente más barato corregirlo. En producción puede resultar extremadamente costoso, caótico y provocar el fracaso completo del proyecto."}
+     ]'></div>
+
+<h2>5. Repaso final del curso (interleaving)</h2>
+<div class="recall">
+<span class="label">Simulacro exprés de examen — 6 preguntas de memoria</span>
+<ol>
+  <li>Dibuja las 4 capas y escribe la regla de comunicación de las capas cerradas. <span class="cite">(<a href="../reference/arquitectura-capas.html">capas</a>)</span></li>
+  <li>Clasifica "testabilidad" y "elasticidad" en su categoría de atributos. <span class="cite">(<a href="../reference/atributos-calidad.html">atributos</a>)</span></li>
+  <li>Recita la definición integradora de Codmind. <span class="cite">(<a href="0003-definicion-de-arquitectura.html">lección 3</a>)</span></li>
+  <li>Nombra los 5 trade-offs clásicos y qué se sacrifica en cada uno. <span class="cite">(<a href="../reference/trade-offs.html">trade-offs</a>)</span></li>
+  <li>Las 3 leyes: autor, año, enunciado. <span class="cite">(<a href="../reference/leyes-arquitectura.html">leyes</a>)</span></li>
+  <li>Las 4 razones para diseñar arquitectura desde el día 1. <span class="cite">(esta lección)</span></li>
+</ol>
+Si fallas alguna, relee la referencia indicada en 48 horas (repaso espaciado).
+</div>
+
+<h2>Fuente principal recomendada</h2>
+<p class="sources">📖 <a href="https://www.philadelphia.edu.jo/academics/lalqoran/uploads/What%20is%20Software%20Architecture.pdf">Bass, Clements &amp; Kazman — "What is Software Architecture?" (capítulo 1 de <em>Software Architecture in Practice</em>, licencia Creative Commons)</a>: la mejor explicación académica de qué es (y qué no es) la arquitectura, de la mano del SEI/CMU.</p>
+
+<div class="lesson-nav">
+  <a href="0005-rol-del-arquitecto-y-leyes.html">← Lección 5: Rol y Leyes</a>
+  <a href="../reference/verificacion-fuentes.html">Verificación del material →</a>
+</div>
+
+<p class="footer-note">Curso completo 🎉 Cuando quieras: simulacros de examen, dudas puntuales o profundizar cualquier tema — <strong>pregúntale a tu tutor (este agente)</strong>. Índice de referencias: <a href="../reference/glosario.html">glosario</a> · <a href="../reference/arquitectura-capas.html">capas</a> · <a href="../reference/atributos-calidad.html">atributos</a> · <a href="../reference/trade-offs.html">trade-offs</a> · <a href="../reference/leyes-arquitectura.html">leyes</a> · <a href="../reference/verificacion-fuentes.html">verificación</a></p>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

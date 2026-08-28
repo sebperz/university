@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia — Leyes de la Arquitectura</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Documento de referencia · Video 5</p>
+<h1>Leyes de la Arquitectura — chuleta</h1>
+<p class="meta">Compresión de la <a href="../lessons/0005-rol-del-arquitecto-y-leyes.html">Lección 5</a>. Citas verificadas contra fuentes primarias: <a href="https://www.melconway.com/Home/Committees_Paper.html">Conway 1968</a> · <a href="https://www.rfc-editor.org/info/rfc793">RFC 793 (Postel, 1981)</a> · <a href="https://www.nomodes.com/larry-tesler-consulting/complexity-law">Tesler ~1984</a>.</p>
+
+<h2>Tabla de memorización</h2>
+<table>
+<thead><tr><th>Ley</th><th>Autor y año</th><th>Enunciado / Principio</th><th>Implicación para el arquitecto</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>Ley de Conway</strong></td>
+<td>Melvin Conway, 1968</td>
+<td>Las organizaciones que diseñan sistemas están limitadas a producir diseños que son <strong>copias de sus estructuras de comunicación</strong>.</td>
+<td>Para lograr un diseño modular, alinea los equipos con la visión estructural (p. ej., equipos por flujos). Si separas frontend y backend, el sistema lo reflejará.</td>
+</tr>
+<tr>
+<td><strong>Ley de Postel</strong><br><span class="cite">(Principio de Robustez)</span></td>
+<td>Jon Postel, 1981 (RFC 793)</td>
+<td>"Sé conservador en lo que haces/envías, liberal en lo que aceptas de otros."</td>
+<td>El <strong>emisor</strong> envía datos con el formato más claro y apegado a norma; el <strong>receptor</strong> tolera pequeñas desviaciones sin caerse. Sistemas estables frente al cambio.</td>
+</tr>
+<tr>
+<td><strong>Ley de Tesler</strong><br><span class="cite">(Conservación de la Complejidad)</span></td>
+<td>Larry Tesler, ~1984</td>
+<td>Toda aplicación tiene un <strong>nivel mínimo de complejidad inherente</strong> que no se elimina: solo se traslada de un lugar a otro.</td>
+<td>Decide conscientemente <strong>dónde vive la complejidad</strong>: si simplificas la UI al máximo, la complejidad migra a la lógica de negocio del backend.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Matices de nivel "brillar en clase"</h2>
+<ul>
+  <li><strong>Conway:</strong> el nombre "ley de Conway" lo popularizó Fred Brooks en <em>The Mythical Man-Month</em>. Su contramedida moderna es la <em>Inverse Conway Maneuver</em>: reestructurar los equipos para obtener la arquitectura deseada (<a href="https://martinfowler.com/bliki/ConwaysLaw.html">Fowler</a>).</li>
+  <li><strong>Postel:</strong> la crítica moderna (<a href="https://cacm.acm.org/practice/the-robustness-principle-reconsidered">Allman, CACM 2011</a>) advierte que ser demasiado tolerante con la entrada puede crear fallas de seguridad y "consolidar" implementaciones descuidadas.</li>
+  <li><strong>Tesler:</strong> viene del mundo HCI (Xerox PARC); su pregunta central es <em>quién</em> carga la complejidad: el usuario, el desarrollador de la app o el de la plataforma.</li>
+</ul>
+
+<h2>El rol del arquitecto (3 responsabilidades)</h2>
+<ol>
+  <li><strong>Tomador de decisiones clave:</strong> define cimientos, estructura general, estilos e integración de tecnologías.</li>
+  <li><strong>Comunicador incansable:</strong> puente entre la visión del negocio y la ingeniería; documenta decisiones y crea diagramas comprensibles.</li>
+  <li><strong>Gestor del riesgo técnico:</strong> identifica fallos de seguridad, rendimiento o escalabilidad en diseño, antes de que sean "incendios" en producción.</li>
+</ol>
+
+<div class="callout">
+<span class="label">Conclusión del rol y leyes</span>
+Las decisiones del arquitecto impactan el software y a la organización durante años. Estas leyes son universales: dominarlas ayuda a diseñar sistemas inteligentes, duraderos, estables y alineados con las realidades humanas y operacionales.
+</div>
+
+<p class="footer-note"><a href="../lessons/0005-rol-del-arquitecto-y-leyes.html">Lección 5: Rol y Leyes</a> · <a href="trade-offs.html">Trade-offs</a> · <a href="glosario.html">Glosario</a></p>
+
+</body>
+</html>

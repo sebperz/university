@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 1 — Arquitectura en Capas Explicada Fácil</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Lección 1 de 6 · Video 1</p>
+<h1>Arquitectura en Capas Explicada Fácil</h1>
+<p class="meta">≈ 15 min · Misión: examen de Diseño de Sistemas y Arquitectura de Software · <a href="../reference/glosario.html">Glosario del curso</a></p>
+
+<div class="callout">
+<span class="label">Tu win de hoy</span>
+Vas a poder <strong>dibujar la arquitectura en capas de memoria</strong>: sus 4 capas, la regla de comunicación entre ellas y por qué esta arquitectura es rápida de mantener pero lenta y poco escalable. Es el tema más "preguntable" del examen.
+</div>
+
+<h2>1. La idea en 30 segundos</h2>
+<p>Si has visto repositorios con carpetas <code>controllers</code>, <code>services</code> y <code>repositories</code>, ya conociste esta arquitectura sin saberlo. Es el estilo llamado <strong>Arquitectura de Capas</strong>: dividir el sistema en capas apiladas verticalmente, donde cada una tiene una sola responsabilidad (<a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch10.html">Richards &amp; Ford, cap. 10</a>).</p>
+
+<div class="layer-stack">
+  <div class="layer">Capa de Presentación <small>La cima: punto de entrada que recibe todas las solicitudes del usuario</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer">Capa de Lógica de Negocio <small>El corazón: reglas, servicios, validaciones, lógica operativa</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer">Capa de Persistencia <small>Una sola responsabilidad: guardar y recuperar la información</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer db-layer">Base de Datos <small>La base: almacenamiento físico de los datos</small></div>
+</div>
+
+<h2>2. La regla de oro: capas cerradas</h2>
+<p>Por defecto, <strong>todas las capas son cerradas</strong>. La comunicación fluye estrictamente en secuencia, de arriba hacia abajo: Presentación habla solo con Lógica de Negocio; esta solo con Persistencia; y esta con la Base de Datos.</p>
+<div class="callout">
+<span class="label">Regla de examen</span>
+A las capas cerradas, la Presentación tiene <strong>prohibido saltarse la Lógica</strong> para hablar directo con la Persistencia. Cualquier petición de datos <strong>debe transitar por toda la jerarquía de capas</strong>.
+</div>
+
+<h3>Flujo práctico: compra en un e-commerce</h3>
+<ol>
+  <li>El usuario hace clic en <em>comprar</em> → la acción llega a la <strong>Presentación</strong>.</li>
+  <li>La Presentación delega a la <strong>Lógica de Negocio</strong>, que procesa la transacción: valida descuentos, calcula impuestos.</li>
+  <li>La Lógica, ya validado todo, instruye a la <strong>Persistencia</strong>: actualiza el stock del producto.</li>
+  <li>La Persistencia ejecuta la instrucción directamente en el <strong>motor de base de datos</strong>.</li>
+</ol>
+
+<h2>3. El giro interesante: la capa abierta</h2>
+<p>¿Dónde pones servicios de uso transversal como <code>date utils</code> o <code>logger utils</code>, que varias capas necesitan? Aparecen dos problemas:</p>
+<ul>
+  <li>Si viven <em>dentro</em> de la Lógica de Negocio, la Presentación podría acceder a ellos por la regla de proximidad, rompiendo el aislamiento: la presentación no debe tocar utilidades internas.</li>
+  <li>Si creas una nueva <strong>Capa de Servicios Comunes</strong> entre Lógica y Persistencia como capa <em>cerrada</em>, cada llamada de negocio que quiera persistir datos hace un salto extra obligatorio por esa capa… aunque no la necesite. Puro desperdicio.</li>
+</ul>
+<p>La solución es marcar esa capa como <strong>capa abierta</strong>. Piénsalo como un <strong>peaje con carril de desvío</strong>: quien sí usa sus servicios baja y pasa por él; quien no los necesita, simplemente se lo salta.</p>
+
+<div class="layer-stack">
+  <div class="layer">Capa de Lógica de Negocio <small>Decide: ¿necesito los servicios comunes?</small></div>
+  <div class="layer-arrow">↓ &nbsp;·&nbsp; ↷ (salto directo si no los necesita)</div>
+  <div class="layer open-layer">Capa de Servicios Comunes <small>ABIERTA · dashed = se puede saltar · date utils, logger utils</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer">Capa de Persistencia</div>
+</div>
+<p class="cite">Ojo: solo esa capa es saltable. La Presentación sigue sin poder saltarse la Lógica de Negocio — lo "abierto" aplica únicamente a la capa que fue marcada como abierta.</p>
+
+<h3>El efecto en los saltos</h3>
+<table>
+<thead><tr><th>Escenario</th><th>Camino de una petición de negocio</th><th>Saltos</th></tr></thead>
+<tbody>
+<tr><td>Servicios comunes <em>cerrados</em></td><td>Lógica → Servicios Comunes → Persistencia → BD</td><td>3, siempre (uno de más)</td></tr>
+<tr><td>Servicios comunes <em>abiertos</em></td><td>Lógica → Persistencia → BD, o bien Lógica → Servicios Comunes si los necesita</td><td>2–3, según necesidad</td></tr>
+</tbody>
+</table>
+
+<p><strong>El trade-off consciente:</strong> abrir una capa mejora el rendimiento (menos saltos obligatorios) a cambio de menos control del acoplamiento — ahora es posible que componentes se comuniquen "de más". Regla práctica: <strong>todo cerrado por defecto; se abre una capa solo con justificación de rendimiento y quedando documentada</strong> (así se gestiona un trade-off, como verás en la <a href="0004-trade-offs.html">Lección 4</a>).</p>
+
+<h2>4. Evaluación por atributos de calidad</h2>
+<table>
+<thead><tr><th>Atributo</th><th>Calificación</th><th>Justificación</th></tr></thead>
+<tbody>
+<tr><td>Mantenibilidad</td><td>5/5</td><td>Su mayor fortaleza: el aislamiento entre capas asegura que un cambio interno no impacte a las demás.</td></tr>
+<tr><td>Testibilidad</td><td>5/5</td><td>Cada capa se prueba de forma aislada e independiente; no hay que testear el sistema de un tirón.</td></tr>
+<tr><td>Escalabilidad</td><td>2/5</td><td>Baja: forma monolitos; escalar un servicio exige duplicar y escalar la aplicación completa.</td></tr>
+<tr><td>Rendimiento</td><td>1/5</td><td>Bajo: transitar secuencialmente por capas cerradas introduce retardos y cuellos de botella.</td></tr>
+</tbody>
+</table>
+<p class="cite">Nota honesta: estas cifras son la escala del material de tu curso. <a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch10.html">Richards &amp; Ford</a> coinciden en la dirección (fortaleza: simplicidad y mantenibilidad; debilidad: rendimiento y escalabilidad), aunque usan otra escala. Para el examen, memoriza estas. Más detalle en la <a href="../reference/arquitectura-capas.html">chuleta de capas</a>.</p>
+
+<div class="callout">
+<span class="label">Conclusión de capas</span>
+Excelente para <strong>proyectos iniciales</strong> que priorizan orden, mantenibilidad rápida y facilidad de prueba. <strong>No recomendada</strong> para aplicaciones con altos requerimientos de rendimiento o escalabilidad masiva.
+</div>
+
+<h2>5. Ponte a prueba</h2>
+<div class="quiz"
+     data-title="Quiz Lección 1 — Arquitectura en Capas"
+     data-quiz='[
+      {"q":"¿Cuál es la única responsabilidad de la capa de persistencia?",
+       "options":["Guardar y recuperar la información","Validar y procesar las reglas","Recibir las solicitudes del usuario","Almacenar físicamente los datos crudos"],
+       "correct":0,
+       "why":"Persistencia solo guarda y recupera. Validar y aplicar reglas es trabajo de la lógica de negocio; recibir solicitudes, de la presentación; el almacenamiento físico es la base de datos."},
+      {"q":"En un sistema de capas cerradas, ¿con quién se comunica la presentación?",
+       "options":["Solo con la capa de persistencia","Con todas las capas de abajo","Solo con la lógica de negocio","Con la base de datos directamente"],
+       "correct":2,
+       "why":"Las capas cerradas fuerzan la comunicación secuencial: cada capa solo habla con su vecina inmediata de abajo. Presentación → Lógica de Negocio, nunca más abajo."},
+      {"q":"¿Qué permite una capa abierta?",
+       "options":["Comunicarse con las capas superiores","Saltársela cuando no se necesita","Convertirse en capa cerrada luego","Duplicar su funcionalidad entre capas"],
+       "correct":1,
+       "why":"Una capa abierta puede ser saltada por las superiores para comunicarse directamente con la capa inferior si no requieren su funcionalidad (ej.: capa de servicios comunes)."},
+      {"q":"¿Por qué el rendimiento suele ser bajo en capas cerradas?",
+       "options":["Toda petición recorre toda la jerarquía","La base de datos siempre es muy lenta","Las validaciones de negocio son excesivas","La presentación no sabe delegar bien"],
+       "correct":0,
+       "why":"Al transitar secuencialmente por múltiples capas cerradas se introducen retardos que generan cuellos de botella: por eso su calificación de rendimiento es 1/5."},
+      {"q":"Para escalar un servicio de negocio en un monolito por capas debes…",
+       "options":["Escalar únicamente esa capa específica","Separar la base de datos del sistema","Convertir la lógica en microservicios","Duplicar y escalar toda la aplicación"],
+       "correct":3,
+       "why":"Al ser un monolito, no puedes escalar una sola capa: la escalabilidad baja (2/5) obliga a duplicar y escalar la aplicación completa."}
+     ]'></div>
+
+<h2>6. Recuperación sin pistas</h2>
+<div class="recall">
+<span class="label">Práctica de retención (2 min, de memoria)</span>
+<ol>
+  <li>Apunta las <strong>4 capas de abajo hacia arriba</strong> y la responsabilidad única de cada una.</li>
+  <li>Explica en una frase la diferencia entre <strong>capa cerrada</strong> y <strong>capa abierta</strong>.</li>
+  <li>Escribe las dos calificaciones perfectas (5/5) y las dos bajas del estilo en capas, con su porqué.</li>
+</ol>
+Después <a href="../reference/arquitectura-capas.html">compáralas con la chuleta</a>. Lo que falles hoy es exactamente lo que debes repasar en 48 h.
+</div>
+
+<h2>Fuente principal recomendada</h2>
+<p class="sources">📖 <a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch10.html">Richards &amp; Ford — "Layered Architecture Style", <em>Fundamentals of Software Architecture</em> (O'Reilly), cap. 10</a>. Es la referencia académica más sólida del tema. Versión en español accesible: <a href="https://reactiveprogramming.io/blog/es/estilos-arquitectonicos/capas">el blog del libro de Codmind</a> (el mismo material de tus videos).</p>
+
+<div class="lesson-nav">
+  <span></span>
+  <a href="0002-atributos-de-calidad.html">Lección 2: Atributos de Calidad →</a>
+</div>
+
+<p class="footer-note">¿Algo no cuadra o quieres más ejemplos? <strong>Pregúntale a tu tutor (este agente)</strong> en la próxima sesión. Referencias: <a href="../reference/arquitectura-capas.html">chuleta de capas</a> · <a href="../reference/glosario.html">glosario</a> · <a href="../reference/verificacion-fuentes.html">verificación del material</a></p>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

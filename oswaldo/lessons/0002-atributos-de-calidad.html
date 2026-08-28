@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 2 — Atributos de Calidad</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Lección 2 de 6 · Video 2</p>
+<h1>Atributos de Calidad en la Arquitectura</h1>
+<p class="meta">≈ 15 min · Requiere la <a href="0001-arquitectura-en-capas.html">Lección 1</a> · <a href="../reference/glosario.html">Glosario del curso</a></p>
+
+<div class="callout">
+<span class="label">Tu win de hoy</span>
+Vas a poder <strong>clasificar cualquier atributo de calidad en su categoría</strong> (runtime, design-time o proceso) y distinguir los pares que los exámenes usan para confundir: escalabilidad/elasticidad y disponibilidad/confiabilidad.
+</div>
+
+<h2>1. Qué son (y qué no son)</h2>
+<p>Los atributos de calidad <strong>no son funcionalidades</strong> — no son "hacer una transferencia" ni "crear una orden de compra". Describen <strong>cómo se comporta</strong> esa funcionalidad. Tradicionalmente se llaman <em>requisitos no funcionales</em> y determinan el éxito comercial y la durabilidad del software a largo plazo.</p>
+<blockquote>Analogía del automóvil: su <em>funcionalidad</em> es llevarte del punto A al B; sus <em>atributos</em> son la seguridad, el consumo, la velocidad, la comodidad y la facilidad de reparación.</blockquote>
+<p>Ignorarlos produce sistemas lentos, inseguros, inestables e imposibles de escalar — que los usuarios terminan rechazando. El estándar internacional que los formaliza es la <a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023</a>; tu material los organiza en <strong>tres dimensiones de diseño</strong>.</p>
+
+<h2>2. Las tres categorías</h2>
+
+<h3>I. Tiempo de ejecución (Runtime) — se sienten usando el sistema en vivo</h3>
+<ul>
+  <li><strong>Rendimiento (performance):</strong> rapidez de respuesta y eficiencia de recursos (CPU, memoria). Se mide con <em>latencia</em> (tiempo de espera) y <em>throughput</em> (operaciones/segundo).</li>
+  <li><strong>Escalabilidad:</strong> soportar más carga (usuarios, datos, transacciones) sin degradación.</li>
+  <li><strong>Disponibilidad:</strong> % de tiempo funcional y accesible (el estándar crítico: 99.99% en banca).</li>
+  <li><strong>Seguridad:</strong> protección contra accesos no autorizados, ciberataques, manipulación y fugas.</li>
+  <li><strong>Confiabilidad (reliability):</strong> probabilidad de operar correcto y entregar resultados exactos sin fallas en un período.</li>
+  <li><strong>Resistencia (resilience):</strong> resistir fallos inesperados y recuperarse rápido.</li>
+  <li><strong>Elasticidad:</strong> escalabilidad <em>dinámica y automatizada</em>: expandir y contraer infraestructura según la demanda para optimizar costos.</li>
+</ul>
+
+<h3>II. Estructura (Design-time) — invisibles al usuario, vitales para el equipo</h3>
+<ul>
+  <li><strong>Mantenibilidad:</strong> modificar, corregir o agregar a bajo costo (código limpio, legible, modular, documentado).</li>
+  <li><strong>Testabilidad:</strong> identificar fallos y verificar componentes de forma individual.</li>
+  <li><strong>Desplegabilidad:</strong> velocidad, eficiencia y seguridad al liberar versiones a producción.</li>
+  <li><strong>Configurabilidad:</strong> adaptar entornos solo cambiando archivos de configuración, sin recompilar.</li>
+  <li><strong>Portabilidad:</strong> trasladar el sistema de infraestructura/SO/proveedor de nube sin <em>vendor lock-in</em>.</li>
+</ul>
+
+<h3>III. Proceso y Operación — el ciclo de vida y la productividad</h3>
+<ul>
+  <li><strong>Eficiencia operacional:</strong> monitorear, diagnosticar y operar con mínimo esfuerzo manual.</li>
+  <li><strong>Simplicidad:</strong> claridad del diseño global para que equipos nuevos entiendan rápido.</li>
+  <li><strong>Reusabilidad:</strong> reutilizar código o componentes en otros proyectos, sin duplicar.</li>
+  <li><strong>Facilidad de instalación:</strong> desplegar en múltiples plataformas y sistemas operativos.</li>
+</ul>
+<p class="cite">Tabla completa y definiciones exactas: <a href="../reference/atributos-calidad.html">chuleta de atributos</a> · <a href="../reference/glosario.html">glosario</a>.</p>
+
+<h2>3. Los pares trampa (aquí caen los exámenes)</h2>
+<table>
+<thead><tr><th>Par</th><th>Diferencia en una frase</th></tr></thead>
+<tbody>
+<tr><td><strong>Escalabilidad vs. Elasticidad</strong></td><td>La elasticidad <em>es</em> una forma dinámica y automatizada de escalabilidad: crece <em>y se encoge</em> sola según la demanda.</td></tr>
+<tr><td><strong>Disponibilidad vs. Confiabilidad</strong></td><td>Disponibilidad = ¿está accesible? (% de tiempo). Confiabilidad = ¿da resultados correctos sin fallas? (probabilidad en un período).</td></tr>
+<tr><td><strong>Rendimiento vs. Escalabilidad</strong></td><td>Rendimiento = qué tan rápido responde <em>hoy</em>. Escalabilidad = si seguirá respondiendo bien <em>con más carga</em>.</td></tr>
+</tbody>
+</table>
+
+<h2>4. Por qué le importan al arquitecto (4 razones)</h2>
+<ol>
+  <li><strong>Guía de decisiones de diseño:</strong> ¿BD relacional o NoSQL? ¿Microservicio o monolito? Se decide priorizando atributos que exige el negocio.</li>
+  <li><strong>Puente de comunicación estratégico:</strong> los stakeholders no hablan de detalles técnicos; hablan de atributos comerciales ("que no se caiga", "datos seguros", "entrega rápida"). El arquitecto los traduce a decisiones de arquitectura.</li>
+  <li><strong>Evaluación y mitigación de riesgos:</strong> detectar fallos antes de construir (ej.: falta de cifrado robusto ante requisitos altos de seguridad).</li>
+  <li><strong>Métrica única de éxito:</strong> la buena arquitectura no es la que "solo funciona": es la que cumple con creces los atributos prioritarios definidos por el negocio desde el inicio.</li>
+</ol>
+
+<div class="callout">
+<span class="label">Clave de calidad</span>
+<strong>No se puede optimizar todo al máximo al mismo tiempo.</strong> Lograr 100% de rendimiento puede comprometer la mantenibilidad; un exceso de seguridad degrada la usabilidad. La misión del arquitecto es <strong>balancear y priorizar según el contexto del negocio</strong>. (Esta idea abre la <a href="0004-trade-offs.html">Lección 4: Trade-offs</a>.)
+</div>
+
+<h2>5. Ponte a prueba</h2>
+<div class="quiz"
+     data-title="Quiz Lección 2 — Atributos de Calidad"
+     data-quiz='[
+      {"q":"¿A qué categoría pertenece la escalabilidad?",
+       "options":["De estructura y diseño","De tiempo de ejecución","De proceso y operación","De calidad en uso"],
+       "correct":1,
+       "why":"La escalabilidad se percibe durante el funcionamiento del sistema en vivo: es un atributo de runtime (tiempo de ejecución), como rendimiento, disponibilidad, seguridad, confiabilidad, resistencia y elasticidad."},
+      {"q":"¿Qué mide exactamente la disponibilidad?",
+       "options":["Porcentaje de tiempo operativo accesible","Cantidad de usuarios concurrentes soportados","Velocidad de respuesta del sistema","Probabilidad de resultados exactos correctos"],
+       "correct":0,
+       "why":"Disponibilidad = porcentaje de tiempo en que la aplicación está funcional y accesible (ej.: el estándar crítico de 99.99% en banca). La probabilidad de resultados exactos es la confiabilidad."},
+      {"q":"La diferencia entre escalabilidad y elasticidad es que…",
+       "options":["Escalabilidad crece sin costo adicional","Ambas son exactamente el mismo concepto","Elasticidad expande y contrae automáticamente","Elasticidad es una escalabilidad manual"],
+       "correct":2,
+       "why":"La elasticidad es una forma dinámica y automatizada de escalabilidad: expande y contrae la infraestructura según la demanda para optimizar costos."},
+      {"q":"El atributo que significa modificar el software a bajo costo se llama:",
+       "options":["Mantenibilidad","Portabilidad","Reusabilidad","Configurabilidad"],
+       "correct":0,
+       "why":"Mantenibilidad = facilidad de modificar, corregir o agregar funcionalidades a bajo costo (design-time). Reusabilidad es reutilizar componentes en otros proyectos; portabilidad, mudarse de infraestructura."},
+      {"q":"El vendor lock-in se evita gracias al atributo de…",
+       "options":["Simplicidad del diseño global","Testabilidad de los componentes","Portabilidad entre infraestructuras","Desplegabilidad en producción"],
+       "correct":2,
+       "why":"Portabilidad = trasladar el sistema entre infraestructura, hardware, SO o proveedor de nube, evitando el bloqueo comercial (vendor lock-in)."},
+      {"q":"Los atributos de calidad también se conocen como…",
+       "options":["Funcionalidades visibles para el usuario","Requisitos no funcionales del sistema","Casos de prueba del producto","Diagramas de la estructura interna"],
+       "correct":1,
+       "why":"Tradicionalmente se llaman requisitos no funcionales: describen cómo se comporta la funcionalidad, no qué hace el sistema."}
+     ]'></div>
+
+<h2>6. Recuperación sin pistas</h2>
+<div class="recall">
+<span class="label">Práctica de retención (3 min, de memoria)</span>
+<ol>
+  <li>Escribe los <strong>7 atributos de runtime</strong> sin mirar. ¿Cuántos te faltaron?</li>
+  <li>Clasifica: "el sistema aguanta el Black Friday" → ¿qué atributo?; "mudar la app de AWS a Azure sin reescribir" → ¿cuál?</li>
+  <li>Resume la analogía del automóvil en una frase propia.</li>
+</ol>
+Verifica con la <a href="../reference/atributos-calidad.html">chuleta</a>. (Respuestas: escalabilidad; portabilidad.)
+</div>
+
+<h2>Fuente principal recomendada</h2>
+<p class="sources">📖 <a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023 — Modelo de calidad de producto</a>: el estándar internacional con las 9 características de calidad (adecuación funcional, eficiencia de rendimiento, compatibilidad, capacidad de interacción, fiabilidad, seguridad, mantenibilidad, flexibilidad, seguridad-inocuidad). Complemento en libro: Bass, Clements &amp; Kazman, <em>Software Architecture in Practice</em>.</p>
+
+<div class="lesson-nav">
+  <a href="0001-arquitectura-en-capas.html">← Lección 1: Capas</a>
+  <a href="0003-definicion-de-arquitectura.html">Lección 3: Definiciones →</a>
+</div>
+
+<p class="footer-note">¿Te confunde algún par de atributos? <strong>Pregúntale a tu tutor (este agente)</strong>. Referencias: <a href="../reference/atributos-calidad.html">chuleta de atributos</a> · <a href="../reference/glosario.html">glosario</a></p>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 3 — ¿Qué es la Arquitectura de Software?</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Lección 3 de 6 · Video 3</p>
+<h1>La Búsqueda de una Definición de Arquitectura</h1>
+<p class="meta">≈ 15 min · Requiere las <a href="0002-atributos-de-calidad.html">lecciones 1–2</a> · <a href="../reference/glosario.html">Glosario del curso</a></p>
+
+<div class="callout">
+<span class="label">Tu win de hoy</span>
+Vas a poder <strong>recitar las 4 definiciones históricas</strong> (Garlan &amp; Shaw, Software Architecture in Practice, SEI/CMU y la integradora de Codmind) y los <strong>5 componentes</strong> que toda definición válida debe cubrir. Pregunta clásica de examen: "¿qué es la arquitectura de software según…?"
+</div>
+
+<h2>1. El problema: no hay una sola verdad</h2>
+<p>Pregunta diez arquitectos qué es la arquitectura de software y obtendrás <strong>diez respuestas diferentes</strong>. No existe una definición estándar y única: aunque la práctica está muy extendida, la arquitectura sigue siendo una de las disciplinas <strong>menos maduras</strong> de la ingeniería de software — ha evolucionado mucho sin consolidar un estándar rígido de comparación.</p>
+
+<h2>2. Las definiciones que debes conocer</h2>
+
+<h3>🏛️ David Garlan y Mary Shaw (1993/1994)</h3>
+<p>En su obra clásica (<a href="https://www.sei.cmu.edu/library/an-introduction-to-software-architecture">CMU/SEI-94-TR-021</a>) definieron que la arquitectura es un nivel de diseño que hace foco <strong>más allá de los algoritmos y las estructuras de datos tradicionales</strong>, y añadieron la idea clave de la época: el diseño y especificación de la <strong>estructura global del sistema es en sí mismo un nuevo tipo de problema complejo</strong>.</p>
+
+<h3>📚 Software Architecture in Practice (Bass, Clements y Kazman)</h3>
+<p>Define la arquitectura como <strong>la estructura o estructuras de un sistema informático</strong>, que comprenden los <strong>elementos de software</strong>, las <strong>propiedades visibles de forma externa</strong> de dichos elementos y las <strong>relaciones</strong> entre ellos. Es una visión orientada a componentes, muy parecida a los diagramas que diseñamos hoy. (Tu material cita la 2.ª edición; la 4.ª dice "el conjunto de estructuras necesarias para razonar sobre el sistema" — <a href="https://www.oreilly.com/library/view/software-architecture-in/9780136885979">detalle en la verificación</a>.)</p>
+
+<h3>🏛️ Carnegie Mellon University (SEI)</h3>
+<p>El <strong>Software Engineering Institute (SEI)</strong> mantiene un <a href="https://www.sei.cmu.edu/architecture">famoso documento que recopila y analiza las definiciones</a> formuladas por diversos libros y autores, confirmando de manera científica que <strong>no existe un criterio único</strong>.</p>
+
+<h3>🧩 Definición integradora (libro de Codmind)</h3>
+<blockquote>"La arquitectura de software es el <strong>diseño de más alto nivel</strong> de la estructura de un sistema, el cual consiste en un conjunto de <strong>patrones y abstracciones</strong> que proporcionan un <strong>marco claro para la implementación</strong> de sistemas."</blockquote>
+
+<h2>3. Los 5 componentes de toda definición válida</h2>
+<p>Aunque no haya acuerdo en el texto exacto, cualquier definición válida debe abarcar estos cinco componentes estructurales:</p>
+<table>
+<thead><tr><th>#</th><th>Componente</th><th>Qué es</th></tr></thead>
+<tbody>
+<tr><td>1</td><td><strong>Diseño de Alto Nivel</strong></td><td>El artefacto visual o documental más importante del proyecto; establece el rumbo del desarrollo del código.</td></tr>
+<tr><td>2</td><td><strong>Estructura</strong></td><td>El armazón del sistema: cómo se organizan todos sus componentes.</td></tr>
+<tr><td>3</td><td><strong>Componentes</strong></td><td>Los bloques funcionales de código y lógica que operan las tareas y flujos de datos.</td></tr>
+<tr><td>4</td><td><strong>Relaciones</strong></td><td>Cómo se conectan y comunican los componentes. Analizarlas revela puntos débiles y posibles fallas operativas.</td></tr>
+<tr><td>5</td><td><strong>Atributos de Calidad</strong></td><td>Los requerimientos (funcionales y no funcionales) que moldean directamente las decisiones estructurales. (<a href="0002-atributos-de-calidad.html">Lección 2</a>.)</td></tr>
+</tbody>
+</table>
+
+<div class="callout">
+<span class="label">Visión de síntesis</span>
+Como no existe una única verdad dogmática, como profesional tienes dos opciones válidas: <strong>adoptar una definición consolidada</strong> de autores clásicos, o <strong>componer tu propia definición formal</strong> basándote en la estructura, los componentes, las relaciones y los atributos de calidad esenciales de tus sistemas.
+</div>
+
+<h2>4. Ponte a prueba</h2>
+<div class="quiz"
+     data-title="Quiz Lección 3 — Definiciones"
+     data-quiz='[
+      {"q":"Según Garlan y Shaw, la arquitectura es un nivel de diseño que va más allá de…",
+       "options":["Los lenguajes y frameworks modernos","Las bases de datos y sus motores","Los algoritmos y estructuras de datos","Los requisitos funcionales del cliente"],
+       "correct":2,
+       "why":"Su tesis central: cuando los sistemas crecen, los algoritmos y estructuras de datos ya no son el principal problema de diseño; la organización global (la arquitectura) es un nuevo tipo de problema complejo."},
+      {"q":"La definición de Software Architecture in Practice habla de elementos, relaciones y…",
+       "options":["Propiedades visibles externamente","Estructuras de datos internas","Procesos de negocio documentados","Tecnologías del proveedor elegido"],
+       "correct":0,
+       "why":"Estructura(s) del sistema = elementos de software + propiedades visibles externamente + relaciones entre ellos. Es una visión orientada a componentes, similar a los diagramas actuales."},
+      {"q":"El documento del SEI de CMU demuestra científicamente que…",
+       "options":["Las capas son el mejor estilo","La arquitectura exige usar UML","El diseño debe preceder al código","No existe una definición única"],
+       "correct":3,
+       "why":"El SEI recopila y analiza las definiciones más importantes de libros y autores, confirmando que no existe un criterio único: de ahí las diez respuestas de diez arquitectos."},
+      {"q":"¿Cuál NO es uno de los cinco componentes clave de toda arquitectura?",
+       "options":["El lenguaje de programación elegido","La estructura del sistema completo","Los componentes y sus relaciones","Los atributos de calidad del sistema"],
+       "correct":0,
+       "why":"Los cinco componentes son: diseño de alto nivel, estructura, componentes, relaciones y atributos de calidad. El lenguaje de programación es una decisión de implementación, no un componente de la definición."},
+      {"q":"La definición integradora de Codmind describe la arquitectura como el diseño de más alto nivel compuesto por…",
+       "options":["Diagramas, tablas y sus métricas","Patrones y abstracciones claras","Equipos, roles y sus procesos","Servidores, redes y sus nodos"],
+       "correct":1,
+       "why":"Citación textual: un conjunto de patrones y abstracciones que proporcionan un marco claro para la implementación de sistemas."}
+     ]'></div>
+
+<h2>5. Recuperación sin pistas</h2>
+<div class="recall">
+<span class="label">Práctica de retención (3 min, de memoria)</span>
+<ol>
+  <li>Recita la definición integradora de Codmind palabra por palabra. Compárala con el texto de arriba.</li>
+  <li>Enumera los <strong>5 componentes</strong> de toda definición válida, en orden.</li>
+  <li>¿Quiénes son los autores del paper de 1994 y qué idea añadieron "para la época"?</li>
+</ol>
+</div>
+
+<h2>Fuente principal recomendada</h2>
+<p class="sources">📄 <a href="https://www.sei.cmu.edu/documents/1119/1994_005_001_16331.pdf">Garlan, D. &amp; Shaw, M. — "An Introduction to Software Architecture" (CMU/SEI-94-TR-021, 1994) — PDF gratuito</a>. Es el paper fundacional del campo y la fuente exacta de la cita de tu material. Solo el primer capítulo ya vale oro.</p>
+
+<div class="lesson-nav">
+  <a href="0002-atributos-de-calidad.html">← Lección 2: Atributos</a>
+  <a href="0004-trade-offs.html">Lección 4: Trade-offs →</a>
+</div>
+
+<p class="footer-note">¿Quieres contrastar las definiciones o preparar una respuesta "modelo" para el examen? <strong>Pregúntale a tu tutor (este agente)</strong>. Referencias: <a href="../reference/verificacion-fuentes.html">verificación de cada cita</a> · <a href="../reference/glosario.html">glosario</a></p>
+
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

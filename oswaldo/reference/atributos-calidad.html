@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia — Atributos de Calidad</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Documento de referencia · Video 2</p>
+<h1>Atributos de Calidad — chuleta</h1>
+<p class="meta">Compresión de la <a href="../lessons/0002-atributos-de-calidad.html">Lección 2</a>. Anclaje estándar: <a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023</a> · taxonomía de 3 categorías: material de Codmind (compatible con Richards &amp; Ford).</p>
+
+<h2>1. La idea en una línea</h2>
+<div class="callout">
+<span class="label">Concepto</span>
+Los atributos de calidad <strong>no son funcionalidades</strong> (hacer una transferencia, crear una orden): describen <strong>cómo se comporta</strong> esa funcionalidad. Antes se llamaban <em>requisitos no funcionales</em>. Analogía del auto: su función es llevarte de A a B; sus atributos son seguridad, consumo, velocidad, comodidad y facilidad de reparación.
+</div>
+
+<h2>2. Las tres categorías (memoriza esta tabla)</h2>
+<table>
+<thead><tr><th>Categoría</th><th>Atributos incluidos</th><th>Impacto principal</th></tr></thead>
+<tbody>
+<tr>
+<td><strong>I. Tiempo de ejecución (Runtime)</strong><br><span class="cite">se perciben usando el sistema en vivo</span></td>
+<td>Rendimiento, Escalabilidad, Disponibilidad, Seguridad, Confiabilidad, Resistencia, Elasticidad</td>
+<td>Experiencia directa del usuario y éxito operativo comercial.</td>
+</tr>
+<tr>
+<td><strong>II. Estructura (Design-time)</strong><br><span class="cite">invisibles al usuario, críticos para el equipo</span></td>
+<td>Mantenibilidad, Testabilidad, Desplegabilidad, Configurabilidad, Portabilidad</td>
+<td>Costo de desarrollo a mediano/largo plazo y agilidad para evolucionar el producto.</td>
+</tr>
+<tr>
+<td><strong>III. Proceso y Operación</strong><br><span class="cite">afectan el ciclo de vida y la administración</span></td>
+<td>Eficiencia Operacional, Simplicidad, Reusabilidad, Facilidad de Instalación</td>
+<td>Facilidad de administración por desarrollo, infraestructura y soporte técnico.</td>
+</tr>
+</tbody>
+</table>
+
+<h2>3. Definiciones de un vistazo</h2>
+<ul>
+  <li><strong>Rendimiento:</strong> latencia (tiempo de espera) + throughput (operaciones/segundo), eficiencia de CPU y memoria.</li>
+  <li><strong>Escalabilidad:</strong> más carga sin degradación. <strong>Elasticidad:</strong> escalar/contraer automáticamente según demanda para optimizar costos.</li>
+  <li><strong>Disponibilidad:</strong> % de tiempo funcional (banca: 99.99%). <strong>Confiabilidad:</strong> operar correcto y exacto sin fallas en un período.</li>
+  <li><strong>Resistencia (resilience):</strong> resistir fallos y recuperarse rápido.</li>
+  <li><strong>Mantenibilidad:</strong> modificar/corregir/agregar a bajo costo. <strong>Testabilidad:</strong> verificar componentes por separado.</li>
+  <li><strong>Desplegabilidad:</strong> liberar versiones rápido y seguro. <strong>Configurabilidad:</strong> cambiar entornos sin recompilar. <strong>Portabilidad:</strong> mudarse de infraestructura sin <em>vendor lock-in</em>.</li>
+</ul>
+<p class="cite">Definiciones completas en el <a href="glosario.html">glosario</a>.</p>
+
+<h2>4. Pares que confunden (preguntas trampa de examen)</h2>
+<table>
+<thead><tr><th>Par</th><th>Diferencia clave</th></tr></thead>
+<tbody>
+<tr><td>Escalabilidad vs. Elasticidad</td><td>La elasticidad ES una forma dinámica y automatizada de escalabilidad (sube y baja con la demanda). La escalabilidad es la capacidad genérica de crecer.</td></tr>
+<tr><td>Disponibilidad vs. Confiabilidad</td><td>Disponibilidad = ¿está accesible? (% de tiempo). Confiabilidad = ¿funciona correcto y exacto? (probabilidad sin fallas).</td></tr>
+<tr><td>Rendimiento vs. Escalabilidad</td><td>Rendimiento = qué tan rápido responde ahora. Escalabilidad = si seguirá igual de bien con más carga.</td></tr>
+<tr><td>Seguridad vs. Confiabilidad</td><td>Seguridad = protección contra accesos/ataques. Confiabilidad = corrección de resultados sin fallas.</td></tr>
+</tbody>
+</table>
+
+<h2>5. Por qué le importan al arquitecto (las 4 razones)</h2>
+<ol>
+  <li><strong>Guía de decisiones de diseño:</strong> BD relacional o NoSQL, microservicio o monolito → se decide por los atributos que exige el negocio.</li>
+  <li><strong>Puente de comunicación estratégico:</strong> traduce necesidades de negocio ("que no se caiga, que los datos estén seguros") a decisiones de arquitectura.</li>
+  <li><strong>Evaluación y mitigación de riesgos:</strong> detecta fallos antes de construir (p. ej., falta de cifrado con requisitos altos de seguridad).</li>
+  <li><strong>Métrica única de éxito:</strong> buena arquitectura = la que cumple los atributos prioritarios definidos por el negocio, no la que "solo funciona".</li>
+</ol>
+
+<div class="callout">
+<span class="label">Clave de calidad</span>
+<strong>No se puede optimizar todo al máximo al mismo tiempo.</strong> 100% de rendimiento compromete mantenibilidad; exceso de seguridad degrada usabilidad. La misión del arquitecto es balancear y priorizar según el contexto del negocio.
+</div>
+
+<p class="footer-note"><a href="../lessons/0002-atributos-de-calidad.html">Lección 2: Atributos de Calidad</a> · <a href="trade-offs.html">Trade-offs</a> · <a href="glosario.html">Glosario</a></p>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glosario — Fundamentos de Arquitectura de Software</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Documento de referencia · curso completo</p>
+<h1>Glosario de Arquitectura de Software</h1>
+<p class="meta">Vocabulario oficial del curso. Todas las lecciones usan estos términos con este significado exacto.
+Fuentes: <a href="https://www.oreilly.com/library/view/software-architecture-in/9780136885979">Bass, Clements &amp; Kazman</a>,
+<a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447">Richards &amp; Ford</a>,
+<a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023</a>,
+<a href="https://reactiveprogramming.io/blog/es/estilos-arquitectonicos/capas">libro de Codmind</a>.</p>
+
+<h2>Conceptos centrales</h2>
+<table>
+<thead><tr><th>Término</th><th>Definición</th></tr></thead>
+<tbody>
+<tr><td><strong>Arquitectura de software</strong></td><td>El diseño de más alto nivel de la estructura de un sistema: un conjunto de patrones y abstracciones que proveen un marco claro para su implementación (definición integradora de Codmind). Según Bass, Clements y Kazman: las estructuras del sistema necesarias para razonar sobre él, compuestas por elementos de software, sus relaciones y las propiedades de ambos.</td></tr>
+<tr><td><strong>Diseño de bajo nivel</strong></td><td>Decisiones locales del código: usar un <em>switch</em> o un <em>if</em>, la nomenclatura de variables. No es arquitectura.</td></tr>
+<tr><td><strong>Componente</strong></td><td>Bloque funcional de código y lógica que ejecuta tareas y flujos de datos.</td></tr>
+<tr><td><strong>Relación</strong></td><td>Cómo se conectan y comunican los componentes entre sí. Analizarlas revela puntos débiles de comunicación.</td></tr>
+<tr><td><strong>Estructura</strong></td><td>El armazón del sistema: cómo se organizan todos sus componentes.</td></tr>
+<tr><td><strong>Estilo arquitectónico</strong></td><td>Familia de organización de un sistema (capas, microservicios, eventos). Cada estilo trae trade-offs inherentes.</td></tr>
+<tr><td><strong>Stakeholder</strong></td><td>Interesado en el sistema (negocio, usuarios, operaciones). No piensa en detalles técnicos, sino en atributos comerciales.</td></tr>
+<tr><td><strong>Trade-off</strong></td><td>Compromiso técnico: al mejorar un atributo de calidad, se renuncia o perjudica necesariamente a otro.</td></tr>
+</tbody>
+</table>
+
+<h2>Arquitectura en capas</h2>
+<table>
+<thead><tr><th>Término</th><th>Definición</th></tr></thead>
+<tbody>
+<tr><td><strong>Arquitectura en capas</strong></td><td>División vertical del sistema en capas apiladas: Presentación → Lógica de Negocio → Persistencia → Base de Datos. Base de estructuras tipo <code>controllers/services/repositories</code>.</td></tr>
+<tr><td><strong>Capa cerrada</strong></td><td>Capa por la que toda petición debe pasar obligatoriamente: la comunicación fluye secuencialmente de arriba hacia abajo, capa por capa.</td></tr>
+<tr><td><strong>Capa abierta</strong></td><td>Capa que las superiores pueden saltarse y comunicarse directamente con la capa inferior si no requieren su funcionalidad (p. ej., capa de servicios comunes).</td></tr>
+<tr><td><strong>Monolito</strong></td><td>Sistema único e indivisible donde todo se despliega junto. Típico del estilo en capas.</td></tr>
+<tr><td><strong>Microservicios</strong></td><td>Arquitectura de servicios distribuidos que escalan de forma independiente; dan escalabilidad pero destruyen simplicidad.</td></tr>
+</tbody>
+</table>
+
+<h2>Atributos de calidad (requisitos no funcionales)</h2>
+<p class="cite">Propiedades que describen <em>cómo se comporta</em> el sistema, no qué hace. Categorías según el material: I. Tiempo de ejecución (runtime), II. Estructura (design-time), III. Proceso y operación. Estándar internacional equivalente: <a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023</a>.</p>
+<table>
+<thead><tr><th>Término</th><th>Categoría</th><th>Definición</th></tr></thead>
+<tbody>
+<tr><td><strong>Rendimiento (performance)</strong></td><td>Runtime</td><td>Rapidez de respuesta y eficiencia en recursos (CPU, memoria). Se evalúa por <em>latencia</em> (tiempo de espera) y <em>throughput</em> (operaciones por segundo).</td></tr>
+<tr><td><strong>Escalabilidad</strong></td><td>Runtime</td><td>Soportar más carga (usuarios, datos, transacciones) sin degradar el rendimiento.</td></tr>
+<tr><td><strong>Elasticidad</strong></td><td>Runtime</td><td>Escalabilidad dinámica y automatizada: expandir y contraer infraestructura según la demanda para optimizar costos.</td></tr>
+<tr><td><strong>Disponibilidad</strong></td><td>Runtime</td><td>Porcentaje de tiempo en que la app está funcional y accesible (p. ej., 99.99% en banca).</td></tr>
+<tr><td><strong>Seguridad</strong></td><td>Runtime</td><td>Protección contra accesos no autorizados, ciberataques, manipulación de datos y fugas de privacidad.</td></tr>
+<tr><td><strong>Confiabilidad (reliability)</strong></td><td>Runtime</td><td>Probabilidad de operar de forma correcta y entregar resultados exactos sin fallas durante un período.</td></tr>
+<tr><td><strong>Resistencia (resilience)</strong></td><td>Runtime</td><td>Resistir fallos inesperados y recuperarse rápido, garantizando la continuidad de las funciones clave.</td></tr>
+<tr><td><strong>Mantenibilidad</strong></td><td>Design-time</td><td>Facilidad de modificar, corregir o agregar funcionalidades a bajo costo (código limpio, legible, modular, documentado).</td></tr>
+<tr><td><strong>Testabilidad (capacidad de prueba)</strong></td><td>Design-time</td><td>Facilidad para identificar fallos y verificar componentes de forma individual.</td></tr>
+<tr><td><strong>Desplegabilidad</strong></td><td>Design-time</td><td>Velocidad, eficiencia y seguridad con que una versión nueva se libera a producción.</td></tr>
+<tr><td><strong>Configurabilidad</strong></td><td>Design-time</td><td>Adaptar el comportamiento a distintos entornos solo con archivos de configuración, sin recompilar.</td></tr>
+<tr><td><strong>Portabilidad</strong></td><td>Design-time</td><td>Traslado entre infraestructuras, hardware, SO o proveedores de nube; evita el <em>vendor lock-in</em>.</td></tr>
+<tr><td><strong>Vendor lock-in</strong></td><td>Design-time</td><td>Bloqueo comercial a un proveedor por dependencia técnica.</td></tr>
+<tr><td><strong>Eficiencia operacional</strong></td><td>Proceso</td><td>Ser monitoreado, diagnosticado y operado con mínimo esfuerzo manual en producción.</td></tr>
+<tr><td><strong>Simplicidad</strong></td><td>Proceso</td><td>Claridad del diseño global para que nuevos equipos entiendan el sistema rápido.</td></tr>
+<tr><td><strong>Reusabilidad</strong></td><td>Proceso</td><td>Usar partes de código o componentes ya construidos en otros proyectos.</td></tr>
+<tr><td><strong>Facilidad de instalación</strong></td><td>Proceso</td><td>Simplicidad técnica para desplegar en múltiples plataformas y sistemas operativos.</td></tr>
+</tbody>
+</table>
+
+<h2>El rol del arquitecto y las leyes</h2>
+<table>
+<thead><tr><th>Término</th><th>Definición</th></tr></thead>
+<tbody>
+<tr><td><strong>Arquitecto de software</strong></td><td>Líder técnico que: (1) toma las decisiones clave de estructura y tecnologías, (2) comunica el negocio con la ingeniería, y (3) gestiona el riesgo técnico de forma proactiva.</td></tr>
+<tr><td><strong>Ley de Conway</strong> (1968)</td><td>Las organizaciones que diseñan sistemas están limitadas a producir diseños que copian sus estructuras de comunicación. Implicación: alinea los equipos con la arquitectura deseada.</td></tr>
+<tr><td><strong>Ley de Postel</strong> / Principio de Robustez (1981)</td><td>Sé conservador en lo que envías, liberal en lo que aceptas. El emisor sigue la norma estrictamente; el receptor tolera pequeñas desviaciones.</td></tr>
+<tr><td><strong>Ley de Tesler</strong> (~1984)</td><td>Toda aplicación tiene complejidad inherente que no se elimina: solo se traslada de un lugar a otro. El arquitecto decide dónde vive.</td></tr>
+<tr><td><strong>Gestión del riesgo técnico</strong></td><td>Identificar fallos de seguridad, rendimiento o escalabilidad en la fase de diseño, antes de que sean "incendios" en producción.</td></tr>
+</tbody>
+</table>
+
+<p class="footer-note">Curso basado en la guía de 6 videos de Codmind · <a href="0001-arquitectura-en-capas.html">Ir a la lección 1</a> · <a href="verificacion-fuentes.html">Informe de verificación</a></p>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Verificación de fuentes — Guía de 6 videos</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Documento de referencia · verificación</p>
+<h1>¿Es veraz la guía de estudio?</h1>
+<p class="meta">Veredicto global: <strong>sí, el contenido es confiable</strong>. Todas las definiciones, leyes y citas del PDF coinciden con las fuentes primarias. Se documentan dos matices menores (fechas de Garlan &amp; Shaw y las calificaciones numéricas de las capas). Verificación realizada en agosto de 2026 contra fuentes primarias.</p>
+
+<div class="callout">
+<span class="label">Veredicto por sección</span>
+Sección 1 (Capas): ✔ correcta · Sección 2 (Atributos): ✔ correcta · Sección 3 (Definiciones): ✔ correcta con matiz de fechas · Sección 4 (Trade-offs): ✔ correcta · Sección 5 (Rol y Leyes): ✔ correcta, citas textuales · Sección 6 (El Plano): ✔ correcta.
+</div>
+
+<h2>Verificación punto por punto</h2>
+<table>
+<thead><tr><th>Afirmación del PDF</th><th>Veredicto</th><th>Evidencia / fuente primaria</th></tr></thead>
+<tbody>
+<tr>
+<td>Garlan y Shaw (1992/1996): la arquitectura es un nivel de diseño "más allá de los algoritmos y estructuras de datos"; la estructura global es "un nuevo tipo de problema".</td>
+<td>✔ Cita textual, <em>con matiz de fechas</em></td>
+<td>La frase es textual de <a href="https://www.sei.cmu.edu/library/an-introduction-to-software-architecture">"An Introduction to Software Architecture" (CMU/SEI-94-TR-021, enero 1994; volumen 1993)</a>. Las fechas exactas son 1993/1994 (el libro "Software Architecture: Perspectives on an Emerging Discipline" es de 1996).</td>
+</tr>
+<tr>
+<td>Software Architecture in Practice: "la estructura o estructuras del sistema… elementos de software, propiedades visibles externamente y relaciones entre ellos".</td>
+<td>✔ Cita verificada (2.ª edición)</td>
+<td>Esa es la definición de la 2.ª ed. (2003). La 4.ª ed. actual dice: "el conjunto de estructuras necesarias para razonar sobre el sistema, que comprenden elementos de software, relaciones entre ellos y propiedades de ambos" (<a href="https://www.oreilly.com/library/view/software-architecture-in/9780136885979">Bass, Clements &amp; Kazman</a>).</td>
+</tr>
+<tr>
+<td>El SEI de CMU tiene un documento que recopila definiciones y confirma que no existe criterio único.</td>
+<td>✔ Correcto</td>
+<td>El SEI mantiene una <a href="https://www.sei.cmu.edu/architecture">colección oficial de definiciones de arquitectura</a>; la literatura lo confirma ("There is no standard definition of architecture").</td>
+</tr>
+<tr>
+<td>Ley de Conway: "las organizaciones que diseñan sistemas están limitadas a producir diseños que son copias de las estructuras de comunicación de estas organizaciones".</td>
+<td>✔ Cita textual</td>
+<td>Melvin E. Conway, <a href="https://www.melconway.com/Home/Committees_Paper.html">"How Do Committees Invent?", Datamation, abril de 1968</a>. El nombre "Ley de Conway" lo popularizó Fred Brooks en <em>The Mythical Man-Month</em> (<a href="https://martinfowler.com/bliki/ConwaysLaw.html">Fowler</a>).</td>
+</tr>
+<tr>
+<td>Ley de Postel: "conservador y estricto con lo que envías, liberal y tolerante con lo que aceptas".</td>
+<td>✔ Cita textual</td>
+<td>RFC 793, TCP (sept. 1981): "be conservative in what you do, be liberal in what you accept from others" (<a href="https://www.rfc-editor.org/info/rfc793">RFC Editor</a>; forma anterior en RFC 761, 1980). <em>Matiz moderno:</em> Eric Allman advierte que la tolerancia excesiva a la entrada puede crear problemas de seguridad (<a href="https://cacm.acm.org/practice/the-robustness-principle-reconsidered">CACM 2011</a>).</td>
+</tr>
+<tr>
+<td>Ley de Tesler: la complejidad inherente no se elimina, solo se traslada (si simplificas la UI, va al backend).</td>
+<td>✔ Cita textual</td>
+<td>Larry Tesler (~1984): "Every application has an inherent amount of irreducible complexity. The only question is: Who will have to deal with it—the user, the application developer, or the platform developer?" (<a href="https://www.nomodes.com/larry-tesler-consulting/complexity-law">sitio oficial de Tesler</a>; <a href="https://lawsofux.com/es/ley-de-tesler/">Laws of UX</a>).</td>
+</tr>
+<tr>
+<td>Capas: Presentación → Lógica → Persistencia → BD; capas cerradas por defecto; capas abiertas se pueden saltar.</td>
+<td>✔ Correcto</td>
+<td>Richards &amp; Ford, <a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch10.html"><em>Fundamentals of Software Architecture</em>, cap. 10</a>: cuatro capas estándar (presentation, business, persistence, database), conceptos de capas cerradas/abiertas y "layers of isolation". Coincide también con <a href="https://reactiveprogramming.io/blog/es/estilos-arquitectonicos/capas">el libro de Codmind</a>.</td>
+</tr>
+<tr>
+<td>Capas: Mantenibilidad 5/5, Testibilidad 5/5, Escalabilidad 2/5, Rendimiento 1/5.</td>
+<td>✔ Dirección correcta, <em>con matiz numérico</em></td>
+<td>Las cifras exactas son del propio material de Codmind (su escala propia). Richards &amp; Ford coinciden en la dirección: gran simplicidad y bajo costo, pero rendimiento y escalabilidad débiles (monolito, tránsito secuencial por capas cerradas, anti-patrón <em>sinkhole</em>).</td>
+</tr>
+<tr>
+<td>Los atributos de calidad = requisitos no funcionales; clasificación en runtime / design-time / proceso.</td>
+<td>✔ Correcto (taxonomía propia del material)</td>
+<td>El término "requisitos no funcionales" es estándar. La división en 3 categorías es del libro de Codmind; es compatible con la taxonomía operacional/estructural de Richards &amp; Ford y con las 9 características de la norma <a href="https://www.iso.org/standard/78176.html">ISO/IEC 25010:2023</a>.</td>
+</tr>
+<tr>
+<td>Disponibilidad crítica de 99.99% en banca; cada minuto caído cuesta millones.</td>
+<td>✔ Ejemplo razonable</td>
+<td>Es un ejemplo ilustrativo del material, no una norma; el estándar 99.99% ("four nines") es práctica común en sistemas financieros. Concepto correcto: la disponibilidad exigida debe justificarse por el negocio.</td>
+</tr>
+<tr>
+<td>"No se puede optimizar todo al máximo": exceso de seguridad degrada usabilidad, 100% de rendimiento compromete mantenibilidad.</td>
+<td>✔ Correcto (es la 1.ª ley de la arquitectura)</td>
+<td>Richards &amp; Ford: "Everything in software architecture is a trade-off" (<a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447">Fundamentals of Software Architecture</a>).</td>
+</tr>
+</tbody>
+</table>
+
+<div class="callout">
+<span class="label">Para el examen</span>
+Aprende las cifras y frases <em>tal como las da el material</em> (así las espera tu profesor). Los matices de esta página son para que entiendas el porqué y puedas brillar si preguntan algo más profundo.
+</div>
+
+<p class="footer-note"><a href="glosario.html">Glosario</a> · <a href="0001-arquitectura-en-capas.html">Lección 1</a> · Verificación: agosto de 2026</p>
+
+</body>
+</html>

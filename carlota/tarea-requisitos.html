@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Práctico de Requisitos</title>
+<style>
+@page { margin: 2cm; }
+body { font-family: Calibri, Arial, sans-serif; font-size: 12pt; line-height: 1.5; }
+code, pre { font-family: "Roboto Mono", Consolas, monospace; font-size: 10pt; }
+.titulo { font-size: 15pt; font-weight: bold; text-align: center; }
+.nombre { font-weight: bold; font-style: italic; text-align: right; font-size: 12pt; }
+h2 { font-weight: bold; font-size: 12pt; }
+h3 { font-weight: bold; font-style: italic; font-size: 12pt; }
+pre { margin-left: 1cm; white-space: pre; }
+table { border-collapse: collapse; margin: 0 auto 1em auto; }
+th, td { border: 1px solid #000; padding: 4px 10px; font-size: 11pt; }
+th { font-weight: bold; }
+</style>
+</head>
+<body>
+
+<p class="titulo">Práctico de Requisitos</p>
+<p class="nombre">Juan Sebastian Perez Galvis</p>
+<p class="nombre">Islender Arturo Alfonso Contreras</p>
+
+<p>El presente trabajo resuelve el práctico de la asignatura Ingeniería de Requisitos. Los ejercicios 1 a 5 se incorporan de los avances previos, y los ejercicios 6 a 11 se desarrollan a continuación. El ejercicio 8 se resuelve sobre el problema planteado al final del enunciado, que se resume en su apartado introductorio.</p>
+
+<h2>Ejercicio 1. Documento único de definición y especificación</h2>
+
+<p>Es posible contar con un documento único de definición y especificación de requisitos, aunque no siempre es lo más conveniente para todos los proyectos. Todo depende de la complejidad, el tamaño y la cantidad de equipos que participan.</p>
+
+<p><strong><em>Pros de tener dos documentos.</em></strong> Permiten separar los requisitos según módulos, plataformas o funcionalidades específicas. Facilitan que diferentes equipos trabajen de manera independiente y que cada documento tenga un mayor nivel de detalle.</p>
+
+<p><strong><em>Contras de tener dos documentos.</em></strong> Puede generarse confusión sobre cuál documento es el válido, producirse contradicciones o duplicarse información. Dificulta el control de cambios y hace posible que los desarrolladores trabajen con versiones diferentes de los requisitos.</p>
+
+<p>Por eso lo más recomendable es tener un único documento de especificación de requisitos, acompañado de un control de versiones e historial de cambios. Cuando el cliente solicite una modificación, por ejemplo agregar Telegram además de WhatsApp, se actualiza el mismo documento y se registra qué cambio se realizó, por qué, cuándo y quién lo solicitó. Así se mantiene una fuente única de información, se evitan inconsistencias y el proyecto puede crecer de forma escalable sin perder el control de los requisitos.</p>
+
+<p>Para identificar los documentos de una organización de manera uniforme, se sugiere una convención con los siguientes componentes: el código del proyecto, la categoría del documento, el número de versión y la fecha de aprobación. Por ejemplo, la cadena <code>PRY-001-DEF-2.1-2026-08-25</code> identifica el documento de definición del proyecto PRY-001 en su versión 2.1 aprobada en esa fecha. Esta estructura permite reconocer a qué proyecto pertenece el documento, qué tipo de documento es, en qué versión se encuentra y cuándo fue aprobado, y se aplica de igual forma a todos los proyectos de la organización.</p>
+
+<h2>Ejercicio 2. Responsabilidad sobre el daño causado</h2>
+
+<p>La pregunta es más para la ética que para la técnica, porque quien desarrolla algo debería estar consciente de lo que puede afectar a terceros. Entran en juego la ética profesional individual y la conciencia de lo que se está haciendo.</p>
+
+<p>Por ejemplo, si un físico crea un sistema para que el uranio alcance una masa crítica de forma instantánea, debe ser consciente de que está construyendo una bomba. Si desarrolla un sistema para que un dron se mantenga estable ante el retroceso que recibe al disparar un arma, también sabe lo que está haciendo. Después no tendría sentido sorprenderse diciendo que el sistema tiene doble cara.</p>
+
+<p>Financieramente es diferente, porque casi todo lo que hacen los ingenieros de software tiene como objetivo que las personas trabajen más rápido o de manera más eficiente, y eso puede llevar a despidos. Aliviar la carga de trabajo es parte del trabajo del ingeniero de software, y esas consecuencias negativas recaen en el mercado.</p>
+
+<p>La responsabilidad depende de si la causa es directa o no. La inteligencia artificial, por ejemplo, es una herramienta que objetivamente es un plus para la humanidad, pero también puede usarse para fines maliciosos, desde contenido ilegal hasta ciberataques. Ayuda a la detección temprana de enfermedades y a personas con discapacidades, y en eso radica la diferencia. Cómo se utiliza culturalmente es otro debate, pero hay que ser responsable tanto de las capacidades que se tienen como de saber qué se está haciendo.</p>
+
+<h2>Ejercicio 3. Verificabilidad de los requisitos de seguridad y confiabilidad</h2>
+
+<p>Los requisitos de seguridad personal y confiabilidad se pueden verificar haciendo pruebas y contando con una buena documentación de cómo se maneja la información. Como programadores se puede garantizar la seguridad con distintas capas, encriptación de la información, claves de acceso y respaldos, porque siempre puede existir algún fallo.</p>
+
+<p>Para verificar la seguridad se comprueba que solamente las personas autorizadas tengan acceso a la información y que esos datos no se puedan vender ni utilizar de manera incorrecta. También se deben seguir las normas de cada país para el manejo de datos personales.</p>
+
+<p>Cuando se habla de un sistema que nunca falle, eso no se puede demostrar, porque siempre puede aparecer un fallo o una vulnerabilidad. Lo que se puede hacer es desarrollar bajo la normativa, realizar pruebas, hacer mantenimiento y aplicar los parches necesarios. Muchos hackeos se producen por ingeniería social, como el phishing, y eso se escapa del rango de acción que se tiene al construir el sistema, por lo que también es importante capacitar a las personas.</p>
+
+<p>En conclusión, no se puede garantizar que un sistema nunca falle, pero sí se puede hacer todo lo posible para que sea confiable y seguro mediante pruebas, respaldos, controles de acceso, encriptación y cumplimiento de las normas.</p>
+
+<h2>Ejercicio 4. Requerimiento imposible de implementar</h2>
+
+<p>Si un cliente plantea un requerimiento que se sabe que es imposible de implementar, lo primero es ser completamente honesto con el cliente y decirle que en las condiciones actuales no se puede cumplir.</p>
+
+<p>También depende del contexto. Si es una idea que todavía no existe pero podría desarrollarse con investigación, pruebas, tiempo y dinero, se puede plantear como una posibilidad a futuro; las grandes empresas tienen laboratorios de investigación donde trabajan en cosas que todavía no existen. Pero si el proyecto tiene una fecha límite corta y no hay tiempo ni recursos para investigar, lo correcto es decir que no es viable y buscar otra alternativa que permita solucionar el problema.</p>
+
+<p>No se debería incluir un requerimiento imposible solo pensando en que más adelante se encontrará una solución, porque se estaría jugando con el tiempo y el dinero del cliente. Lo correcto es explicar por qué no es viable, proponer alternativas y dejar todo claro desde el principio.</p>
+
+<p>Desde el punto de vista ético, prometer lo que se sabe que no se puede brindar es engañar. Hay que ser completamente honesto, tanto por respeto al cliente, a su tiempo y a su dinero, como por la propia moral como ingenieros. Si después de avanzar medio proyecto y de invertir recursos se dijera que en realidad no se podía hacer, el profesional quedaría mal; desde el principio se debió decir la verdad.</p>
+
+<h2>Ejercicio 5. Tabla de decisión de un juego de mesa</h2>
+
+<p>Se especifica el juego de cartas "Mayor producto". Objetivo: acumular la mayor cantidad de cartas. Cada jugador tiene su propio mazo de 52 cartas sin comodines. Se asignan valores numéricos: A=1, J=11, Q=12, K=13; el resto toma su número. Se baraja y se coloca el mazo boca abajo. En cada ronda ambos dan vuelta la primera carta de su mazo al mismo tiempo, calculan el producto de los dos valores y el primero que dice el resultado correcto en voz alta gana la ronda y se queda con ambas cartas, colocándolas en una pila aparte. Si un jugador dice un resultado incorrecto, el otro gana automáticamente las cartas. Si ambos responden a la vez o ninguno acierta, las cartas se descartan y no suman para nadie. El juego termina cuando un jugador se queda sin cartas o tras un número de rondas acordado, y gana quien tenga más cartas en su pila de ganadas.</p>
+
+<p>La tabla de decisión resume las reglas según quién responde y si el resultado es correcto.</p>
+
+<table>
+<tr><th>Regla</th><th>Jugador 1 dice resultado correcto</th><th>Jugador 2 dice resultado correcto</th><th>Responden al mismo tiempo</th><th>Alguno dice resultado incorrecto</th><th>Acción / Resultado</th></tr>
+<tr><td>1</td><td>Sí</td><td>No</td><td>No</td><td>No</td><td>Jugador 1 gana las 2 cartas</td></tr>
+<tr><td>2</td><td>No</td><td>Sí</td><td>No</td><td>No</td><td>Jugador 2 gana las 2 cartas</td></tr>
+<tr><td>3</td><td>Sí</td><td>Sí</td><td>Sí</td><td>No</td><td>Se descartan las 2 cartas</td></tr>
+<tr><td>4</td><td>Sí</td><td>Sí</td><td>No</td><td>No</td><td>Gana el jugador que respondió primero</td></tr>
+<tr><td>5</td><td>No</td><td>No</td><td>No</td><td>Sí</td><td>Se descartan las 2 cartas</td></tr>
+<tr><td>6</td><td>Sí</td><td>No</td><td>No</td><td>Sí</td><td>Jugador 2 gana automáticamente las 2 cartas</td></tr>
+<tr><td>7</td><td>No</td><td>Sí</td><td>No</td><td>Sí</td><td>Jugador 1 gana automáticamente las 2 cartas</td></tr>
+<tr><td>8</td><td>No</td><td>No</td><td>No</td><td>No</td><td>Se descartan las 2 cartas</td></tr>
+</table>
+
+<p>Los apartados b y c del ejercicio, que consisten en intercambiar la especificación con otro estudiante y corregir lo que se detecte, quedan pendientes de realizarse en el aula junto con el compañero.</p>
+
+<h2>Ejercicio 6. Biblioteca</h2>
+
+<p>Se desea ofrecer a los socios la posibilidad de consultar por internet los libros disponibles. El socio indica palabras presentes en los títulos o en los nombres de los autores, fecha de edición e idioma, y el sistema devuelve la lista de publicaciones que satisfacen el criterio con la cantidad total de títulos seleccionados, paginada con un máximo de 10 títulos por página.</p>
+
+<h3>a) Historias de usuario</h3>
+
+<ul>
+<li>Como socio, quiero buscar publicaciones indicando palabras presentes en los títulos o en los nombres de los autores, la fecha de edición y el idioma, para encontrar los libros que me interesan.</li>
+<li>Como socio, quiero ver la lista de publicaciones que satisfacen mi criterio de búsqueda y la cantidad total de títulos seleccionados, para dimensionar el resultado de mi consulta.</li>
+<li>Como socio, quiero ver los resultados paginados con un máximo de 10 títulos por página, para revisarlos de forma ordenada.</li>
+<li>Como socio, quiero recorrer las páginas de resultados y aplicar filtros adicionales sobre la lista devuelta, para acotar la búsqueda sin volver a escribir el criterio.</li>
+<li>Como socio, quiero elegir un libro y ver información adicional, como los comentarios y si está disponible para préstamo, para decidir si me conviene retirarlo.</li>
+</ul>
+
+<h3>b) Caso de uso Registro de usuario</h3>
+
+<p><strong><em>Caso de uso.</em></strong> Registrar usuario.</p>
+<p><strong><em>Actor.</em></strong> Usuario no registrado.</p>
+<p><strong><em>Objetivo.</em></strong> Crear una cuenta de usuario que habilite el acceso a los servicios adicionales del portal.</p>
+<p><strong><em>Precondiciones.</em></strong> El usuario no posee una cuenta activa. El formulario de registro está disponible en el portal.</p>
+<p><strong><em>Flujo principal.</em></strong></p>
+<ol>
+<li>El usuario indica los datos solicitados. Son obligatorios la identificación de usuario, la contraseña y el conjunto de campos que el portal defina como tales.</li>
+<li>El sistema verifica que la identificación de usuario no se encuentre repetida entre las cuentas existentes.</li>
+<li>El sistema solicita el ingreso de la contraseña dos veces.</li>
+<li>El usuario ingresa la contraseña en ambos campos.</li>
+<li>El sistema comprueba que las dos contraseñas ingresadas sean idénticas.</li>
+<li>El sistema crea la cuenta y confirma el registro al usuario.</li>
+</ol>
+<p><strong><em>Postcondiciones.</em></strong> La cuenta queda creada y el usuario puede acceder a los servicios adicionales.</p>
+<p><strong><em>Flujos alternativos.</em></strong> Si la identificación de usuario ya existe, el sistema informa el error y solicita otra identificación. Si las dos contraseñas no coinciden, el sistema informa el error y solicita nuevamente la contraseña.</p>
+
+<h3>c) Modificación de la parte a</h3>
+
+<p>La nueva condición establece que el socio debe identificarse con nombre de usuario y contraseña para ingresar al portal web. Esto agrega una historia de usuario de autenticación y convierte a las historias de la parte a en historias de un socio ya identificado, porque la consulta de libros queda restringida a sesiones autenticadas.</p>
+
+<ul>
+<li>Como socio, quiero ingresar al portal identificándome con mi nombre de usuario y mi contraseña, para poder consultar los libros disponibles.</li>
+<li>Como socio identificado, quiero buscar publicaciones indicando palabras presentes en los títulos o en los nombres de los autores, la fecha de edición y el idioma, para encontrar los libros que me interesan.</li>
+<li>Como socio identificado, quiero ver la lista de publicaciones que satisfacen mi criterio de búsqueda y la cantidad total de títulos seleccionados, para dimensionar el resultado de mi consulta.</li>
+<li>Como socio identificado, quiero ver los resultados paginados con un máximo de 10 títulos por página y recorrer las páginas, para revisarlos de forma ordenada.</li>
+<li>Como socio identificado, quiero aplicar filtros adicionales sobre la lista devuelta, para acotar la búsqueda sin volver a escribir el criterio.</li>
+<li>Como socio identificado, quiero elegir un libro y ver información adicional, como los comentarios y si está disponible para préstamo, para decidir si me conviene retirarlo.</li>
+</ul>
+
+<h3>d) Historia de usuario del boletín mensual</h3>
+
+<p><strong><em>Como socio suscripto al boletín, quiero recibir el primer día de cada mes un correo electrónico con la lista de los libros nuevos que ingresaron a la biblioteca durante ese mes, para mantenerme informado de las novedades sin tener que consultar el portal.</em></strong></p>
+
+<p>El sistema genera y envía el correo de forma automática el primer día de cada mes a todos los socios suscriptos al boletín. El correo lista los libros incorporados a la biblioteca en el mes anterior, con los datos mínimos que permitan identificarlos, y su envío no depende de que el socio esté conectado en ese momento.</p>
+
+<h2>Ejercicio 7. Cajero automático</h2>
+
+<h3>a) Caso de uso Depósito de dinero</h3>
+
+<p><strong><em>Caso de uso.</em></strong> Depósito de dinero.</p>
+<p><strong><em>Actor.</em></strong> Cliente del banco, titular de una tarjeta válida.</p>
+<p><strong><em>Objetivo.</em></strong> Acreditar un depósito en la cuenta asociada a la tarjeta mediante la entrega de un sobre en el cajero.</p>
+<p><strong><em>Precondiciones.</em></strong> El cliente posee una tarjeta válida y se autenticó con su PIN. El cajero está operativo.</p>
+<p><strong><em>Flujo principal.</em></strong></p>
+<ol>
+<li>El cliente inserta la tarjeta e ingresa el PIN válido.</li>
+<li>El cajero muestra el menú de operaciones.</li>
+<li>El cliente selecciona la opción Depósito.</li>
+<li>El cajero solicita el sobre con el dinero.</li>
+<li>El cliente coloca el sobre en la ranura correspondiente.</li>
+<li>El cajero verifica la recepción del sobre.</li>
+<li>El cliente confirma el monto depositado que declara.</li>
+<li>El cajero actualiza el saldo de la cuenta con el monto declarado.</li>
+<li>El cajero imprime el comprobante de la operación.</li>
+<li>El cajero devuelve la tarjeta.</li>
+</ol>
+<p><strong><em>Postcondiciones.</em></strong> El depósito queda acreditado en la cuenta y se emite el comprobante.</p>
+<p><strong><em>Flujos alternativos.</em></strong> Si el PIN es incorrecto, el cajero informa el error y permite reintentar; tras tres intentos fallidos retiene la tarjeta. Si el cliente cancela antes de colocar el sobre, el cajero devuelve la tarjeta sin modificar la cuenta. Si el sobre no es aceptado o se detecta un error de lectura, el cajero devuelve el sobre y el cliente puede reintentar o cancelar.</p>
+<p><strong><em>Excepciones.</em></strong> Si falla la comunicación con el sistema central o la impresión del comprobante, la operación se cancela, se devuelve la tarjeta y el monto no se acredita hasta confirmar el resultado de la transacción.</p>
+
+<h3>b) Diagrama de actividad</h3>
+
+<pre>
+Inicio
+  |
+  v
+[Insertar la tarjeta]
+  |
+  v
+[Solicitar el PIN]
+  |
+  v
+&lt;¿PIN correcto?&gt; --- no, quedan intentos ---&gt; [Solicitar el PIN de nuevo] ----^
+  | sí                                          |
+  v                                             no quedan intentos
+[Mostrar el menú principal]                     v
+  |                                      [Retener la tarjeta]
+  v                                           |
+[Seleccionar la opción Depósito]              v
+  |                                          Fin
+  v
+[Introducir el sobre con el dinero]
+  |
+  v
+&lt;¿Sobre aceptado?&gt; --- no ---&gt; [Devolver el sobre] ---&gt; Fin
+  | sí
+  v
+[Confirmar la cantidad depositada]
+  |
+  v
+[Actualizar el saldo de la cuenta]
+  |
+  v
+[Imprimir el comprobante]
+  |
+  v
+[Devolver la tarjeta]
+  |
+  v
+Fin
+</pre>
+
+<h3>c) Diagrama de estados</h3>
+
+<p>El diagrama modela el depósito de dinero con énfasis en la espera del PIN, que está limitada por un temporizador de 20 segundos. Al entrar al estado Esperando PIN se inicia el temporizador; si el cliente no ingresa el PIN antes de que expire, el cajero muestra un mensaje de tiempo agotado y devuelve la tarjeta.</p>
+
+<pre>
+[Esperando tarjeta]
+  |  inserta la tarjeta
+  v
+[Esperando PIN]  &lt;-- entrada: se inicia el temporizador de 20 s
+  |
+  |-- PIN correcto ----------&gt; [Autenticando] ----&gt; [Menú de operaciones]
+  |-- PIN incorrecto --------&gt; mensaje "PIN incorrecto" ----&gt; vuelve a [Esperando PIN]
+  |                            y se reinicia el temporizador
+  |                            tras 3 intentos fallidos ----&gt; [Retener la tarjeta] ----&gt; Fin
+  |-- expira el temporizador
+  |    (20 segundos) --------&gt; mensaje "Tiempo agotado" ----&gt; [Devolver la tarjeta] ----&gt; Fin
+  |
+  v
+[Menú de operaciones]
+  |  selecciona la opción Depósito
+  v
+[Esperando sobre]
+  |  coloca el sobre
+  v
+[Verificando sobre]
+  |  sobre aceptado
+  |  sobre rechazado ----&gt; devuelve el sobre ----&gt; vuelve a [Esperando sobre]
+  v
+[Acreditando el depósito]
+  |  saldo actualizado
+  v
+[Emitiendo el comprobante]
+  |  comprobante impreso
+  v
+[Devolviendo la tarjeta]
+  |
+  v
+Fin
+</pre>
+
+<p>El evento del temporizador solo está activo en el estado Esperando PIN. Cuando el cliente ingresa el PIN correcto, el temporizador se cancela y la operación continúa por el flujo normal del depósito. El mensaje de tiempo agotado se emite como consecuencia de la transición por expiración y conduce directamente al fin de la operación con la devolución de la tarjeta.</p>
+
+<h2>Ejercicio 8. Sistema de preparación de entregas</h2>
+
+<p>El problema final del práctico describe un producto de software para preparar entregas a clientes. En una base de datos de un servidor conectado a una red se registran los pedidos de los clientes y la información de los artículos en existencia. Un proceso por lotes identifica diariamente, de forma automática, los pedidos para los que hay disponibilidad como para cumplir las entregas, atendiendo primero los de mayor prioridad y, a igual prioridad, los más antiguos. El sistema emite listados, el personal aparta las mercaderías, corrige cantidades, marca los pedidos como entregados y, al hacerlo, el producto envía un mensaje al sistema de control de existencias, emite una factura y registra los datos en la base para el control del pago y la contabilidad.</p>
+
+<h3>a) Actores e historias de usuario</h3>
+
+<p><strong><em>Actores.</em></strong> Se identifican los siguientes actores:</p>
+<ul>
+<li>Operario: cambia las prioridades de los pedidos, revisa por pantalla los pedidos que debía cumplir, corrige la Cantidad a Entregar y marca los pedidos como entregados.</li>
+<li>Encargado de preparar los envíos: tilda en el listado las líneas ya apartadas y anota la cantidad efectivamente apartada cuando existe discrepancia con la existencia registrada.</li>
+<li>Proceso por lotes: actor sistema que ejecuta diariamente la identificación automática de los pedidos cumplibles.</li>
+<li>Sistema de control de existencias: actor externo que recibe el mensaje de actualización cuando un pedido se marca como entregado.</li>
+<li>Cliente: actor externo indirecto, no opera el sistema pero es el destinatario de los pedidos y de la factura.</li>
+</ul>
+
+<p><strong><em>Historias de usuario.</em></strong> Las historias son las siguientes:</p>
+<ol>
+<li>Como proceso por lotes, quiero identificar cada día los pedidos para los que hay disponibilidad como para cumplir las entregas, atendiendo primero los de mayor prioridad y, a igual prioridad, los más antiguos, para optimizar el cumplimiento de los pedidos.</li>
+<li>Como operario, quiero recibir el listado de los pedidos en condiciones de cumplirse total o parcialmente, con el número, las fechas y horas, los datos del cliente y el detalle de sus líneas, para organizar la preparación de las entregas.</li>
+<li>Como operario, quiero recibir un listado de los pedidos que tienen más de 24 horas y no pueden cumplirse, para conocer los pedidos pendientes sin solución.</li>
+<li>Como operario, quiero cambiar la prioridad de un pedido, para modificar el orden en que se atienden los pedidos.</li>
+<li>Como encargado de preparar los envíos, quiero tildar en el listado las líneas ya apartadas, para registrar el avance de la preparación.</li>
+<li>Como encargado de preparar los envíos, quiero anotar la cantidad efectivamente apartada cuando no hay existencia física como para cumplir un envío, para reflejar la discrepancia entre la existencia registrada y la real.</li>
+<li>Como operario, quiero corregir la Cantidad a Entregar cuando la cantidad apartada no coincide con la del listado, para dejar el pedido consistente con lo que realmente se apartó.</li>
+<li>Como operario, quiero revisar por pantalla los pedidos que tenía para cumplir y marcarlos como entregados, para cerrar el ciclo de la entrega.</li>
+<li>Como operario, quiero que al marcar un pedido como entregado el sistema envíe un mensaje al sistema de control de existencias para que actualice la existencia y emita la factura con los datos del cliente y de los artículos, para dejar registrada la operación.</li>
+<li>Como operario, quiero que la factura y sus datos queden registrados en la base, para controlar a posteriori el pago y alimentar la contabilidad.</li>
+</ol>
+
+<h3>b) Descripción de las historias de usuario</h3>
+
+<p><strong><em>Historia 1.</em></strong> Es la historia del proceso por lotes, que actúa sin intervención humana. Su criterio de aceptación es que la selección diaria incluya todos los pedidos con disponibilidad, ordene por prioridad descendente y, dentro de igual prioridad, por antigüedad ascendente, y que emita los dos listados previstos.</p>
+<p><strong><em>Historia 2.</em></strong> Describe el listado principal. Incluye los datos del pedido, los datos del cliente, la fecha y hora del día, y por cada línea el producto, la descripción, la cantidad pedida, la cantidad ya entregada, la cantidad a entregar y la ubicación.</p>
+<p><strong><em>Historia 3.</em></strong> Describe el listado de pedidos sin solución. Agrupa los pedidos con más de 24 horas de antigüedad que no pueden cumplirse, para que el operario sepa cuáles requieren una acción distinta de la preparación.</p>
+<p><strong><em>Historia 4.</em></strong> Permite al operario alterar la prioridad de un pedido. El cambio debe reflejarse en el siguiente ciclo del proceso por lotes.</p>
+<p><strong><em>Historia 5.</em></strong> Describe el tilde de las líneas apartadas. El encargado registra sobre el listado el avance físico de la preparación.</p>
+<p><strong><em>Historia 6.</em></strong> Cubre la excepción de discrepancia de existencia. Cuando la existencia real no alcanza para el envío, el encargado anota la cantidad efectivamente apartada, que pasa a ser la referencia para la corrección posterior.</p>
+<p><strong><em>Historia 7.</em></strong> Describe la corrección de la Cantidad a Entregar. El operario la modifica solo cuando la cantidad apartada no coincide con la del listado, y el sistema debe registrar la nueva cantidad como válida para la facturación.</p>
+<p><strong><em>Historia 8.</em></strong> Describe el cierre del ciclo. El operario consulta por pantalla los pedidos pendientes de cumplir y los marca como entregados una vez completada la preparación.</p>
+<p><strong><em>Historia 9.</em></strong> Describe los efectos automáticos de la entrega: el mensaje al sistema de control de existencias para que actualice la existencia y la emisión de la factura con el número, la fecha, los datos del cliente y el detalle de los artículos con sus importes.</p>
+<p><strong><em>Historia 10.</em></strong> Describe el registro de la factura en la base. Los mismos datos que se emiten en la factura quedan almacenados para el control posterior del pago y para alimentar la contabilidad.</p>
+
+<h3>c) Diagrama de clases</h3>
+
+<pre>
+Cliente                       Pedido
++-----------------+          +------------------+
+| idCliente       |          | nroPedido        |
+| nombre          |          | fechaPedido      |
+| direccion       |          | horaPedido       |
+| ruc             |          | prioridad        |
++-----------------+          | estado           |
+                             | fechaDia         |
+                             | hora             |
+                             +------------------+
+
+Producto                      Existencia
++-----------------+          +------------------+
+| idProducto      |          | idProducto       |
+| descripcion     |          | cantidadReal     |
+| precioUnitario  |          | cantidadRegistrada|
+| ubicacion       |          +------------------+
++-----------------+
+
+LineaPedido                    LineaFactura
++-----------------+          +------------------+
+| cantidadPedida  |          | cantidadFactura  |
+| cantEntregada   |          | precioUnitario   |
+| cantAEntregar   |          | importe          |
+| cantApartada    |          +------------------+
+| ubicacion       |
++-----------------+
+
+Factura
++------------------+
+| nroFactura       |
+| fechaFactura     |
+| subtotal         |
+| importeIVA       |
+| importeTotal     |
++------------------+
+
+Relaciones y multiplicidades:
+Cliente       1 --- *     Pedido
+Pedido        1 --- *     LineaPedido
+Producto      1 --- *     LineaPedido
+Producto      1 --- 1     Existencia
+Cliente       1 --- *     Factura
+Pedido        1 --- 0..1  Factura
+Factura       1 --- *     LineaFactura
+Producto      1 --- *     LineaFactura
+</pre>
+
+<p>La clase Pedido concentra los datos que el proceso por lotes necesita para ordenar el trabajo: la prioridad, que el operario puede modificar, y el estado, que cambia a entregado al cerrarse el ciclo. Las líneas del pedido guardan las cantidades en cada etapa, desde la pedida hasta la apartada, lo que permite detectar las discrepancias que la historia 6 describe. La factura se asocia a un pedido y a un cliente, y sus líneas referencian los productos con sus importes, mientras que la clase Existencia vincula la cantidad registrada en el sistema con la cantidad real.</p>
+
+<h3>d) Diagrama de flujo de información</h3>
+
+<pre>
+     Base de Datos en el servidor (red)
+     Pedidos de clientes  |  Artículos en existencia
+                       |
+                       | lectura
+                       v
+        +-------------------------------------+
+        | Proceso por lotes (diario, automático) |
+        | identifica pedidos cumplibles        |
+        | total o parcialmente                 |
+        +-------------------------------------+
+          |                               |
+          | pedidos cumplibles            | pedidos con más de 24 horas
+          v                               v          que no pueden cumplirse
+  +---------------------+          +---------------------+
+  | Listado de pedidos  |          | Listado de pedidos  |
+  | cumplibles          |          | no cumplibles       |
+  +---------------------+          +---------------------+
+          |
+          | papel
+          v
+  +-----------------------------------------------+
+  | Encargado de envíos: tilde de líneas apartadas|
+  | y anotación de la cantidad efectiva (manual)  |
+  +-----------------------------------------------+
+          |
+          v
+  +-----------------------------------------------+
+  | Operario: corrección de la Cantidad a         |
+  | Entregar si no coincide con la apartada       |
+  | (manual)                                      |
+  +-----------------------------------------------+
+          |
+          v
+  +-----------------------------------------------+
+  | Operario: revisa por pantalla y marca el      |
+  | pedido como entregado                         |
+  +-----------------------------------------------+
+          |
+          +-----------------+----------------------+
+          v                 v                      v
+  +-------------------+  +------------------+  +----------------------+
+  | Mensaje al sistema|  | Emisión de la    |  | Registro de la       |
+  | de control de     |  | factura (papel)  |  | factura en la Base   |
+  | existencias para  |  | con datos del    |  | para control del pago|
+  | que la actualice  |  | cliente y artículos| | y contabilidad      |
+  +-------------------+  +------------------+  +----------------------+
+</pre>
+
+<p>El flujo muestra que la información sale de la base, pasa por el proceso por lotes y se materializa en listados en papel. Desde ese punto intervienen los tratamientos manuales: el tilde de las líneas y la anotación de la cantidad apartada los hace el encargado, y la corrección de la Cantidad a Entregar la hace el operario. También se indican las prioridades que el operario cambia, las cuales vuelven a alimentar el proceso por lotes en el ciclo siguiente. Al marcarse un pedido como entregado el flujo se divide en tres destinos: la actualización de la existencia, la factura en papel y el registro en la base para el pago y la contabilidad.</p>
+
+<h3>e) Comparación de las descripciones</h3>
+
+<p>Las historias de usuario de (b) describen el sistema desde la perspectiva de cada actor. Cada historia expresa una necesidad concreta en lenguaje natural y resulta fácil de validar con el personal de la empresa. Su virtud es comunicar el valor esperado sin entrar en detalles técnicos. Su limitación es que no muestran la estructura de los datos ni el orden en que se ejecutan las tareas; cada historia se lee por separado y relaciones como la dependencia entre el tilde de líneas y la corrección de la cantidad quedan implícitas.</p>
+
+<p>El diagrama de clases de (c) muestra las entidades del sistema, sus atributos y sus relaciones, y sirve de base para el modelo de datos. Su virtud es precisar qué información se conserva y cómo se relaciona, por ejemplo que un pedido tiene muchas líneas o que la factura se genera a partir de un pedido entregado. Su limitación es que describe estructura y no comportamiento: no indica cuándo se actualiza la existencia ni quién modifica la prioridad, y resulta difícil de interpretar para quien no maneja notación UML.</p>
+
+<p>El diagrama de flujo de (d) recorre la información desde la base hasta la factura y destaca los tratamientos manuales, que en los otros dos enfoques no se ven. Su virtud es mostrar la secuencia completa del proceso y el punto donde interviene cada rol. Su limitación es que no detalla los atributos de cada entidad ni la semántica de cada requisito, y en procesos largos el diagrama tiende a crecer.</p>
+
+<p>Las tres descripciones se complementan. Las historias dicen qué valor espera cada actor, el diagrama de clases dice con qué estructuras se trabaja y el diagrama de flujo dice cómo circula la información y dónde interviene la mano del hombre. Una buena especificación debería apoyarse en las tres, porque ninguna reemplaza a las otras.</p>
+
+<h2>Ejercicio 9. Servicio de correo electrónico web</h2>
+
+<p>Se desea implementar un servicio de correo electrónico para la Web. Las historias de usuario que siguen describen la redacción de un mensaje nuevo, con la incorporación de archivos adjuntos.</p>
+
+<ul>
+<li>Como usuario, quiero redactar un mensaje nuevo indicando el destinatario, el asunto y el cuerpo del mensaje, para comunicarme con otra persona por correo electrónico.</li>
+<li>Como usuario, quiero indicar varios destinatarios y agregar copias y copias ocultas, para dirigir el mensaje a más de un contacto.</li>
+<li>Como usuario, quiero adjuntar uno o varios archivos al mensaje, para incluir documentos en el envío.</li>
+<li>Como usuario, quiero ver el nombre y el tamaño de cada archivo adjunto y el progreso de su carga, para confirmar que los archivos se adjuntaron correctamente.</li>
+<li>Como usuario, quiero quitar un archivo adjunto antes de enviar el mensaje, para corregir errores en la selección.</li>
+<li>Como usuario, quiero que el sistema advierta cuando el tamaño total de los adjuntos supere el máximo permitido, para ajustar el envío antes de intentarlo.</li>
+<li>Como usuario, quiero guardar el mensaje como borrador sin enviarlo, para retomarlo más adelante.</li>
+</ul>
+
+<p>La historia de los adjuntos se puede precisar con criterios de aceptación: el usuario selecciona uno o varios archivos desde su equipo; el sistema muestra cada archivo con su nombre y tamaño; la carga de cada archivo muestra su estado de progreso; el sistema rechaza o advierte sobre los archivos cuyo tamaño supere el límite definido y sobre los tipos de archivo no permitidos; el usuario puede eliminar un adjunto antes del envío; y el envío solo se habilita cuando todos los adjuntos terminaron de cargarse.</p>
+
+<h2>Ejercicio 10. Documento de requisitos y prototipo</h2>
+
+<p>La pregunta admite una respuesta matizada. El prototipo se construye para mostrar la factibilidad o la funcionalidad del sistema y es, por definición, incompleto. Su propósito no es ser la base de la entrega final, sino servir de herramienta de elicitación y validación.</p>
+
+<p>Escribir el documento definitivo antes de desarrollar el prototipo supone que los requisitos ya se conocen y que el prototipo solo los confirma, lo cual contradice su razón de ser. El cliente y el desarrollador evalúan el prototipo precisamente para descubrir qué falta, qué sobra y qué se interpretó mal. Si el documento se cierra antes, esas correcciones quedarían fuera de alcance o se incorporarían tarde.</p>
+
+<p>Escribirlo solo después de la evaluación tampoco es lo más conveniente, porque el prototipo se construiría sin una referencia escrita y los acuerdos tomados en cada reunión deberían reconstruirse de memoria.</p>
+
+<p>La práctica recomendada es redactar una versión preliminar del documento de requisitos antes de construir el prototipo, que sirva de guía para la construcción, y completar y corregir esa versión después de evaluar el prototipo con el cliente. La evaluación del prototipo aporta información para precisar los requisitos ambiguos, eliminar los innecesarios y confirmar los bien planteados. El documento definitivo refleja así lo que el cliente efectivamente validó y no lo que el desarrollador supuso.</p>
+
+<p>Debe tenerse además una precaución: el cliente tiende a ver el prototipo como el producto terminado. Por eso conviene aclarar desde el inicio que el prototipo es descartable y que el documento de requisitos, y no el prototipo, es el que establece el compromiso sobre lo que se va a construir.</p>
+
+<h2>Ejercicio 11. Revisión de los requisitos</h2>
+
+<p>En una revisión de requisitos se buscan defectos que el autor no percibe por estar inmerso en el texto. Los más frecuentes son los siguientes: requisitos incompletos, en los que falta un caso, un atributo o una condición; requisitos ambiguos, que admiten más de una interpretación; requisitos contradictorios o inconsistentes entre sí; requisitos no verificables, porque no puede comprobarse de forma objetiva su cumplimiento; requisitos sin trazabilidad, que no se relacionan con una necesidad concreta del negocio; requisitos duplicados, que repiten lo ya dicho; y requisitos que imponen una solución técnica en lugar de expresar la necesidad. También aparecen problemas de redacción, como el uso de términos vagos o de expresiones como "etcétera", "y/o" y "razonablemente", y la ausencia de criterios de aceptación, de prioridades y de glosario.</p>
+
+<p><strong><em>Lista de verificación.</em></strong></p>
+<ul>
+<li>¿El requisito es comprensible para el usuario final?</li>
+<li>¿Está expresado con términos precisos y cuantificables?</li>
+<li>¿Es verificable y posee un criterio de aceptación claro?</li>
+<li>¿Cubre todos los casos, incluidas las excepciones?</li>
+<li>¿No contradice a otros requisitos del documento?</li>
+<li>¿Cada requisito se relaciona con una necesidad y con un actor?</li>
+<li>¿No hay requisitos duplicados ni solapados?</li>
+<li>¿No impone una solución de diseño particular?</li>
+<li>¿Los términos técnicos y de dominio están definidos?</li>
+<li>¿Se fijaron prioridades para los requisitos?</li>
+<li>¿Los requisitos no funcionales son medibles?</li>
+<li>¿El conjunto es completo y consistente con el alcance del sistema?</li>
+</ul>
+
+<p>Sobre la universalidad, existe una lista base que puede considerarse universal, porque los defectos de calidad de los requisitos, como la ambigüedad, la incompletitud o la inconsistencia, no dependen del área de aplicación. Cualquier documento de requisitos se revisa con esas preguntas. Pero conviene complementarla con una lista específica por área de aplicación, porque cada dominio tiene fallas características. En un sistema de tiempo real se revisan plazos y tasas de respuesta; en un sistema financiero se revisan restricciones de auditoría y de seguridad; en un sistema web se revisan la carga esperada y la compatibilidad de navegadores. La lista específica no reemplaza a la universal, la completa, y por eso la práctica habitual es mantener ambas.</p>
+
+</body>
+</html>

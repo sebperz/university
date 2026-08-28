@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia — Arquitectura en Capas</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+
+<p class="kicker">Documento de referencia · Video 1</p>
+<h1>Arquitectura en Capas — chuleta</h1>
+<p class="meta">Compresión de la <a href="../lessons/0001-arquitectura-en-capas.html">Lección 1</a>. Fuentes: <a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch10.html">Richards &amp; Ford, cap. 10</a> · <a href="https://reactiveprogramming.io/blog/es/estilos-arquitectonicos/capas">libro de Codmind</a>.</p>
+
+<h2>1. La pila de capas</h2>
+
+<div class="layer-stack">
+  <div class="layer">Capa de Presentación <small>Punto de entrada: recibe todas las solicitudes del usuario</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer">Capa de Lógica de Negocio <small>Corazón de la app: reglas, servicios, validaciones</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer">Capa de Persistencia <small>Única responsabilidad: guardar y recuperar información</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer db-layer">Base de Datos <small>Almacenamiento físico de los datos</small></div>
+</div>
+
+<p class="cite">Corresponde a la estructura típica de carpetas <code>controllers / services / repositories</code> de cualquier repositorio real.</p>
+
+<h2>2. Reglas de comunicación</h2>
+<ul>
+  <li><strong>Por defecto todas las capas son cerradas:</strong> la comunicación fluye estrictamente de arriba hacia abajo, una capa a la vez.</li>
+  <li><strong>Prohibido saltarse capas:</strong> Presentación no puede hablar directamente con Persistencia; toda petición transita por toda la jerarquía.</li>
+  <li><strong>Capa abierta:</strong> las superiores pueden saltársela y comunicarse directamente con la inferior si no requieren su funcionalidad. Ejemplo clásico: la capa de <em>Servicios Comunes</em> (date utils, logger utils).</li>
+  <li><strong>El dilema:</strong> capa de servicios comunes cerrada → saltos innecesarios (más lentitud); abierta → menos saltos, pero pierdes control del acoplamiento.</li>
+</ul>
+
+<p><strong>Analogía:</strong> una capa cerrada es un <em>peaje obligatorio</em> de la autopista; una capa abierta es un peaje <em>con carril de desvío</em>: pasas por él solo si necesitas pagar (usar sus servicios).</p>
+
+<div class="layer-stack">
+  <div class="layer">Capa de Lógica de Negocio</div>
+  <div class="layer-arrow">↓ &nbsp;·&nbsp; ↷ (salto directo si no los necesita)</div>
+  <div class="layer open-layer">Capa de Servicios Comunes <small>ABIERTA · se puede saltar</small></div>
+  <div class="layer-arrow">↓</div>
+  <div class="layer">Capa de Persistencia</div>
+</div>
+
+<table>
+<thead><tr><th>Escenario</th><th>Camino de una petición de negocio</th><th>Saltos</th></tr></thead>
+<tbody>
+<tr><td>Servicios comunes <em>cerrados</em></td><td>Lógica → Servicios Comunes → Persistencia → BD</td><td>3, siempre</td></tr>
+<tr><td>Servicios comunes <em>abiertos</em></td><td>Lógica → Persistencia → BD (o baja a Servicios Comunes si los necesita)</td><td>2–3, según necesidad</td></tr>
+</tbody>
+</table>
+
+<p class="cite">Regla práctica: todo cerrado por defecto; una capa se abre solo con justificación de rendimiento y documentada.</p>
+
+<h2>3. Flujo de ejemplo (e-commerce)</h2>
+<ol>
+  <li>Usuario hace clic en <em>comprar</em> → <strong>Presentación</strong> recibe la acción.</li>
+  <li>Presentación delega a <strong>Lógica de Negocio</strong>: valida descuentos, calcula impuestos.</li>
+  <li>Lógica instruye a <strong>Persistencia</strong>: actualiza el stock.</li>
+  <li>Persistencia ejecuta la instrucción en el <strong>motor de BD</strong>.</li>
+</ol>
+
+<h2>4. Evaluación por atributos de calidad</h2>
+<table>
+<thead><tr><th>Atributo</th><th>Calificación</th><th>Justificación</th></tr></thead>
+<tbody>
+<tr><td>Mantenibilidad</td><td>★★★★★ (5/5)</td><td>Su mayor fortaleza: el aislamiento entre capas hace que un cambio interno no afecte a las demás.</td></tr>
+<tr><td>Testibilidad</td><td>★★★★★ (5/5)</td><td>Cada capa se testea de forma aislada e independiente, sin probar el sistema completo.</td></tr>
+<tr><td>Escalabilidad</td><td>★★ (2/5)</td><td>Baja: conforma monolitos; escalar un servicio exige duplicar toda la aplicación.</td></tr>
+<tr><td>Rendimiento</td><td>★ (1/5)</td><td>Bajo: transitar secuencialmente por capas cerradas introduce retardos y cuellos de botella.</td></tr>
+</tbody>
+</table>
+<p class="cite">Nota: la escala numérica es del material de Codmind; <a href="https://www.oreilly.com/library/view/fundamentals-of-software/9781492043447/ch10.html">Richards &amp; Ford</a> coinciden en la dirección (simplicidad alta, rendimiento/escalabilidad bajos).</p>
+
+<h2>5. Cuándo usarla</h2>
+<div class="callout">
+<span class="label">Conclusión de capas</span>
+Excelente para <strong>proyectos iniciales</strong> que priorizan orden, mantenibilidad rápida y facilidad de prueba. <strong>No recomendada</strong> para aplicaciones con altos requerimientos de rendimiento o escalabilidad masiva.
+</div>
+
+<p class="footer-note"><a href="../lessons/0001-arquitectura-en-capas.html">Lección 1: Arquitectura en Capas</a> · <a href="atributos-calidad.html">Atributos de calidad</a> · <a href="glosario.html">Glosario</a></p>
+
+</body>
+</html>
