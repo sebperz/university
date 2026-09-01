@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How fast are locally runnable LLMs closing the coding gap? · PRISMA progress report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Martian+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#CECECE;
+    --ink:#101010;
+    --acc:#CC3333;
+    --hair:rgba(16,16,16,.18);
+    --hair-soft:rgba(16,16,16,.10);
+    --acc-soft:rgba(204,51,51,.10);
+    --mono:'Martian Mono',ui-monospace,'Cascadia Mono','JetBrains Mono',Consolas,monospace;
+    --sans:'Inter',system-ui,'Segoe UI',Roboto,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;background:var(--bg);color:var(--ink);
+    font-family:var(--sans);-webkit-font-smoothing:antialiased;
+    overflow:hidden;
+  }
+  ::selection{background:var(--acc);color:var(--bg)}
+
+  .slide{
+    position:absolute;inset:0 0 56px 0;
+    display:none;flex-direction:column;
+    padding:clamp(20px,4.4vh,52px) clamp(26px,5.6vw,92px) clamp(14px,2.6vh,30px);
+    overflow:auto;
+  }
+  .slide.active{display:flex;animation:slidein .5s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes slidein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .kicker{
+    display:flex;align-items:center;gap:14px;
+    font-family:var(--mono);font-weight:700;font-size:clamp(12px,1.25vw,16px);
+    letter-spacing:.24em;text-transform:uppercase;color:var(--acc);
+    margin-bottom:clamp(14px,3vh,34px);flex:none;
+  }
+  .kicker::after{content:"";flex:1;height:1px;background:var(--hair)}
+  .kicker .phase{
+    background:var(--acc);color:var(--bg);padding:4px 10px 3px;letter-spacing:.18em;
+  }
+  h1{font-size:clamp(36px,5.4vw,76px);line-height:1.06;font-weight:800;letter-spacing:-.02em;margin:0 0 22px}
+  h2{font-size:clamp(30px,4.4vw,60px);line-height:1.08;font-weight:800;letter-spacing:-.015em;margin:0 0 clamp(16px,2.6vh,28px)}
+  h3{font-size:clamp(16px,1.75vw,24px);font-weight:700;margin:0 0 12px;letter-spacing:.01em}
+  p{margin:0 0 12px;font-size:clamp(15px,1.7vw,23px);line-height:1.6}
+  .lead{font-size:clamp(17px,2vw,27px);line-height:1.6;font-weight:500}
+  .small{font-size:clamp(13px,1.3vw,18px);line-height:1.55}
+  .muted{opacity:.72}
+  .num{font-family:var(--mono);font-weight:700;color:var(--acc)}
+  .mono{font-family:var(--mono)}
+  .acc{color:var(--acc)}
+
+  .body{flex:1 1 auto;min-height:0}
+
+  .grid{display:grid;gap:clamp(12px,1.8vw,26px)}
+  .g2{grid-template-columns:1fr 1fr}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g5{grid-template-columns:repeat(5,1fr)}
+  @media (max-width:1100px){.g4,.g5{grid-template-columns:1fr 1fr}}
+  @media (max-width:900px){.g2,.g3,.g4,.g5{grid-template-columns:1fr}}
+
+  .card{
+    border:1px solid var(--hair);border-radius:10px;
+    padding:clamp(16px,2.1vw,30px);background:rgba(255,255,255,.16);
+  }
+  .card.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .card.dark .muted{opacity:.62}
+  .card h3 .idx{color:var(--acc);font-family:var(--mono);margin-right:8px}
+  .tag{
+    display:inline-block;font-family:var(--mono);font-size:clamp(10.5px,1.05vw,13.5px);
+    font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    border:1px solid var(--ink);border-radius:3px;padding:5px 12px 4px;
+  }
+  .tag.fill{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+  .tag.done{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  .tag.pending{border-style:dashed;opacity:.75}
+
+  table{width:100%;border-collapse:collapse;font-size:clamp(13.5px,1.45vw,19px)}
+  th{
+    font-family:var(--mono);font-weight:700;font-size:clamp(11px,1.15vw,14px);
+    letter-spacing:.14em;text-transform:uppercase;text-align:left;
+    border-bottom:2px solid var(--ink);padding:10px 14px 9px;
+  }
+  td{border-bottom:1px solid var(--hair);padding:clamp(10px,1.5vh,16px) 14px;vertical-align:top;line-height:1.5}
+  tr:last-child td{border-bottom:none}
+  td .num, td.num{font-family:var(--mono);font-weight:700}
+  tr.hl td{background:var(--acc-soft)}
+  tr.hl td:first-child{box-shadow:inset 3px 0 0 var(--acc)}
+  .compact{font-size:clamp(12.5px,1.35vw,17.5px)}
+  .compact td{padding:8px 14px;line-height:1.4}
+  .compact th{padding:8px 14px 7px}
+  .compact .tag{font-size:clamp(9px,.85vw,11px);padding:3px 8px 2px;margin-left:8px;white-space:nowrap;vertical-align:2px}
+
+  code,pre{
+    font-family:var(--mono);white-space:pre-wrap;word-break:break-word;
+  }
+  .string{
+    background:var(--ink);color:var(--bg);border-radius:10px;
+    padding:clamp(14px,2vh,24px) clamp(16px,2.1vw,28px);
+    font-size:clamp(10.5px,1.15vw,15.5px);line-height:1.7;margin:0;
+  }
+  .string b{color:var(--acc);font-weight:700}
+  .stringlabel{
+    font-family:var(--mono);font-size:clamp(10.5px,1.05vw,13.5px);font-weight:700;
+    letter-spacing:.16em;text-transform:uppercase;margin:0 0 8px;color:var(--acc);
+  }
+
+  .stat{border:1px solid var(--hair);border-radius:10px;padding:clamp(14px,1.9vw,28px);background:rgba(255,255,255,.16);display:flex;flex-direction:column;justify-content:center}
+  .stat .v{font-family:var(--mono);font-weight:800;color:var(--acc);font-size:clamp(34px,4.4vw,68px);line-height:1;letter-spacing:-.02em}
+  .stat .l{font-family:var(--mono);font-size:clamp(10.5px,1.05vw,14px);font-weight:500;letter-spacing:.12em;text-transform:uppercase;margin-top:12px;opacity:.8;line-height:1.55}
+
+  .tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .tab{
+    font-family:var(--mono);font-size:clamp(11px,1.15vw,14.5px);font-weight:700;letter-spacing:.12em;
+    text-transform:uppercase;padding:10px 18px;border:1px solid var(--ink);border-radius:5px;
+    background:transparent;color:var(--ink);cursor:pointer;
+  }
+  .tab.on{background:var(--ink);color:var(--bg)}
+  .panel{display:none}
+  .panel.on{display:block;animation:slidein .35s both}
+
+  .foot{
+    margin-top:auto;flex:none;padding-top:clamp(8px,1.6vh,18px);
+    border-top:1px solid var(--hair);
+    display:flex;justify-content:space-between;gap:16px;align-items:baseline;
+    font-family:var(--mono);font-size:clamp(9.5px,.9vw,12px);
+    letter-spacing:.14em;text-transform:uppercase;opacity:.66;
+  }
+
+  .flow{display:flex;flex-direction:column;align-items:center;gap:0}
+  .fbox{
+    border:2px solid var(--ink);border-radius:10px;background:rgba(255,255,255,.22);
+    padding:clamp(12px,1.8vh,20px) clamp(18px,2vw,28px);text-align:center;width:min(620px,86%);
+  }
+  .fbox .t{font-family:var(--mono);font-weight:700;font-size:clamp(11px,1.15vw,15px);letter-spacing:.1em;text-transform:uppercase}
+  .fbox .n{font-family:var(--mono);font-weight:800;color:var(--acc);font-size:clamp(20px,2.4vw,36px);margin-top:4px}
+  .fbox .d{font-size:clamp(12px,1.2vw,16px);margin-top:6px;line-height:1.5}
+  .fbox.accbox{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+  .fbox.accbox .n{color:var(--bg)}
+  .fbox.pend{border-style:dashed;opacity:.8;background:transparent}
+  .farrow{display:flex;flex-direction:column;align-items:center;padding:2px 0}
+  .farrow .shaft{width:2px;height:clamp(10px,1.8vh,20px);background:var(--ink)}
+  .farrow.pend .shaft{background:transparent;border-left:2px dashed var(--ink);width:0;height:clamp(10px,1.8vh,20px)}
+  .farrow .head{
+    width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;
+    border-top:8px solid var(--ink);
+  }
+  .farrow.pend .head{opacity:.55}
+  .fside{
+    display:flex;align-items:center;gap:0;width:min(880px,96%);
+  }
+  .fside .main{flex:1;display:flex;justify-content:center}
+  .fside .link{width:clamp(20px,3vw,44px);height:2px;background:var(--ink)}
+  .fside .side{
+    flex:0 0 auto;width:min(380px,40%);border:1px solid var(--hair);border-radius:10px;
+    background:rgba(255,255,255,.14);padding:12px 16px;text-align:left;
+  }
+  .fside .side .t{font-family:var(--mono);font-weight:700;font-size:clamp(10.5px,1.05vw,13.5px);letter-spacing:.12em;text-transform:uppercase}
+  .fside .side .d{font-size:clamp(11.5px,1.15vw,15px);margin-top:6px;line-height:1.55}
+  .dbrow{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;width:100%}
+  .dbrow .fbox{width:calc(33.3% - 12px);min-width:200px;text-align:left}
+
+  .checkrow{display:flex;align-items:flex-start;gap:14px;border-bottom:1px solid var(--hair);padding:clamp(10px,1.6vh,16px) 2px}
+  .checkrow:last-child{border-bottom:none}
+  .checkrow .box{
+    flex:none;width:18px;height:18px;border:2px solid var(--ink);border-radius:4px;margin-top:3px;position:relative;
+  }
+  .checkrow.done .box{background:var(--acc);border-color:var(--acc)}
+  .checkrow.done .box::after{
+    content:"";position:absolute;left:3px;top:0px;width:5px;height:10px;
+    border-right:2px solid var(--bg);border-bottom:2px solid var(--bg);transform:rotate(40deg);
+  }
+  .checkrow .what{flex:1}
+  .checkrow .what b{display:block;font-size:clamp(15px,1.6vw,21px)}
+  .checkrow .what span{font-size:clamp(12.5px,1.25vw,17px);opacity:.75}
+
+  .bars{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .bar{display:grid;grid-template-columns:minmax(140px,220px) 1fr minmax(60px,72px);gap:12px;align-items:center}
+  .bar .lab{font-size:clamp(10.5px,1vw,13px);font-weight:600;text-align:right}
+  .bar .track{height:14px;border:1px solid var(--hair);background:rgba(255,255,255,.2);border-radius:3px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--acc)}
+  .bar .val{font-family:var(--mono);font-weight:700;font-size:clamp(10px,.95vw,12.5px)}
+
+  .hud{
+    position:fixed;left:0;right:0;bottom:0;height:56px;z-index:50;
+    display:flex;align-items:center;gap:14px;
+    padding:0 clamp(20px,4vw,60px);
+    border-top:1px solid var(--hair);background:var(--bg);
+  }
+  .hud .proj{
+    font-family:var(--mono);font-size:clamp(8px,.72vw,10px);letter-spacing:.16em;
+    text-transform:uppercase;opacity:.62;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .counter{font-family:var(--mono);font-weight:700;font-size:clamp(11px,1.05vw,14px);letter-spacing:.1em}
+  .navbtn{
+    width:34px;height:34px;border-radius:50%;border:1.5px solid var(--ink);
+    background:transparent;color:var(--ink);cursor:pointer;font-size:15px;line-height:1;
+    display:grid;place-items:center;transition:all .15s;
+  }
+  .navbtn:hover{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+  .progress{position:fixed;top:0;left:0;height:4px;background:var(--acc);z-index:60;transition:width .3s}
+
+  .titleSlide .body{display:flex;flex-direction:column;justify-content:center}
+  .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+  .chip{
+    font-family:var(--mono);font-size:clamp(11px,1.15vw,15px);font-weight:700;letter-spacing:.1em;
+    border:1px solid var(--ink);border-radius:5px;padding:10px 17px;
+  }
+  .chip b{color:var(--acc)}
+  .pico{
+    font-family:var(--mono);font-weight:800;color:var(--acc);
+    font-size:clamp(26px,3.2vw,52px);line-height:1;margin-bottom:14px;
+  }
+  .wm{
+    position:absolute;right:clamp(20px,6vw,90px);bottom:clamp(60px,14vh,120px);
+    font-family:var(--mono);font-weight:800;font-size:clamp(80px,14vw,190px);line-height:1;
+    color:transparent;-webkit-text-stroke:1.5px rgba(16,16,16,.14);pointer-events:none;user-select:none;
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="bar" style="width:8%"></div>
+
+<main id="deck">
+
+<!-- 0 · TITLE -->
+<section class="slide titleSlide">
+  <div class="kicker"><span class="phase">Systematic Review</span><span>PRISMA 2020 · Progress Report</span></div>
+  <div class="body">
+    <h1>How fast are locally runnable LLMs<br>closing the coding gap?</h1>
+    <p class="lead" style="max-width:860px">A systematic review of code-generation and software-engineering benchmarks, 2023–2026, comparing locally runnable models against the closed proprietary frontier. This progress report covers search execution and title/abstract screening per PRISMA 2020 and PRISMA-S.</p>
+    <div class="chips">
+      <span class="chip"><b>3 / 6+</b>&nbsp;DATABASES EXECUTED</span>
+      <span class="chip"><b>2,392</b>&nbsp;RECORDS IDENTIFIED</span>
+      <span class="chip"><b>1,239</b>&nbsp;SCREENED</span>
+      <span class="chip"><b>118</b>&nbsp;CANDIDATE STUDIES</span>
+    </div>
+  </div>
+  <div class="wm">118</div>
+  <div class="foot"><span>Investigación · Anderson</span><span>September 1, 2026</span></div>
+</section>
+
+<!-- 1 · RESEARCH QUESTION · PICOS -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Protocol</span><span>Research Question · PICOS Framework</span></div>
+  <h2>Research question</h2>
+  <div class="body grid" style="grid-template-rows:auto 1fr;gap:clamp(14px,2.6vh,28px)">
+    <div class="card dark">
+      <p class="lead" style="margin:0"><span class="mono acc" style="font-weight:700">RQ&nbsp;·</span>
+      Among <b>locally runnable LLMs</b> (consumer-hardware feasibility constraint), how has coding and software-engineering benchmark performance evolved across model release dates from <b>2023 to 2026</b>, and how large is the remaining gap to the best closed proprietary models?</p>
+    </div>
+    <div class="grid g5">
+      <div class="card">
+        <div class="pico">P</div><h3>Population</h3>
+        <p class="small">Evaluation studies of LLMs for code tasks whose models are <b>locally runnable</b>: Q4_K_M weights + KV cache fully resident at ≥&nbsp;15–20&nbsp;tok/s. Primary 16&nbsp;GB VRAM · envelope 24&nbsp;GB · sensitivity 8&nbsp;GB · Apple unified ≤&nbsp;48&nbsp;GB.</p>
+      </div>
+      <div class="card">
+        <div class="pico">I</div><h3>Intervention</h3>
+        <p class="small">Open-weight code LLMs <b>across release generations</b>, 2023–2026 (e.g., CodeLlama → Qwen2.5-Coder → Qwen3-Coder): release date is the exposure whose slope is estimated.</p>
+      </div>
+      <div class="card">
+        <div class="pico">C</div><h3>Comparator</h3>
+        <p class="small">Two reference lines: the <b>closed proprietary frontier</b> (envelope-of-best per benchmark and date) and an all-open-weight, feasibility-blind line. Outcome of comparison: the residual <b>feasibility penalty</b>.</p>
+      </div>
+      <div class="card">
+        <div class="pico">O</div><h3>Outcomes</h3>
+        <p class="small">Pre-specified set: <b>HumanEval(+), MBPP(+), LiveCodeBench, BigCodeBench</b> (primary, code generation); <b>SWE-bench Verified</b> / Pro (secondary, software engineering). Normalized 0–100.</p>
+      </div>
+      <div class="card">
+        <div class="pico">S</div><h3>Study design</h3>
+        <p class="small">Systematic review per <b>PRISMA 2020</b> with quantitative synthesis (mixed-effects meta-regression); evaluation studies 2023–2026 (codegen), 2024–2026 (SWE); English; cutoff ≈ July 2026.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>scope.txt §2–§5, §10 · OSF pre-registered · dual screening</span><span>Secondary RQ · size of the gap to the closed frontier</span></div>
+</section>
+
+<!-- 2 · COMPARISON DESIGN -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Protocol</span><span>Comparison Design · Synthesis Model</span></div>
+  <h2>Three-line comparison design</h2>
+  <p class="lead muted" style="max-width:900px">The gap decomposes into the already-studied open-vs-closed difference plus the <b>feasibility penalty</b>, which is this review's contribution.</p>
+  <div class="body grid" style="grid-template-rows:1fr 1fr;gap:clamp(14px,2.2vh,24px)">
+    <div class="grid g3" style="grid-template-rows:1fr">
+      <div class="card"><h3><span class="idx">01</span>Feasible-local set</h3><p class="small">Population under study: ≤&nbsp;24&nbsp;GB VRAM / ≤&nbsp;48&nbsp;GB unified memory, Q4_K_M floor (e.g., Qwen2.5-Coder 7–32B, Llama 3.1 8B, Gemma 3, Phi-4).</p></div>
+      <div class="card"><h3><span class="idx">02</span>All open-weight, feasibility-blind</h3><p class="small">Includes data-center-scale open models (e.g., DeepSeek 671B MoE), the line that public hubs already track.</p></div>
+      <div class="card"><h3><span class="idx">03</span>Closed proprietary frontier</h3><p class="small">Best closed model per benchmark; anchored by an <b>envelope-of-best</b> rule at each date, with no composite black-box index.</p></div>
+    </div>
+    <div class="grid g2" style="grid-template-rows:1fr">
+      <div class="card dark">
+        <h3 style="color:var(--bg)">Quantitative synthesis</h3>
+        <p class="small" style="color:var(--bg);opacity:.85">Mixed-effects meta-regression on 0–100 normalized scores. Predictors: release date (the headline slope), log-parameters, hardware band (8/16/24&nbsp;GB), benchmark family. Random effects clustered by model and benchmark; cluster-robust variance.</p>
+      </div>
+      <div class="card">
+        <h3>Sensitivity analyses</h3>
+        <p class="small">Independently-verified scores only · contamination-resistant benchmarks only (LiveCodeBench, SWE-bench vs saturated HumanEval/MBPP) · per hardware band.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>scope.txt §4, §8, §11</span><span>Qwen treatment is neutral; the best models win on the data</span></div>
+</section>
+
+<!-- 3 · PRISMA ROADMAP -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Framework</span><span>PRISMA 2020 · Roadmap</span></div>
+  <h2>Where we are in the PRISMA 2020 workflow</h2>
+  <div class="body grid g4" style="grid-template-rows:1fr">
+    <div class="card"><span class="tag fill">In progress · 50%</span>
+      <h3 style="margin-top:12px">Identification</h3>
+      <p class="small">Searches across Scopus, WoS, IEEE Xplore, ACM DL, arXiv, ACL Anthology (+ Semantic Scholar / Google Scholar as gap-fillers). arXiv, Scopus and WoS executed with documented strings and dates.</p>
+      <p class="small"><span class="num">2,392</span> records identified so far.</p></div>
+    <div class="card"><span class="tag fill">In progress</span>
+      <h3 style="margin-top:12px">Screening</h3>
+      <p class="small">Deduplication on normalized DOI + title; title/abstract screening against three pre-specified inclusion levers. Complete for the three executed databases.</p>
+      <p class="small"><span class="num">1,239</span> records screened · <span class="num">1,121</span> excluded.</p></div>
+    <div class="card"><span class="tag pending">Pending</span>
+      <h3 style="margin-top:12px">Eligibility</h3>
+      <p class="small">Human co-reviewer pass on the <span class="num">118</span> auto-included candidates to confirm hardware feasibility and extractable scores, plus the 5-item risk-of-bias appraisal.</p></div>
+    <div class="card"><span class="tag pending">Pending</span>
+      <h3 style="margin-top:12px">Included &amp; synthesis</h3>
+      <p class="small">Final included set; extraction of model × benchmark × score with provenance; merge with leaderboard data; meta-regression and gap analysis.</p></div>
+  </div>
+  <div class="foot"><span>PRISMA 2020 flow diagram structure</span><span>This report covers phases 01–02 for executed databases</span></div>
+</section>
+
+<!-- 4 · IDENTIFICATION -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Phase 01</span><span>Identification · Search Execution</span></div>
+  <h2>Records identified, by database</h2>
+  <div class="body" style="display:grid;grid-template-rows:auto 1fr;gap:clamp(14px,2.4vh,26px)">
+    <table>
+      <thead><tr><th>Source</th><th>Search</th><th style="text-align:right">Hits</th><th>Composition</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>arXiv <span class="small muted">(live API, full-text)</span></td><td class="small">MAIN-codegen · MAIN-SWE · SUPP-1 · SUPP-2</td><td class="num" style="text-align:right">897</td><td class="small">245 + 353 + 247 + 52</td><td><span class="tag done">Executed</span></td></tr>
+        <tr><td>Scopus <span class="small muted">(API)</span></td><td class="small">MAIN · SUPP-1 · SUPP-2</td><td class="num" style="text-align:right">903</td><td class="small">369 + 446 + 88</td><td><span class="tag done">Executed</span></td></tr>
+        <tr><td>Web of Science <span class="small muted">(Core, TS)</span></td><td class="small">MAIN · SUPP-1 · SUPP-2</td><td class="num" style="text-align:right">592</td><td class="small">76 + 512 + 4</td><td><span class="tag done">Executed · 2026-09-01</span></td></tr>
+        <tr><td>IEEE Xplore · ACM DL · ACL Anthology</td><td class="small">Syntax-adapted variants prepared</td><td class="num muted" style="text-align:right">n/a</td><td class="small muted">Awaiting institutional access</td><td><span class="tag pending">Pending</span></td></tr>
+        <tr><td>Semantic Scholar · Google Scholar</td><td class="small">Cross-check only (recall verification)</td><td class="num muted" style="text-align:right">n/a</td><td class="small muted">S2 rate-limited (HTTP 429)</td><td><span class="tag pending">Pending</span></td></tr>
+      </tbody>
+    </table>
+    <div class="grid g4" style="grid-template-rows:1fr">
+      <div class="stat"><div class="v">2,392</div><div class="l">Records identified (executed sources)</div></div>
+      <div class="stat"><div class="v">A–D</div><div class="l">Four pre-specified search blocks (PICO-mapped)</div></div>
+      <div class="stat"><div class="v">3×3</div><div class="l">Strings per database: MAIN, SUPP-1, SUPP-2</div></div>
+      <div class="stat"><div class="v">2023–26</div><div class="l">Year filter · English · article / proceedings / preprint</div></div>
+    </div>
+  </div>
+  <div class="foot"><span>search_strategy.md · search_execution_report.md</span><span>Block D (benchmarks) is the strongest precision lever</span></div>
+</section>
+
+<!-- 5 · SEARCH STRINGS -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Phase 01</span><span>Search Strings · PRISMA-S Item 5–7</span></div>
+  <h2>Full search strings for Scopus and Web of Science</h2>
+  <div class="body">
+    <div class="tabs">
+      <button class="tab on" data-tab="t0">MAIN · benchmark-anchored</button>
+      <button class="tab" data-tab="t1">SUPP-1 · local / on-device</button>
+      <button class="tab" data-tab="t2">SUPP-2 · model designation sweep</button>
+    </div>
+    <div class="panel on" id="t0">
+      <p class="stringlabel">Scopus · TITLE-ABS-KEY</p>
+      <pre class="string">( "large language model*" OR "language model*" OR "code language model*" OR "coding model*" OR "foundation model*" OR LLM OR LLMs )
+  AND ( "code generation" OR "code completion" OR "code synthesis" OR "program synthesis" OR "software engineering" OR "software development" OR "automated program repair" OR "code repair" OR "bug fix*" OR "code intelligence" )
+  AND ( HumanEval OR MBPP OR LiveCodeBench OR BigCodeBench OR "SWE-bench" )</pre>
+      <p class="stringlabel" style="margin-top:14px">Web of Science · Topic (TS)</p>
+      <pre class="string">( "large language model*" OR "language model*" OR "code language model*" OR "coding model*" OR "foundation model*" OR LLM OR LLMs )
+  AND ( "code generation" OR "code completion" OR "program synthesis" OR "software engineering" OR "software development" OR "bug fix*" OR "automated program repair" )
+  AND ( HumanEval OR MBPP OR LiveCodeBench OR BigCodeBench OR "SWE-bench" )</pre>
+    </div>
+    <div class="panel" id="t1">
+      <p class="stringlabel">Scopus · TITLE-ABS-KEY</p>
+      <pre class="string">( "large language model*" OR "language model*" OR LLM OR LLMs )
+  AND ( "code generation" OR "code completion" OR "software engineering" OR "program synthesis" OR coding )
+  AND ( local OR "on-device" OR "self-hosted" OR "open-weight*" OR quantiz* OR "consumer hardware" OR "edge device*" OR "personal computer*" )</pre>
+      <p class="stringlabel" style="margin-top:14px">Web of Science · Topic (TS)</p>
+      <pre class="string">( "large language model*" OR "language model*" OR LLM OR LLMs )
+  AND ( "code generation" OR "code completion" OR "software engineering" OR "program synthesis" OR coding )
+  AND ( local OR "on-device" OR "self-hosted" OR "open-weight*" OR quantiz* OR "consumer hardware" OR "edge device*" )</pre>
+    </div>
+    <div class="panel" id="t2">
+      <p class="stringlabel">Scopus · TITLE-ABS-KEY</p>
+      <pre class="string">( "Qwen2.5-Coder" OR "Qwen3-Coder" OR CodeLlama OR CodeGemma OR StarCoder OR "DeepSeek-Coder" OR "Llama-3" OR "Gemma-3" OR Mistral OR "Phi-4" )
+  AND ( HumanEval OR MBPP OR LiveCodeBench OR BigCodeBench OR "SWE-bench" )</pre>
+      <p class="stringlabel" style="margin-top:14px">Web of Science · Topic (TS)</p>
+      <pre class="string">( ( "Qwen2.5-Coder" OR "Qwen3-Coder" OR CodeLlama OR CodeGemma OR StarCoder OR "DeepSeek-Coder" OR "Llama-3" OR "Gemma-3" OR Mistral OR "Phi-4" ) AND ( HumanEval OR MBPP OR LiveCodeBench OR BigCodeBench OR "SWE-bench" ) )</pre>
+    </div>
+    <p class="small muted" style="margin-top:auto;padding-top:16px">Why block C stays out of MAIN. Feasibility is defined by model family and VRAM budget, not by paper terminology, so AND-ing block C into the main string would drop most qualifying studies. The WoS export omits the Language and Document-Type columns; filters were applied at query level.</p>
+  </div>
+  <div class="foot"><span>PRISMA-S Items 4–8 documented</span><span>Strings peer-checked against PRESS before execution</span></div>
+</section>
+
+<!-- 6 · DEDUPLICATION -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Phase 02</span><span>Deduplication · Record-Level</span></div>
+  <h2>Deduplication across sources</h2>
+  <p class="lead muted" style="max-width:880px">Records were deduplicated on normalized DOI and normalized title (case- and punctuation-folded). Semantic Scholar ID-based dedup is deferred to the next session (API quota). The 897 arXiv records are not yet merged at record level, so arXiv-cross dedup remains pending.</p>
+  <div class="body grid" style="grid-template-rows:auto 1fr;gap:clamp(14px,2.4vh,26px)">
+    <div class="grid g3" style="grid-template-rows:1fr">
+      <div class="card"><h3>Within Scopus</h3><div style="font-family:var(--mono);font-weight:800;color:var(--acc);font-size:clamp(34px,4.2vw,66px)">−94</div><p class="small">903 → <b>809</b> unique records retained (most-complete record kept).</p></div>
+      <div class="card"><h3>Within Web of Science</h3><div style="font-family:var(--mono);font-weight:800;color:var(--acc);font-size:clamp(34px,4.2vw,66px)">−11</div><p class="small">592 → 581 unique; cross-search overlaps between MAIN / SUPP-1 / SUPP-2.</p></div>
+      <div class="card"><h3>WoS ∩ Scopus</h3><div style="font-family:var(--mono);font-weight:800;color:var(--acc);font-size:clamp(34px,4.2vw,66px)">−151</div><p class="small">Overlap removed; <b>430</b> genuinely new WoS records entered screening. MAIN was almost fully absorbed (70 of 76).</p></div>
+    </div>
+    <div class="card dark" style="display:flex;align-items:center">
+      <p style="margin:0"><span class="mono" style="letter-spacing:.14em;font-weight:700">RESULT&nbsp;·</span> Unique records screened at title/abstract: <span class="num" style="font-size:1.35em">809 + 430 = 1,239</span></p>
+    </div>
+  </div>
+  <div class="foot"><span>wos_screen.py · screening_report.md</span><span>Duplicates removed, total: 256</span></div>
+</section>
+
+<!-- 7 · SCREENING -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Phase 02</span><span>Screening · Title / Abstract</span></div>
+  <h2>Screening criteria and disposition</h2>
+  <div class="body grid g2" style="gap:clamp(14px,2.2vw,30px)">
+    <div>
+      <h3>Pre-specified inclusion levers <span class="small muted">(scope.txt §9, all must hold)</span></h3>
+      <div class="card" style="margin-bottom:10px"><p class="small" style="margin:0"><span class="num">L1 ·</span> <b>Outcome.</b> The study reports at least one pre-specified benchmark: HumanEval(+), MBPP(+), LiveCodeBench, BigCodeBench, SWE-bench (Verified / Pro).</p></div>
+      <div class="card" style="margin-bottom:10px"><p class="small" style="margin:0"><span class="num">L2 ·</span> <b>Population.</b> It evaluates at least one feasible-local model family (Qwen2.5/3-Coder, CodeLlama, CodeGemma, Gemma, StarCoder, DeepSeek-Coder / R1-Distill, Llama, Mistral, Phi-3/4, Yi-Coder) or uses explicit local-deployment / quantization language.</p></div>
+      <div class="card"><p class="small" style="margin:0"><span class="num">L3 ·</span> <b>Time.</b> 2023–2026 for code generation; SWE-only records are restricted to 2024–2026.</p></div>
+      <p class="small muted" style="margin-top:12px">False-positive controls applied to the WoS pass: <i>"human evaluation"</i> vs <i>HumanEval</i>, and bare <i>DeepSeek</i> (DeepSeek-V3 is out of scope; only the DeepSeek-Coder / R1-Distill families are admitted).</p>
+    </div>
+    <div>
+      <h3>Exclusion reasons <span class="small muted">(counts by database)</span></h3>
+      <table>
+        <thead><tr><th>Reason</th><th style="text-align:right">Scopus</th><th style="text-align:right">WoS</th></tr></thead>
+        <tbody>
+          <tr><td>No pre-specified benchmark outcome</td><td class="num" style="text-align:right">427</td><td class="num" style="text-align:right">417</td></tr>
+          <tr><td>Benchmark present, no feasible-local signal</td><td class="num" style="text-align:right">244</td><td class="num" style="text-align:right">4</td></tr>
+          <tr><td>Out of time window (2022 / 2027 early-access)</td><td class="num muted" style="text-align:right">n/a</td><td class="num" style="text-align:right">7</td></tr>
+          <tr><td>Failed tighter local-family re-check</td><td class="num" style="text-align:right">22</td><td class="num muted" style="text-align:right">n/a</td></tr>
+          <tr><td><b>Auto-included</b></td><td class="num acc" style="text-align:right">116</td><td class="num acc" style="text-align:right">2</td></tr>
+          <tr><td>Records screened</td><td class="num" style="text-align:right">809</td><td class="num" style="text-align:right">430</td></tr>
+        </tbody>
+      </table>
+      <p class="small muted" style="margin-top:12px">Auto-screening deliberately over-includes; the human co-reviewer pass is mandatory to confirm (a) hardware feasibility per scope §2 and (b) extractable benchmark scores.</p>
+    </div>
+  </div>
+  <div class="foot"><span>screening_report.md · wos_screening_log.csv (per-record audit trail)</span><span>PRISMA flow: 1,239 screened → 1,121 excluded → 118 included</span></div>
+</section>
+
+<!-- 8 · INCLUDED CANDIDATES -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Phase 03</span><span>Included Candidates · Auto-Screen Output</span></div>
+  <h2>Candidate set: <span class="num" style="font-size:1.15em">118</span> studies</h2>
+  <div class="body" style="display:grid;grid-template-rows:auto 1fr;gap:14px">
+    <table class="compact">
+      <thead><tr><th style="width:52px">Year</th><th>Representative candidates (high-priority subset)</th><th>Model(s)</th><th>Benchmark(s)</th></tr></thead>
+      <tbody>
+        <tr><td class="num">2026</td><td>Not All Local LLMs Are Equal: A Benchmark of Energy and Performance</td><td class="small">on-device deployment</td><td class="small">HumanEval, MBPP, MBPP+</td></tr>
+        <tr><td class="num">2025</td><td>Locally-deployed Open-source LLMs for Code Generation: Promises and Challenges</td><td class="small">local deployment</td><td class="small">HumanEval</td></tr>
+        <tr><td class="num">2025</td><td>Automated Program Repair using Quantized Language Models and PEFT</td><td class="small">CodeLlama, StarCoder, Llama, Qwen2.5</td><td class="small">HumanEval</td></tr>
+        <tr><td class="num">2025</td><td>Implementation of System Code Generation … QLoRA</td><td class="small">Qwen2.5-Coder</td><td class="small">HumanEval, HumanEval+</td></tr>
+        <tr><td class="num">2025</td><td>A Taxonomy of Inefficiencies in LLM-Generated Python Code</td><td class="small">CodeLlama, CodeGemma, Gemma, DeepSeek-Coder, Llama</td><td class="small">HumanEval, HumanEval+</td></tr>
+        <tr><td class="num">2025</td><td>Closing the Loop: Code Generation and Intelligent Debugging</td><td class="small">Llama · 16 GB / quantized</td><td class="small">HumanEval, LiveCodeBench</td></tr>
+        <tr class="hl"><td class="num">2026</td><td>Large Language Models for Fault Localization: An Empirical Study<span class="tag fill">WoS</span></td><td class="small">Qwen2.5-Coder-32B (open-weight)</td><td class="small">HumanEval</td></tr>
+        <tr class="hl"><td class="num">2026</td><td>Intelligent automated code review and software quality evaluation: a survey<span class="tag fill">WoS</span></td><td class="small">Code Llama coverage</td><td class="small">SWE-bench</td></tr>
+      </tbody>
+    </table>
+    <p class="small muted">116 candidates from Scopus + 2 from Web of Science (highlighted). Full list with DOIs and abstracts: <span class="mono">included_candidates_116.csv</span>; 15 high-priority seed sources anchor extraction. SWE-bench evidence for feasible-local models remains scarce, which is itself a reportable finding.</p>
+  </div>
+  <div class="foot"><span>Dual screening status: AI-assisted auto-screen complete</span><span>Human co-reviewer pass pending</span></div>
+</section>
+
+<!-- 9 · PRISMA FLOW DIAGRAM -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Phase 01–03</span><span>PRISMA 2020 · Flow Diagram (current state)</span></div>
+  <h2>Flow of records through the review</h2>
+  <div class="body flow" style="overflow:visible">
+    <div class="dbrow">
+      <div class="fbox"><div class="t">Scopus · 2026-08-25</div><div class="n">n = 903</div></div>
+      <div class="fbox"><div class="t">Web of Science · 2026-09-01</div><div class="n">n = 592</div></div>
+      <div class="fbox pend"><div class="t">arXiv · pending merge</div><div class="n">n = 897</div></div>
+    </div>
+    <div class="fside">
+      <div class="main"><div class="farrow"><div class="shaft"></div><div class="head"></div></div></div>
+      <div class="link"></div>
+      <div class="side"><div class="t">Duplicates removed · 256</div><div class="d">94 intra-Scopus · 11 intra-WoS · 151 WoS ∩ Scopus (normalized DOI + title)</div></div>
+    </div>
+    <div class="fbox"><div class="t">Records screened (title / abstract)</div><div class="n">n = 1,239</div></div>
+    <div class="fside">
+      <div class="main"><div class="farrow"><div class="shaft"></div><div class="head"></div></div></div>
+      <div class="link"></div>
+      <div class="side"><div class="t">Reports excluded · n = 1,121</div><div class="d">No pre-specified benchmark · 844<br>Benchmark, no feasible-local signal · 248<br>Out of time window · 7<br>Failed local-family re-check · 22</div></div>
+    </div>
+    <div class="fbox accbox"><div class="t">Auto-included candidate studies</div><div class="n">n = 118</div><div class="d">116 Scopus · 2 Web of Science</div></div>
+    <div class="farrow pend"><div class="shaft"></div><div class="head"></div></div>
+    <div class="fbox pend" style="width:min(480px,80%)"><div class="t">Pending · human co-review and risk of bias (5-item tool)</div><div class="d small">final included set → data extraction → synthesis</div></div>
+  </div>
+  <div class="foot"><span>PRISMA 2020 Item 7 · finalized after IEEE / ACM / ACL + arXiv merge</span><span>Solid = executed · dashed = pending</span></div>
+</section>
+
+<!-- 10 · EVIDENCE ARCHITECTURE -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Design</span><span>Evidence Architecture · Data Sources</span></div>
+  <h2>How the two evidence streams combine</h2>
+  <div class="body grid g2" style="gap:clamp(14px,2.2vw,30px);align-content:stretch">
+    <div>
+      <div class="card" style="margin-bottom:12px"><h3><span class="idx">01</span>PRISMA corpus (literature-first)</h3>
+        <p class="small">Screened studies evaluating ≥ 1 feasible-local model on ≥ 1 pre-specified benchmark. From each we extract model × benchmark × score, tagged with provenance: source type, self-reported vs independently run, contamination resistance.</p></div>
+      <div class="card"><h3><span class="idx">02</span>Benchmark leaderboards (data sources, gray-lit appendix)</h3>
+        <p class="small">Epoch AI Benchmarking Hub CSV (primary) · SWE-bench Verified official leaderboard · LiveBench snapshots · EvalPlus leaderboard. Secondary cross-checks: LLM Stats, Artificial Analysis. Not screened as studies; they supplement and verify extractions.</p></div>
+    </div>
+    <div>
+      <div class="card dark" style="margin-bottom:12px"><h3 style="color:var(--bg)">Merged dataset → meta-regression</h3>
+        <p class="small" style="opacity:.85">Both streams merge into the quantitative synthesis. The headline parameter is the release-date slope, the speed at which locally runnable capability improves. The gap metric is the envelope-of-best distance to the closed frontier, per benchmark and date.</p></div>
+      <div class="card"><h3>Risk of bias (5-item tailored appraisal)</h3>
+        <p class="small">Independent run vs self-reported · harness / version transparency · contamination-resistance · sample / compute adequacy · reporting completeness. Quality flags feed the pre-specified sensitivity analyses.</p></div>
+    </div>
+  </div>
+  <div class="foot"><span>scope.txt §6, §7, §10</span><span>Every data point carries provenance</span></div>
+</section>
+
+<!-- 11 · NEXT STEPS -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Plan</span><span>Next Steps · To Completed PRISMA Flow</span></div>
+  <h2>Workplan to finalize the evidence base</h2>
+  <div class="body" style="max-width:920px">
+    <div class="checkrow done"><div class="box"></div><div class="what"><b>Execute arXiv, Scopus, Web of Science</b><span class="small">2,392 records; strings, dates and hit counts documented per PRISMA-S</span></div><span class="tag done">Done</span></div>
+    <div class="checkrow done"><div class="box"></div><div class="what"><b>Deduplicate + title/abstract screen executed databases</b><span class="small">1,239 screened · 1,121 excluded · 118 candidates (per-record audit trail retained)</span></div><span class="tag done">Done</span></div>
+    <div class="checkrow"><div class="box"></div><div class="what"><b>Human co-reviewer pass, 118 candidates</b><span class="small">Confirm feasibility (≤ 24 GB / ≤ 48 GB unified) + extractable score → final included set</span></div><span class="tag pending">Next</span></div>
+    <div class="checkrow"><div class="box"></div><div class="what"><b>Execute IEEE Xplore, ACM DL, ACL Anthology</b><span class="small">Syntax-adapted strings ready; institutional access required</span></div><span class="tag pending">Pending</span></div>
+    <div class="checkrow"><div class="box"></div><div class="what"><b>Record-level merge of arXiv (897) + re-screening + S2 ID dedup</b><span class="small">Semantic Scholar quota-dependent; completes PRISMA flow diagram</span></div><span class="tag pending">Pending</span></div>
+    <div class="checkrow"><div class="box"></div><div class="what"><b>Download benchmark data sources</b><span class="small">Epoch AI CSV, SWE-bench Verified, LiveBench, EvalPlus → gray-literature appendix</span></div><span class="tag pending">Pending</span></div>
+    <div class="checkrow"><div class="box"></div><div class="what"><b>Extraction → meta-regression → PRISMA report</b><span class="small">Model × benchmark × date with provenance tags; RoB tables; OSF-registered protocol</span></div><span class="tag pending">Pending</span></div>
+  </div>
+  <div class="foot"><span>search_execution_report.md §6</span><span>Stage-1 checkpoint reached</span></div>
+</section>
+
+<!-- 12 · SUMMARY -->
+<section class="slide">
+  <div class="kicker"><span class="phase">Summary</span><span>Key Numbers · Stage One</span></div>
+  <h2>Progress at a glance</h2>
+  <div class="body" style="display:grid;grid-template-rows:1fr auto;gap:clamp(14px,2.4vh,26px)">
+    <div class="grid g4" style="grid-template-rows:1fr 1fr">
+      <div class="stat"><div class="v">2,392</div><div class="l">Records identified<br>arXiv 897 · Scopus 903 · WoS 592</div></div>
+      <div class="stat"><div class="v">256</div><div class="l">Duplicates removed<br>DOI + title normalization</div></div>
+      <div class="stat"><div class="v">1,239</div><div class="l">Records screened<br>title / abstract, three levers</div></div>
+      <div class="stat"><div class="v">1,121</div><div class="l">Records excluded<br>four documented reasons</div></div>
+      <div class="stat"><div class="v">118</div><div class="l">Auto-included candidates<br>awaiting co-review</div></div>
+      <div class="stat"><div class="v">3/6+</div><div class="l">Databases executed<br>IEEE · ACM · ACL pending</div></div>
+      <div class="stat"><div class="v">7</div><div class="l">Benchmark outcomes<br>pre-specified outcome set</div></div>
+      <div class="stat"><div class="v">2</div><div class="l">Evidence streams<br>literature + leaderboards</div></div>
+    </div>
+    <div class="card dark">
+      <p style="margin:0" class="small"><span class="mono acc" style="letter-spacing:.16em;font-weight:700">INTERIM CONCLUSION&nbsp;·</span>
+      Search and screening are complete for the three executed databases, and the pipeline is reproducible end to end. The 118-study corpus is large enough to move into co-review and extraction. One coverage caveat deserves emphasis: feasible-local models are rarely evaluated on SWE-bench. The evaluations that do exist come mostly from agent-scaffold papers testing large or closed models. That asymmetry is a finding, and the synthesis will report it as one.</p>
+    </div>
+  </div>
+  <div class="foot"><span>Prepared with AI-assisted research tooling; every degradation was documented</span><span>September 1, 2026</span></div>
+</section>
+
+</main>
+
+<div class="hud">
+  <span class="proj">Locally runnable LLMs and the coding gap · PRISMA 2020 progress report</span>
+  <span class="counter" id="counter">1 / 13</span>
+  <button class="navbtn" id="prev" aria-label="Previous slide">←</button>
+  <button class="navbtn" id="next" aria-label="Next slide">→</button>
+</div>
+
+<script>
+(function(){
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var counter = document.getElementById('counter');
+  var bar = document.getElementById('bar');
+  var i = 0;
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function go(n){
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function(s, k){ s.classList.toggle('active', k === i); });
+    counter.textContent = pad(i + 1) + ' / ' + pad(slides.length);
+    bar.style.width = ((i + 1) / slides.length * 100) + '%';
+    if (history.replaceState) history.replaceState(null, '', '#' + i);
+  }
+
+  document.getElementById('prev').addEventListener('click', function(){ go(i - 1); });
+  document.getElementById('next').addEventListener('click', function(){ go(i + 1); });
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(i + 1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); go(i - 1); }
+    else if (e.key === 'Home') { go(0); }
+    else if (e.key === 'End') { go(slides.length - 1); }
+    else if (e.key === 'f' || e.key === 'F') {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen();
+    }
+  });
+
+  var x0 = null;
+  document.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, {passive:true});
+  document.addEventListener('touchend', function(e){
+    if (x0 === null) return;
+    var dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 60) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  }, {passive:true});
+
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click', function(){
+      document.querySelectorAll('.tab').forEach(function(x){ x.classList.toggle('on', x === t); });
+      document.querySelectorAll('.panel').forEach(function(p){ p.classList.toggle('on', p.id === t.dataset.tab); });
+    });
+  });
+
+  var h = parseInt(location.hash.slice(1), 10);
+  go(isNaN(h) ? 0 : h);
+})();
+</script>
+</body>
+</html>

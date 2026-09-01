@@ -8,13 +8,14 @@
 
 ---
 
-## 1. PRISMA Flow (Scopus executed — status update)
+## 1. PRISMA Flow (Scopus + WoS executed — status update)
 
 ```
-Records identified (total):           ~1,800  [2 of 6+ databases executed]
+Records identified (total):           ~2,392  [3 of 6+ databases executed]
 ├── arXiv (live API):                  897    [MAIN-codegen 245 + MAIN-SWE 353 + SUPP1-local 247 + SUPP2-model 52]
 ├── Scopus:                            903    [MAIN 369 + SUPP-1 446 + SUPP-2 88]  ✅ EXECUTED
-├── WoS / IEEE / ACM / ACL:            pending (not yet executed)
+├── WoS:                               592    [MAIN 76 + SUPP-1 512 + SUPP-2 4]    ✅ EXECUTED 2026-09-01
+├── IEEE / ACM / ACL:                  pending (not yet executed)
 └── Gap-fillers (S2, Google Scholar):  TBD     [S2 rate-limited this session]
 
 Scopus dedup (DOI/title):              809 unique (of 903)
@@ -22,6 +23,14 @@ Scopus title/abstract screen:          809 screened
   ├── Excluded (no benchmark):         427
   ├── Excluded (no local signal):      244
   └── Auto-included:                   116  (see screening_report.md; human co-review pending)
+
+WoS dedup (intra-WoS DOI/title):       11 removed → 581 unique
+WoS dedup vs Scopus (DOI/title):       151 removed (overlap) → 430 new records screened
+WoS title/abstract screen:             430 screened
+  ├── Excluded (no benchmark):         417
+  ├── Excluded (out of time window):   7     [2022: 3, 2027 Early Access: 4]
+  ├── Excluded (benchmark, no local):  4
+  └── Auto-included:                   2     → appended to candidate list (116 → 118)
 ```
 
 > Full PRISMA flow to be finalized after WoS/IEEE/ACM/ACL execution. See `screening_report.md` for the detailed Scopus screen.
@@ -46,17 +55,39 @@ Top recent returns (sample, most-recent-first) corroborate the field is active t
 
 ---
 
+## 2b. Live Search Execution — Web of Science (user-run queries, exports processed 2026-09-01)
+
+The three WoS strings from `search_strategy.md` §2.2 were run in the WoS Core interface by the user; exports received as `wos_MAIN.csv` + `wos_MAIN.xls` (MAIN, 76 records — both formats verified identical), `wos_SUPP1.xls` (512), `wos_SUPP2.xls` (4). Processed with `wos_screen.py` (dedup + title/abstract screen, full decision log in `wos_screening_log.csv`, audit trail per record).
+
+| Search string | Hits |
+|---|---|
+| MAIN (benchmark-anchored, TS) | **76** |
+| SUPP-1 (local/on-device coding, TS) | **512** |
+| SUPP-2 (model-family × benchmarks, TS) | **4** |
+| **WoS subtotal** | **592** |
+
+Notes:
+- MAIN is almost entirely absorbed by Scopus (70 of 76 records already in the Scopus corpus) — expected, since both index the same benchmark-anchored journal/conference literature.
+- SUPP-1 profile mirrors the Scopus pattern: dominated by local/on-device LLM papers that do not name a pre-specified benchmark (417 of 430 screened excluded on that lever).
+- **Export caveat (PRISMA-S Item 4):** the WoS export left `Language` and `Document Type` columns empty; the English + document-type filters are assumed applied at query time in the WoS interface. Blank-author proceedings noise: 0 records.
+- Auto-included (2, appended to the candidate list): *Large Language Models for Fault Localization: An Empirical Study* (2026, Qwen2.5-Coder-32B open-weight, HumanEval) and *Intelligent automated code review and software quality evaluation: a survey* (2026, Code Llama coverage, SWE-bench).
+- Screening false-positive controls: "human eval(uation)" and bare "DeepSeek" (DeepSeek-V3 is out of scope; only DeepSeek-Coder / R1-Distill admitted) — see `wos_screen.py` patterns.
+
+---
+
 ## 3. Degradation & Gap Note (PRISMA-S Item 7 — completeness)
 
 - **Semantic Scholar API:** returned **HTTP 429 (rate-limited)** for the whole session. Per bibliography protocol, `semantic_scholar_unmatched` signals are **omitted** (not set false) for all entries this pass; Semantic Scholar ID dedup (Step 4.5) is **deferred** to the next session when the quota resets.
-- **Scopus / WoS / IEEE / ACM / ACL:** these require institutional access / interactive query interfaces that this session cannot hit programmatically. Counts above are **marked ESTIMATE pending manual execution** by the user. The strings in `search_strategy.md` are ready to paste.
+- **WoS:** executed via user-run interface queries (programmatic API requires institutional subscription); exports processed as documented in §2b. Language/Document-Type filter application is assumed at query time (columns empty in export).
+- **IEEE / ACM / ACL:** still require institutional access / interactive query interfaces. The strings in `search_strategy.md` are ready to paste.
+- **arXiv ↔ WoS/Scopus cross-dedup:** the 897 arXiv hits from the earlier pass are still not merged as a record-level file, so WoS-vs-arXiv duplicate removal is **pending** (risk: some WoS preprint-indexed records may duplicate arXiv entries at full-text stage).
 - **Epoch AI Benchmarking Hub CSV** (`epoch.ai/data/benchmark_data.zip`, updated 2026-08-21): identified and confirmed as the primary **data source** (gray-literature appendix) for benchmark scores — not screened as a study. Download deferred to the synthesis stage.
 
 ---
 
 ## 4. Provisional Evidence Corpus (seed shortlist, N ≈ 15)
 
-**Updated:** Scopus screening identified **116 auto-included candidates** (see `screening_report.md`). The table below retains the highest-priority seed sources — benchmark-defining methodology papers plus the local-model tech reports that anchor extraction. These seed the `literature_corpus`; the full screen (dual-pass, co-reviewer) runs after WoS/IEEE/ACM/ACL execution.
+**Updated:** Scopus + WoS screening identified **118 auto-included candidates** (116 Scopus + 2 WoS; see `screening_report.md`). The table below retains the highest-priority seed sources — benchmark-defining methodology papers plus the local-model tech reports that anchor extraction. These seed the `literature_corpus`; the full screen (dual-pass, co-reviewer) runs after WoS/IEEE/ACM/ACL execution.
 
 | # | Source | Type | Benchmark data | Local-relevant? |
 |---|--------|------|----------------|-----------------|
@@ -92,8 +123,8 @@ Top recent returns (sample, most-recent-first) corroborate the field is active t
 
 ## 6. Next Steps (Stage 1 Phase 2 completion → checkpoint)
 
-1. **Co-reviewer human pass** on the 116 auto-included candidates (confirm feasibility per scope.txt §2 + extractable score) → final included set + RoB.
-2. **Execute WoS / IEEE / ACM / ACL** strings from `search_strategy.md` → merge with Scopus + arXiv → re-run dedup + screening → complete PRISMA flow.
+1. **Co-reviewer human pass** on the 118 auto-included candidates (116 Scopus + 2 WoS; confirm feasibility per scope.txt §2 + extractable score) → final included set + RoB.
+2. **Execute IEEE / ACM / ACL** strings from `search_strategy.md` → merge with Scopus + WoS + arXiv → re-run dedup + screening → complete PRISMA flow.
 3. **Download Epoch AI benchmark CSV** (+ LiveBench, SWE-bench Verified, EvalPlus leaderboards) as data sources.
 4. **Re-run Semantic Scholar** (quota reset) for ID-based dedup + `semantic_scholar_unmatched` signals.
 5. Extract model × benchmark × date scores with provenance tags → merged dataset for meta-regression.

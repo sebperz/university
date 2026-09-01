@@ -1,0 +1,431 @@
+decision,reason,benchmarks,search,year,title,doi,ut
+excluded,benchmark-no-local-signal,SWE-bench,MAIN,2025,BLAZE: Cross-Language and Cross-Project Bug Localization via Dynamic Chunking and Hard Example Learning,10.1109/tse.2025.3579574,WOS:001551587900005
+excluded,benchmark-no-local-signal,HumanEval;MBPP,MAIN,2025,LevDetectCode: Zero-Shot Detection of AI-Generated Code using Levenshtein Distance,10.1142/s0218194025500524,WOS:001577545100001
+excluded,benchmark-no-local-signal,SWE-bench,MAIN,2026,Bridging Bug Localization and Issue Fixing: A Hierarchical Localization Framework Leveraging Large Language Models,10.1109/tse.2026.3668601,WOS:001746840800003
+excluded,benchmark-no-local-signal,SWE-bench,MAIN,2026,CGARF: a causality-guided framework for reliable automated program repair,10.1007/s10664-026-10940-1,WOS:001855214700001
+excluded,out-of-time-window,,SUPP-1,2022,A Computational Strategy for Code- and Mesh-Agnostic Nonlinear Global-Local Analysis,10.1109/tcpmt.2022.3167651,WOS:000800180000009
+excluded,out-of-time-window,,SUPP-1,2022,Named Entity Recognition of Hazardous Chemical Risk Information Based on Multihead Self-Attention Mechanism and BERT,10.1155/2022/8300672,WOS:000852894900003
+excluded,no-prespecified-benchmark,,SUPP-1,2023,Improving the robustness of machine reading comprehension via contrastive learning,10.1007/s10489-022-03947-w,WOS:000836531100006
+excluded,out-of-time-window,,SUPP-1,2022,S-Pred: protein structural property prediction using MSA transformer,10.1038/s41598-022-18205-9,WOS:000841397200010
+excluded,no-prespecified-benchmark,,SUPP-1,2023,Incidence of the Sample Size Distribution on One-Shot Federated Learning,10.5201/ipol.2023.440,WOS:001152812100002
+excluded,no-prespecified-benchmark,,SUPP-1,2023,CSGVD: A deep learning approach combining sequence and graph embedding for source code vulnerability detection,10.1016/j.jss.2023.111623,WOS:000932009900001
+excluded,no-prespecified-benchmark,,SUPP-1,2023,Semantic feature learning for software defect prediction from source code and external knowledge,10.1016/j.jss.2023.111753,WOS:001025865100001
+excluded,no-prespecified-benchmark,,SUPP-1,2023,Feature structure distillation with Centered Kernel Alignment in BERT transferring,10.1016/j.eswa.2023.120980,WOS:001120981200001
+excluded,no-prespecified-benchmark,,SUPP-1,2023,Bridging artificial intelligence in medicine with generative pre-trained transformer (GPT) technology,10.21037/jmai-23-36,WOS:001555468100001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Topic model for long document extractive summarization with sentence-level features and dynamic memory unit,10.1016/j.eswa.2023.121873,WOS:001098759200001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Joint unsupervised contrastive learning and robust GMM for text clustering,10.1016/j.ipm.2023.103529,WOS:001102148400001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Enhancing code summarization with action word prediction,10.1016/j.neucom.2023.126777,WOS:001103845000001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Tuning-Free Universally-Supervised Semantic Segmentation,10.1109/access.2024.3512379,WOS:001380707700042
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Leveraging Local LLMs for Secure In-System Task Automation With Prompt-Based Agent Classification,10.1109/access.2024.3505298,WOS:001373670100028
+excluded,no-prespecified-benchmark,,SUPP-1,2024,THE STATE STATUTES PROJECT,10.59015/wlr.kmem2466,WOS:001368041000008
+excluded,no-prespecified-benchmark,,SUPP-1,2024,A Concise and Varied Visual Features-Based Image Captioning Model with Visual Selection,10.32604/cmc.2024.054841,WOS:001362451900001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Regulatory and Ethical Considerations on Artificial Intelligence for Occupational Medicine,10.23749/mdl.v115i2.15881,WOS:001223327200002
+excluded,no-prespecified-benchmark,,SUPP-1,2024,API Entity and Relation Joint Extraction from Text via Dynamic Prompt-tuned Language Model,10.1145/3607188,WOS:001168576700007
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Lightweight transformers for clinical natural language processing,10.1017/s1351324923000542,WOS:001141915500001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,C-CORE: Clustering by Code Representation to Prioritize Test Cases in Compiler Testing,10.32604/cmes.2023.043248,WOS:001149367100001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Dissociable Neural Mechanisms for Human Inference Processing Predicted by Static and Contextual Language Models,10.1162/nol_a_00090,WOS:001200316700007
+excluded,no-prespecified-benchmark,,SUPP-1,2024,On-device query intent prediction with lightweight LLMs to support ubiquitous conversations,10.1038/s41598-024-63380-6,WOS:001238391600046
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Toward a deeper understanding: RetNet viewed through Convolution,10.1016/j.patcog.2024.110625,WOS:001250138700001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,"Large language models from OpenAI, Google, Meta, X and Co. The role of closed and open models in radiology",10.1007/s00117-024-01327-8,WOS:001241276300001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Text-enhanced knowledge graph representation learning with local structure,10.1016/j.ipm.2024.103797,WOS:001253645000001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Open-Vocabulary Animal Keypoint Detection with Semantic-Feature Matching,10.1007/s11263-024-02126-3,WOS:001254008300002
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Dense Text Retrieval Based on Pretrained Language Models: A Survey,10.1145/3637870,WOS:001229267400002
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Development and Evaluation of a Retrieval-Augmented Large Language Model Framework for Ophthalmology,10.1001/jamaophthalmol.2024.2513,WOS:001272861100003
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Demonstration of DB-GPT: Next Generation Data Interaction System Empowered by Large Language Models,10.14778/3685800.3685876,WOS:001378223700028
+excluded,no-prespecified-benchmark,,SUPP-1,2025,length PMANet: Malicious URL detection via post-trained language model guided multi-level feature attention network,10.1016/j.inffus.2024.102638,WOS:001297691500001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Enhancing the Interpretability of Malaria and Typhoid Diagnosis with Explainable AI and Large Language Models,10.3390/tropicalmed9090216,WOS:001322854400001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Deciphering the Language of Protein-DNA Interactions: A Deep Learning Approach Combining Contextual Embeddings and Multi-Scale Sequence Modeling,10.1016/j.jmb.2024.168769,WOS:001314062200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Video-driven musical composition using large language model with memory-augmented state space,10.1007/s00371-024-03606-w,WOS:001315673700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Moving Beyond ChatGPT: Local Large Language Models (LLMs) and the Secure Analysis of Confidential Unstructured Text Data in Social Work Research,10.1177/10497315241280686,WOS:001346109900001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Learning to Generate Structured Code Summaries From Hybrid Code Context,10.1109/tse.2024.3439562,WOS:001339093700005
+excluded,no-prespecified-benchmark,,SUPP-1,2024,An AI Agent for Fully Automated Multi-Omic Analyses,10.1002/advs.202407094,WOS:001324919900001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,PB-GPT: An innovative GPT-based model for protein backbone generation,10.1016/j.str.2024.07.016,WOS:001331562100001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Bi-VLGM: Bi-Level Class-Severity-Aware Vision-Language Graph Matching for Text Guided Medical Image Segmentation,10.1007/s11263-024-02246-w,WOS:001326806000001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,MultiSentimentArcs: a novel method to measure coherence in multimodal sentiment analysis for long-form narratives in film,10.3389/fcomp.2024.1444549,WOS:001348538300001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Fast computation of local dips using the one-lag-correlation method,10.1190/geo2023-0407.1,WOS:001401878100049
+excluded,no-prespecified-benchmark,,SUPP-1,2024,TPTE: Text-Guided Patch Token Exploitation for Unsupervised Fine-Grained Representation Learning,10.1145/3673657,WOS:001386436200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Retrieval In Decoder benefits generative models for explainable complex question answering,10.1016/j.neunet.2024.106833,WOS:001353491000001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,XEdgeAI: A human-centered industrial inspection framework with data-centric Explainable Edge AI approach,10.1016/j.inffus.2024.102782,WOS:001361266000001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,SemantiCodec: An Ultra Low Bitrate Semantic Audio Codec for General Sound,10.1109/jstsp.2024.3506286,WOS:001416163600006
+excluded,no-prespecified-benchmark,,SUPP-1,2024,(A Comparative Study on Development Models of AI Chinese Language Partners Based on the ERNIE Large Language Model),,WOS:001391827800002
+excluded,no-prespecified-benchmark,,SUPP-1,2024,MacBehaviour: An R package for behavioural experimentation on large language models,10.3758/s13428-024-02524-y,WOS:001381969100003
+excluded,no-prespecified-benchmark,,SUPP-1,2024,"A Survey on Deep Neural Network Pruning: Taxonomy, Comparison, Analysis, and Recommendations",10.1109/tpami.2024.3447085,WOS:001364431200192
+excluded,no-prespecified-benchmark,,SUPP-1,2024,"An Inventory of Proposed and Enacted Sugar-Sweetened Beverage Policies at the State, Local, and Tribal Levels in the United States, 2014-2023",10.2105/ajph.2024.307855,WOS:001355693800014
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Vulnerability detection using BERT based LLM model with transparency obligation practice towards trustworthy AI,10.1016/j.mlwa.2024.100598,WOS:001355503300001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,Joint extraction of entity and relation based on fine-tuning BERT for long biomedical literatures,10.1093/bioadv/vbae194,WOS:001381785800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Operating Conversational Large Language Models (LLMs)in the Presenceof Errors,10.1109/mnano.2024.3513112,WOS:001385766300001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Enhancing visual representation for text-based person searching,10.1016/j.knosys.2024.112893,WOS:001402606900001
+excluded,no-prespecified-benchmark,,SUPP-1,2024,modelRxiv: A Platform for the Dissemination and Interactive Display of Models,10.1111/ele.70042,WOS:001386250400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Rule-Based Translation From Natural Language to OpenSCENARIO by Injecting Various Disturbance for Driving Simulator,10.1109/access.2025.3638671,WOS:001641551600005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Self-Calibrated CLIP for Training-Free Open-Vocabulary Segmentation,10.1109/tip.2025.3639996,WOS:001643488600005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Deep-Learning-Empowered Detection of Large-Language-Model-Based Generative Content in Educational Tasks,10.1109/tlt.2025.3626545,WOS:001631848500003
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Fed-urlBERT: Client-Split Federated BERT for Malicious URL Detection,10.1109/access.2025.3629370,WOS:001615892300015
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Multi-Agent Visual Reasoning for Out-of-Distribution Detection in Complex Road Environments,10.1109/access.2025.3627794,WOS:001611682800024
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Integrating Global and Local Information for Remote Sensing Image-Text Retrieval,10.1109/lgrs.2025.3616154,WOS:001608973300005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,A Novel VLM-Guided Diffusion Model for Remote Sensing Image Super-Resolution,10.1109/lgrs.2025.3608178,WOS:001594873000004
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Using GenAI to Assess Design Patterns in Student-Written Code,10.1109/tlt.2025.3604054,WOS:001594927900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Interpretable Vulnerability Detection in LLMs: A BERT-Based Approach with SHAP Explanations,10.32604/cmc.2025.067044,WOS:001591361300001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,An Efficient Approach for Code-Mixed Emotion Classification Applying Machine Learning,10.1109/access.2025.3598754,WOS:001586194400043
+excluded,no-prespecified-benchmark,,SUPP-1,2025,LLMYOLOEdge: An Edge-IoT Aware Novel Framework for Integration of YOLO With Localized Quantized Large Language Models,10.1109/access.2025.3613423,WOS:001586193100039
+excluded,no-prespecified-benchmark,,SUPP-1,2025,TriP-LLM: A Tri-Branch Patch-Wise Large Language Model Framework for Time-Series Anomaly Detection,10.1109/access.2025.3613663,WOS:001586193100005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,AULoRA: Anomaly Understanding With Low-Rank Adaptation for Zero-Shot Anomaly Detection,10.1109/access.2025.3614713,WOS:001587270100032
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Radiation-Tolerant Unsupervised Deep Image Stitching for Remote Sensing,10.1109/tgrs.2025.3605270,WOS:001575188400048
+excluded,no-prespecified-benchmark,,SUPP-1,2025,OPEN: Lightweight Map-Based Semantic Navigation for GPS-Free Last-Mile Delivery,10.1109/tase.2025.3605356,WOS:001571424100004
+excluded,no-prespecified-benchmark,,SUPP-1,2025,A Multimodal Prototype Correction and Multidimensional Knowledge Distillation Framework for Cross-Domain Few-Shot Hyperspectral Image Classification,10.1109/tgrs.2025.3601337,WOS:001567061200017
+excluded,no-prespecified-benchmark,,SUPP-1,2025,ERVQ: Enhanced Residual Vector Quantization With Intra-and-Inter-Codebook Optimization for Neural Audio Codecs,10.1109/taslpro.2025.3579310,WOS:001515507700002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,SeaCap: Multi-Sight Embedding and Alignment for One-Stage Image Captioner,10.1109/tmm.2025.3535303,WOS:001506811400016
+excluded,no-prespecified-benchmark,,SUPP-1,2025,OASIS: Outlier-Aware KV Cache Clustering for Scaling LLM Inference in CXL Memory Systems,10.1109/lca.2025.3567844,WOS:001498221200003
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Large Language Model-Based Critical Care Big Data Deployment and Extraction: Descriptive Analysis,10.2196/63216,WOS:001447331700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,MCAP: Low-Pass GNNs with Matrix Completion for Academic Recommendations,10.1145/3698193,WOS:001434174000004
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Optimal RoPE extension via Bayesian Optimization for training-free length generalization,10.1016/j.aiopen.2025.01.002,WOS:001426934800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Open-Source Large Language Models in Radiology: A Review and Tutorialfor PracticalResearch and ClinicalDeployment,10.1148/radiol.241073,WOS:001423130700005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,LLMOA: A novel large language model assisted hyper-heuristic optimization algorithm,10.1016/j.aei.2024.103042,WOS:001400279400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Automatic Code Summarization Using Abbreviation Expansion and Subword Segmentation,10.1111/exsy.13835,WOS:001391553300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SparseLight: Dynamic gradient-optimized softmax for efficient transformer acceleration,10.1016/j.knosys.2025.115050,WOS:001640911800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SEMQ: Efficient non-uniform quantization with sensitivity-based error minimization for large language models,10.1016/j.future.2025.108120,WOS:001613833900003
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Generalized Robotic Vision-Language Learning Model via Linguistic Foreground-Aware Contrast,10.1007/s11263-024-02340-z,WOS:001396957400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,ChatHTTPFuzz: large language model-assisted IoT HTTP fuzzing,10.1007/s13042-024-02527-3,WOS:001399419300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SAVIOR: Assessing volume alignment quality for serial section electron microscopy images using large vision-language model,10.1016/j.neucom.2025.132038,WOS:001619489000005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Deep API Sequence Generation via Golden Solution Samples and API Seeds,10.1145/3695995,WOS:001431203000004
+excluded,no-prespecified-benchmark,,SUPP-1,2025,A closer look at the explainability of Contrastive language-image pre-training,10.1016/j.patcog.2025.111409,WOS:001423329200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,An end-to-end audio classification framework with diverse features for obstructive sleep apnea-hypopnea syndrome diagnosis,10.1007/s10489-025-06299-3,WOS:001417590500007
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Smaller But Better: Unifying Layout Generation with Smaller Large Language Models,10.1007/s11263-025-02353-2,WOS:001418921400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,LLM-enhanced evolutionary test generation for untyped languages,10.1007/s10515-025-00496-7,WOS:001423537600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Capturing the context-aware code change via dynamic control flow graph for commit message generation,10.1007/s10994-024-06671-3,WOS:001443655600005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,LegItBART: a summarization model for Italian legal documents,10.1007/s10506-025-09436-y,WOS:001428574300001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,NanoAbLLaMA: construction of nanobody libraries with protein large language models,10.3389/fchem.2025.1545136,WOS:001441180100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A collaborative reasoning framework for large language models in long-context Q&A,10.1016/j.eswa.2025.129960,WOS:001600169700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Towards semantic versioning of open pre-trained language model releases on hugging face,10.1007/s10664-025-10631-3,WOS:001439318200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Semantic lossless encoded image representation for malware classification,10.1038/s41598-025-88130-0,WOS:001439808000030
+excluded,no-prespecified-benchmark,,SUPP-1,2025,AskBeacon-performing genomic data exchange and analytics with natural language,10.1093/bioinformatics/btaf079,WOS:001439361600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Large language model-empowered paradigm for automated geotechnical site planning and geological characterization,10.1016/j.autcon.2025.106103,WOS:001443710900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,FedBM: Stealing knowledge from pre-trained language models for heterogeneous federated learning,10.1016/j.media.2025.103524,WOS:001446120100001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,An Efficient FPGA Implementation of Approximate Nearest Neighbor Search,10.1109/tvlsi.2025.3544342,WOS:001470929800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,DyLas: A dynamic label alignment strategy for large-scale multi-label text classification,10.1016/j.inffus.2025.103081,WOS:001449836900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Multi-view framework for multi-label bioactive peptide classification based on multi-modal representation learning,10.1016/j.asoc.2025.113007,WOS:001461101600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,RNALoc-LM: RNA subcellular localization prediction using pre-trained RNA language model,10.1093/bioinformatics/btaf127,WOS:001461443400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Harnessing Large Language Models for Automated Software Testing: A Leap Towards Scalable Test Case Generation,10.3390/electronics14071463,WOS:001465745800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Mitigating Quantization Errors Due to Activation Spikes in Gated Linear Unit-Based Large Language Models,10.3390/fi17040185,WOS:001475065400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Using Generative Artificial Intelligence in Health Economics and Outcomes Research: A Primer on Techniques and Breakthroughs,10.1007/s41669-025-00580-4,WOS:001478374200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,PhosF3C: a feature fusion architecture with fine-tuned protein language model and conformer for prediction of general phosphorylation site,10.1093/bib/bbaf242,WOS:001498387900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,DeepRNA-Twist: language-model-guided RNA torsion angle prediction with attention-inception network,10.1093/bib/bbaf199,WOS:001480051700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Ex2Vec: Enhancing assembly code semantics with end-to-end execution-aware embeddings,10.1016/j.neunet.2025.107506,WOS:001513722000001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Natural vs programming language in LLM knowledge graph construction,10.1016/j.ipm.2025.104195,WOS:001490769300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Data retrieval from local heritage books-Is artificial intelligence the solution?,10.1080/01615440.2025.2512744,WOS:001503979500001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Reductive Analysis with Compiler-Guided Large Language Models for Input-Centric Code Optimizations,10.1145/3729282,WOS:001533077300012
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Exploring Large Protein Sequence Space through Homology- and Representation-based Hierarchical Clustering,10.1093/molbev/msaf136,WOS:001518061600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,LLM for Mobile: An Initial Roadmap,10.1145/3708528,WOS:001505551000014
+excluded,no-prespecified-benchmark,,SUPP-1,2025,PQCache: Product Quantization-based KVCache for Long Context LLM Inference,10.1145/3725338,WOS:001815231600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Cracking SQL Barriers: An LLM-based Dialect Translation System,10.1145/3725278,WOS:001814656800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Exploring the Trade-Offs: Unified Large Language Models vs Local Fine-Tuned Models for Highly-Specific Radiology NLI Task,10.1109/tbdata.2025.3536928,WOS:001488533700023
+excluded,no-prespecified-benchmark,,SUPP-1,2025,AllohubPy: Detecting Allosteric Signals Through An Information-theoretic Approach,10.1016/j.jmb.2025.168969,WOS:001508992200016
+excluded,no-prespecified-benchmark,,SUPP-1,2025,ProtSpace: A Tool for Visualizing Protein Space,10.1016/j.jmb.2025.168940,WOS:001508992200014
+excluded,no-prespecified-benchmark,,SUPP-1,2026,CPE-Pro: A Structure-Sensitive Deep Learning Method for Protein Representation and Origin Evaluation,10.1007/s12539-025-00732-4,WOS:001503666700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,FAA-CLIP: Federated Adversarial Adaptation of CLIP,10.1109/jiot.2025.3545574,WOS:001506780700024
+excluded,no-prespecified-benchmark,,SUPP-1,2025,TokenPacker: Efficient Visual Projector for Multimodal LLM,10.1007/s11263-025-02491-7,WOS:001518332600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Innovative Guardrails for Generative AI: Designing an Intelligent Filter for Safe and Responsible LLM Deployment,10.3390/app15137298,WOS:001526198800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,PHILOSOPHY OF ARTIFICIAL INTELLIGENCE: ANTHROPOCENTRISM VS. MACHINE THINKING,,WOS:001624186400002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,TEESLICE: Protecting Sensitive Neural Network Models in Trusted Execution Environments when Attackers Have Pre-Trained Models,10.1145/3707453,WOS:001540884500001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Spatio-Temporal and Retrieval-Augmented Modeling for Chest X-Ray Report Generation,10.1109/tmi.2025.3554498,WOS:001523480800014
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Information Compression in the AI Era: Recent Advances and Future Challenges,10.1109/jsac.2025.3560359,WOS:001511604800019
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Exploring the potential of lightweight large language models for AI-based mental health counselling task: a novel comparative study,10.1038/s41598-025-05012-1,WOS:001522635700013
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Evaluating Proprietary and Open-Weight Large Language Models as Universal Decimal Classification Recommender Systems,10.3390/app15147666,WOS:001549350000001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,LoRA2: Multi-scale low-rank approximations for fine-tuning large language models,10.1016/j.neucom.2025.130859,WOS:001529591400002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Can large language models understand depth in monocular images without prior vision knowledge?,10.1016/j.engappai.2025.111680,WOS:001539108800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Fungi-Kcr: a language model for predicting lysine crotonylation in pathogenic fungal proteins,10.3389/fcimb.2025.1615443,WOS:001538011900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,EEG Emotion Copilot: Optimizing lightweight LLMs for emotional EEG interpretation with assisted medical record generation,10.1016/j.neunet.2025.107848,WOS:001548438000001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Accurate and Efficient Fine-Tuning of Quantized Large Language Models Through Optimal Balance in Adaptation,10.1162/tacl.a.23,WOS:001544290100002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,FairQuanti: Enhancing Fairness in Deep Neural Network Quantization via Neuron Role Contribution,10.1145/3744560,WOS:001563001900009
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Large Language Model With Region-Guided Referring and Grounding for CT Report Generation,10.1109/tmi.2025.3559923,WOS:001554480100018
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Improving LLM-based code completion using LR parsing,10.1016/j.cola.2025.101352,WOS:001544720400002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,PersAD: adversarial protection against text-based personality inference,10.1007/s10618-025-01144-0,WOS:001541778900003
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Implicit Multi-Behavior Generative Recommendation With Mixture of Quantization,10.1109/tkde.2025.3572014,WOS:001525525600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Investigation of growth traits in Turkish Merino lambs using multi-locus GWAS approaches: Karacabey Merino,10.1186/s12917-025-04957-9,WOS:001545790900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Evaluating and deploying Large Vision-Language Models for fruit quality assessment in smart agriculture systems,10.1016/j.compag.2025.110806,WOS:001583391900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Evaluating gender bias in large language models in long-term care,10.1186/s12911-025-03118-0,WOS:001546363500001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Enhancing anomaly detection in plant disease recognition with knowledge ensemble,10.3389/fpls.2025.1623907,WOS:001559875500001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,DLUSEdge: Dynamic Load-Unload Scheduling for Localized LLMs on Resource-Constrained Edge,10.1007/s13218-025-00895-8,WOS:001554539800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,SensorChat: Answering Qualitative and Quantitative Questions during Long-term Multimodal Sensor Interactions,10.1145/3749496,WOS:001578724000001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,BenchING: A Benchmark for Evaluating Large Language Models in Following Structured Output Format Instruction in Text-Based Narrative Game Tasks,10.1109/tg.2025.3529117,WOS:001575795400022
+excluded,no-prespecified-benchmark,,SUPP-1,2025,PF-AGCN: an adaptive graph convolutional network for protein-protein interaction-based function prediction,10.1093/bioinformatics/btaf473,WOS:001574573800001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Fully Semantic Gap Recovery for End-to-End Image Captioning,10.1109/tcsvt.2025.3558088,WOS:001573747800002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Intelligent extraction of manufacturing system components from natural language using transformer models,10.1080/00207543.2025.2554311,WOS:001566088200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Ranking-oriented cross-modal hashing,10.1016/j.engappai.2025.112195,WOS:001570673000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Implementing a Resource-Light and Low-Code Large Language Model System for Information Extraction from Mammography Reports: A Pilot Study,10.1007/s10278-025-01659-4,WOS:001569211000001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Partner-RBR: Predicting Multitype RNA-Binding Residues Based on Mutual Learning,10.1021/acs.jcim.5c01785,WOS:001573293400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,"Efficient inference, training, and fine-tuning of protein language models",10.1016/j.isci.2025.113495,WOS:001587266500002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"GPT-5 and open-weight large language models: Advances in reasoning, transparency, and control",10.1016/j.is.2025.102620,WOS:001577795500001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Codebook LLMs: Evaluating LLMs as Measurement Tools for Political Science Concepts,10.1017/pan.2025.10017,WOS:001574153700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,SRDA: Self-regulating distribution alignment based on prompt learning for unsupervised domain adaptation,10.1016/j.neucom.2025.131498,WOS:001578610400006
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Investigating the bugs in reinforcement learning programs: Insights from Stack Overflow and GitHub,10.1007/s10515-025-00555-z,WOS:001575876700002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Occlusion-aware multi-person pose estimation with keypoint grouping and dual-prompt guidance in crowded scenes,10.1016/j.jvcir.2025.104545,WOS:001582915700003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Ethical governance and artificial intelligence for climate resilience in small island developing states,10.1108/jices-04-2025-0093,WOS:001579238900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Terrain is a stronger predictor of peat depth than airborne radiometrics in Norwegian landscapes,10.5194/soil-11-763-2025,WOS:001588312800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Human-robot collaborative visual inspection with Large Language Models☆,10.1016/j.rcim.2025.103154,WOS:001591774000002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,TALE: Token-Adaptive Low-Rank KVCache Approximation with Reconstruction Elimination,10.1162/tacl.a.39,WOS:001598397700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Leveraging Electronic Health Record Data and Up-to-Date Clinical Guidelines for High-Accuracy Clinical Diabetes Drug and Dosage Recommendation,10.1055/a-2707-2862,WOS:001591722400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MiKTr: Multiscale knowledge fusion transformer for consumer fraud detection,10.1016/j.inffus.2025.103779,WOS:001597387800002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MACR-afford: Weakly supervised multimodal affordance grounding via multi-branch attention enhancement and CoT multi-stage reasoning,10.1016/j.eswa.2025.129929,WOS:001597588400005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,"Global burden of 292 causes of death in 204 countries and territories and 660 subnational locations, 1990-2023: a systematic analysis for the Global Burden of Disease Study 2023",10.1016/s0140-6736(25)01917-8,WOS:001605004700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,"Burden of 375 diseases and injuries, risk-attributable burden of 88 risk factors, and healthy life expectancy in 204 countries and territories, including 660 subnational locations, 1990-2023: a systematic analysis for the Global Burden of Disease Study 2023",10.1016/s0140-6736(25)01637-x,WOS:001606031100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Usage patterns of software product metrics in assessing developers' output: A comprehensive study,10.1016/j.infsof.2025.107935,WOS:001604764100002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Synchronizing LLM-based semantic knowledge bases via secure federated fine-tuning in semantic communication,10.3389/frai.2025.1690950,WOS:001609084600001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,A machine learning approach for automating review of a RxNorm medication mapping pipeline output,10.1016/j.jbi.2025.104909,WOS:001583070500001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,DeepfakeCLIP: Semantic-Opposite prompt learning for generalizable deepfake detection,10.1016/j.knosys.2025.114681,WOS:001608428900003
+excluded,no-prespecified-benchmark,,SUPP-1,2025,METFAN: Multisource Enhanced Therapeutic Peptide Function Prediction via Adapter Network,10.1021/acsomega.5c07552,WOS:001605908200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Automated OncoTree Coding of Surgical Pathology Reports for Molecular Pathology Correlation via a Local RAG-LLM Pipeline,,WOS:001740079900255
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Multi-modal Joint Distillation Optimization for Source Code Vulnerability Detection,10.11999/jeit250453,WOS:001644508400005
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LkaM-PTM: Predicting PTM sites through multimodal protein features from capturing cross-field information,10.1016/j.artmed.2025.103297,WOS:001613617800002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,CRVQ: Channel-Relaxed Vector Quantization for Extreme Compression of LLMs,10.1162/tacl.a.45,WOS:001609105600002
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Enhancing dangerous scene classification with multimodal LLMs and attention mechanisms,10.1007/s11227-025-08012-0,WOS:001688657500003
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Automated UAV Object Detector Design Using Large Language Model-Guided Architecture Search,10.3390/drones9110803,WOS:001624580300001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,"Modeling water column gas transformation, migration and atmospheric flux from seafloor seepage",10.5194/os-21-3031-2025,WOS:001618585300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Enhancing Robotaxi Pick-Up Through Vision-Language-Model-Based Passenger Identification,10.1109/tits.2025.3633488,WOS:001620823000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Progressive text-semantic-aware generative adversarial network for image fusion,10.1016/j.patcog.2025.112720,WOS:001627984700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MCIFSS: Mask-guided modality collaboration with global-local discriminative synergy for incremental few-shot semantic segmentation,10.1016/j.eswa.2025.130250,WOS:001629400200008
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Human level information extraction from clinical reports with finetuned language models,10.1038/s41598-025-28767-z,WOS:001651165600005
+excluded,no-prespecified-benchmark,,SUPP-1,2025,"Global, Regional, and National Burden of Cardiovascular Diseases and Risk Factors in 204 Countries and Territories, 1990-2023",10.1016/j.jacc.2025.08.015,WOS:001630601900021
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Unsupervised multi-semantic similarity reconstruction contrastive hashing for multi-label image retrieval,10.1016/j.eswa.2025.130414,WOS:001631641500018
+excluded,no-prespecified-benchmark,,SUPP-1,2025,SAQ: Pushing the Limits of Vector Quantization through Code Adjustment and Dimension Segmentation,10.1145/3769824,WOS:001814809400001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,REST: Embracing the rust programming language for modern electronic structure theory,10.1063/1674-0068/cjcp2510156,WOS:001684281900013
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Enhancing Visual Reasoning With LLM-Powered Knowledge Graphs for Visual Question Localized-Answering in Robotic Surgery,10.1109/jbhi.2025.3538324,WOS:001640359100020
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Few-shot and zero-shot Assamese hate speech detection: a comparative benchmark of large language models,10.1007/s13278-025-01531-x,WOS:001662857300001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Natural-Language Relay Control for a SISO Thermal Plant: A Proof-of-Concept with Validation Against a Conventional Hysteresis Controller,10.3390/app152412986,WOS:001646137900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,GlySitePred: Identification of Glycation Modification Sites Based on Deep Feature Fusion and NCR-CC Sampling Technology,10.1021/acs.jcim.5c02178,WOS:001636532000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Computational modeling of semantic synchrony using transformer architectures in the context of online second language instruction dialogues,10.1016/j.rmal.2025.100290,WOS:001640043200001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Embedded IoT System for Acoustic Precipitation Phase Partitioning via Edge ML and MFCCs,10.1109/jiot.2025.3613138,WOS:001635759800019
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Protein embeddings and local alignments,10.1016/j.csbj.2025.12.002,WOS:001645551900001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,Optimizing Cloudlets for Faster Feedback in LLM-Based Code-Evaluation Systems,10.3390/computers14120557,WOS:001646242300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SAM-Swin: SAM-driven dual-swin transformers with adaptive lesion enhancement for Laryngo-Pharyngeal tumor detection,10.1016/j.media.2025.103906,WOS:001643288200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,IVC-DB: Iterative verification correction method guided by dual-Backward mathematical reasoning in large language models,10.1016/j.knosys.2025.115095,WOS:001645703700001
+excluded,no-prespecified-benchmark,,SUPP-1,2025,A comprehensive framework for legal dispute analysis integrating prompt engineering and multi-dimensional knowledge graphs,10.1038/s41598-025-30306-9,WOS:001656384300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM-informed global-local contextualization for zero-shot food detection,10.1016/j.patcog.2025.112928,WOS:001648428600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM4STP: A large language model-driven multi-feature fusion method for ship trajectory prediction,10.1016/j.tre.2025.104599,WOS:001650011700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Vision model fine-tuning based on two-level prompts fusion,10.1016/j.knosys.2025.115185,WOS:001658032300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"microbiONT: an AI-assisted, privacy-focused platform for local Nanopore 16S and 18S amplicon analysis",10.1093/bioadv/vbag229,WOS:001855144200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM-QFL: Distilling Large Language Model for Quantum Federated Learning,10.1109/tnsm.2026.3712394,WOS:001843440400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,AWa: An Activation-Weight Distribution-Aware Binarization Method for Large Language Models,10.1109/access.2026.3709846,WOS:001841541500025
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MagiCodec: Simple Masked Gaussian-Injected Codec for High-Fidelity Reconstruction and Generation,10.1109/taslpro.2026.3711754,WOS:001841704500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Large Language Model-Based Representations of Heterogeneous Graphs for Vulnerability Detection,10.32604/cmc.2026.082481,WOS:001839156500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Data cleaning and spam filtering methods in the TAWOS database,10.33039/ami.2026.06.004,WOS:001833245000011
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Device-Cloud Collaborative LLM Inference With Multi-Modal, Multi-Task, and Multi-Turn Conversations",10.1109/ton.2026.3712685,WOS:001827906500007
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-Section Lyric-to-Song Generation With Autoregressive-Diffusion Modeling and Preference Optimization,10.1109/taslpro.2026.3705684,WOS:001820959900007
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A Dual-Level Selective Unlearning Framework for Multi-Agent Decentralized Federated Learning,10.1109/tccn.2026.3711105,WOS:001821037800008
+excluded,no-prespecified-benchmark,,SUPP-1,2026,IP-Augmented Multimodal Malicious URL Detection via Token-Contrastive Representation Enhancement and Multigranularity Fusion,10.1109/tifs.2026.3709128,WOS:001820965100003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Text-Guided Local Feature Optimization for Few-Shot Remote Sensing Scene Classification,10.1109/lgrs.2026.3704843,WOS:001817218900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,ROI-Aware Image Transmission With Unequal Joint Source-Channel Coding,10.1109/lcomm.2026.3707182,WOS:001811575400011
+excluded,no-prespecified-benchmark,,SUPP-1,2026,VulSCP: Automated Code Vulnerability Detection via Sequential Convolution and Parallel Attention Mechanism,10.32604/cmc.2026.081155,WOS:001807672400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,External Data Extraction Attacks Against Retrieval-Augmented Large Language Models,10.1109/tifs.2026.3705326,WOS:001805524500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Fine-Grained Text and Spectral Attribute Supervised Semantic Network for Hyperspectral Image Zero-Shot Domain Generalization,10.1109/tgrs.2026.3698486,WOS:001792347700006
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Detection of Self-Harm in Electronic Mental Health Records Using Privacy-Preserving Local Language Models: Methodological Study,10.2196/87586,WOS:001793423100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,DiffHash: Text-Guided Targeted Attack via Diffusion Models Against Deep Hashing Image Retrieval,10.1109/tifs.2026.3694622,WOS:001783566700009
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Extracting Cardiorespiratory Symptoms From Clinical Notes Using Open-Weight Large Language Models: Method Development and Validation Study,10.2196/89480,WOS:001779347900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Automatic Speech Recognition and Large Language Models for Multilingual Pathology Report Generation: Proof-of-Concept Study,10.2196/90814,WOS:001771353300030
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Project Evolution-aware Prompting of LLMs for Just-in-time Defect Prediction in Edge-cloud Systems,10.13052/jwe1540-9589.2535,WOS:001762454300006
+excluded,no-prespecified-benchmark,,SUPP-1,2026,FTGID: Fine-Grained Text-Driven Framework for Universal Generative Image Detection,10.1109/tip.2026.3685840,WOS:001760338000003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Hidden-Uncertainty Assessment via Non-Verbalized Signatures for LLM Medical QA,10.1109/access.2026.3682338,WOS:001748521500037
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM-ABBA: Understanding Time Series via Symbolic Approximation,10.1109/tsp.2026.3662011,WOS:001730966100003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Lightweight Dual-Agent Architecture for 2-D Shadow Puppetry: Real-Time Edge Deployment and Evaluation,10.1109/access.2026.3674872,WOS:001727215500015
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Learning to Tune Like an Expert: Interpretable and Scene-Aware Navigation via MLLM Reasoning and CVAE-Based Adaptation,10.1109/tase.2026.3673004,WOS:001723032000011
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A Critical Review and Evaluation of LLMs for RTL Generation,10.1109/access.2026.3665894,WOS:001716038900028
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Risk-Aware Privacy Preservation for LLM Inference,10.1109/tifs.2026.3667458,WOS:001711081200003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Collaborated With Hallucination: Enhancing Egocentric Grounded Question Answering via Error Demonstrations,10.1109/tip.2026.3666732,WOS:001714460800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Two-Stage Expert Offloading for Domain-Aware MoE Inference,10.1109/access.2026.3665697,WOS:001708173300024
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Learning Where to Look: VLM-Assisted Efficient Inference for Sparse Aerial Objects Segmentation,10.1109/lgrs.2026.3669375,WOS:001711076100003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Sentiment Analysis in Political Education Reviews Using Aspect-Level Coupled Reflective Network,10.4018/ijdwm.402700,WOS:001706108600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MMProtRepPPI: A Multimodal Protein Representation for Predicting Protein-Protein Interactions Using Sequence and Structure,10.1109/tmbmc.2025.3627871,WOS:001692102600010
+excluded,no-prespecified-benchmark,,SUPP-1,2026,VMAD: Visual-Enhanced Multimodal Large Language Model for Zero-Shot Anomaly Detection,10.1109/tase.2025.3591656,WOS:001687371300003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,E-Flash: Energy-Efficient LLM Mapping on NAND Flash-Based In-Storage Inference Computing,10.1109/tvlsi.2026.3657777,WOS:001691133200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Enhancing Technical Question Answering Quality Through Multimodal Document Segmentation,10.1109/access.2026.3655813,WOS:001674724600004
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Experimental Evaluation of AI-Augmented Cybersecurity Requirements Generation Leveraging LLMs' Capabilities,10.1109/access.2026.3658339,WOS:001687406600019
+excluded,no-prespecified-benchmark,,SUPP-1,2026,TIPS: A Prompt Engineering Framework for Code Classification and Generation on Resource-Constrained Systems,10.1109/access.2026.3658502,WOS:001680999200041
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"LLM QLoRA Fine-Tuning of Llama, DeepSeek, and Qwen: A Skyrim Case Study",10.1109/access.2026.3659054,WOS:001680999200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Federated Domain Generalization via Prompt Learning and Aggregation,10.1109/tifs.2026.3655520,WOS:001676227500002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Integration of Large Language Models (LLMs) and Static Analysis for Improving the Efficacy of Security Vulnerability Detection in Source Code,10.32604/cmc.2025.074566,WOS:001671622800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Enabling Cost-Efficient LLM Inference on Mid-Tier GPUs With NMP DIMMs,10.1109/lca.2025.3646622,WOS:001658567700004
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Molecular-level protein semantic learning via structure-aware coarse-grained language modeling,10.1093/bioinformatics/btaf654,WOS:001652349300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Backdoor Attacks on Semantic Communications Systems With Joint Source and Channel Coding,10.1109/lcomm.2025.3637721,WOS:001644558700013
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A Multimodal Phishing Website Detection System Using Explainable Artificial Intelligence Technologies,10.3390/make8010011,WOS:001670907900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,HyperSeq-LLM: Evolving hypergraph sequence learning with LLMs for phishing scam detection on Ethereum,10.1016/j.eswa.2026.131101,WOS:001665728800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A language independent machine learning model for sentiment analysis and toxicity classification in code-mixed data,10.1007/s11047-025-10062-5,WOS:001661735900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,ProtFPreDTI: Drug-Target Interaction Prediction Study and LIME Interpretability Analysis Based on the ProtBERT Deep Language Model with Adaptive Fuzzy Sampling Strategy,10.1021/acs.bioconjchem.5c00399,WOS:001661036100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Adapting pre-trained large model to robust individual tree crown detection from UAV optical images,10.1016/j.atech.2025.101674,WOS:001671852500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,From interaction to evolution: A behavior-driven framework for automated software requirements elicitation,10.1007/s10515-026-00593-1,WOS:001664093100002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,OntoSage: Intelligent Human-Building Smartbot for Semantic Smart Building Question Answering,10.1007/s11280-026-01403-0,WOS:001666700600002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"A code distribution-based trajectory representation and its application to similarity, clustering and classification of AIS big data",10.1016/j.eswa.2026.131216,WOS:001678355100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,FRM-PTQ: Feature relationship matching enhanced low-bit post-training quantization for large language models,10.1016/j.neunet.2026.108619,WOS:001677826200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,UECNet: A unified framework for exposure correction utilizing region-level prompts,10.1016/j.knosys.2026.115365,WOS:001679319800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MOREPAIR: Teaching LLMs to Repair Code via Multi-Objective Fine-Tuning,10.1145/3735129,WOS:001696460900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Activating Associative Disease-Aware Vision Token Memory for LLM-Based X-Ray Report Generation,10.1109/tmi.2025.3603416,WOS:001681025100015
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A Computational Approach to Evaluating Empirical Antibiotic Coverage for Gram-Negative Bloodstream Infections in Pediatric Febrile Neutropenia,10.3390/antibiotics15020192,WOS:001699785400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Feasibility and performance of minimal-volume capillary blood screening for type 1 diabetes and coeliac disease autoantibodies across all age groups: the UNISCREEN population study,10.1007/s00125-026-06680-y,WOS:001686789000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLMs as Hackers: Autonomous Linux Privilege Escalation Attacks,10.1007/s10664-025-10758-3,WOS:001687103300005
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Panoptic-VSNet: Visual-semantic prior knowledge-driven multimodal 3D panoptic segmentation,10.1016/j.patcog.2026.113239,WOS:001689829300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Context-Aware Code Review Automation: A Retrieval-Augmented Approach,10.3390/app16041875,WOS:001699831000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Beyond metrics to methods: a scoping review of transformers and large language models for detection of social drivers of health in clinical notes,10.1093/jamia/ocaf201,WOS:001689949400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Explainable AI: Context-aware layer-wise integrated gradients for explaining transformer models,10.1016/j.neucom.2026.133050,WOS:001695063100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Efficient multilingual spam detection on resource-constrained devices: a comparative analysis of QLoRA fine-tuning of Gemma 3, Qwen 3, and Llama 3.2 models",10.1007/s40747-026-02247-x,WOS:001705841000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"HIAPLLM: IoT-Enabled Hybrid Edge-Cloud LLM for Real-Time, Privacy-Preserving Air Quality Advisories in India",10.1007/s12647-026-00908-3,WOS:001698083500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Legaleval-q: a benchmark for quality evaluation of LLM-generated Chinese legal text,10.1007/s10115-026-02703-7,WOS:001699162600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Enhancing text-to-structured query language translation for seamless electronic medical record access,10.7717/peerj-cs.3467,WOS:001707869400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-granularity information fusion for knowledge graph completion,10.1007/s13042-026-03010-x,WOS:001703516400009
+excluded,no-prespecified-benchmark,,SUPP-1,2026,DP-OTG: A Feature-Free Deep Learning Model for Accurate Prediction of Human O-Linked Threonine Glycosylation Sites,10.1177/15578666261424278,WOS:001702170100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Development of a Predictive Calculator for the Need for Abdominoperineal Resection after Chemoradiation Therapy in Anal Squamous Cell Carcinoma,10.1097/xcs.0000000000001670,WOS:001736951600012
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Rethinking Variable-Length Encoding: Exploiting Bit Sparsity for Parallel Decoding in LLM Accelerators,10.1145/3777471,WOS:001752900800008
+excluded,no-prespecified-benchmark,,SUPP-1,2026,VectorWeaver: A Stage-Aware Automated Optimization Framework for LLM Inference on Edge Platform,10.1145/3799719,WOS:001752003900007
+excluded,no-prespecified-benchmark,,SUPP-1,2026,An agent-Based service architecture for smart greenhouses: Telemetry analytics and decision support with RAG-grounded LLM agents,10.1016/j.atech.2026.101872,WOS:001704542800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Optimal Quantization for Matrix Multiplication,10.1109/tit.2025.3649596,WOS:001699899700015
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Dynamical alignment: a principle for adaptive neural computation,10.1088/2634-4386/ae3acd,WOS:001684926400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Living Off the LLM: How LLMs Will Change Adversary Tactics,10.1109/msec.2026.3659035,WOS:001708229300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Small Language Models for Phishing Website Detection: Cost, Performance, and Privacy Trade-Offs",10.3390/jcp6020048,WOS:001749795000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Privacy-Aware Code-Mixed Cyberbullying Dataset for Session-Based Analysis,10.3390/data11030051,WOS:001727343100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,S2SWCLIP: semantic-optimized prompts with spatial-wavelet synergy for zero-shot anomaly detection,10.1038/s41598-026-43044-3,WOS:001751362200013
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Enhancing full-reference image quality assessment via dual-attention fusion of global-local features and CLIP-based text prior,10.1186/s13640-026-00687-6,WOS:001739079900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,AdapSNE: Adaptive Fireworks-Optimized and Entropy-Guided Dataset Sampling for Edge DNN Training,10.1109/tcsi.2026.3667183,WOS:001714662000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Leveraging Local-LLM for sentiment analysis to enhance text data quality assessment in information science research,10.1108/el-08-2025-0354,WOS:001715518300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Emergency Events Traffic Flow Forecasting Using Text-Prompt-Guided Multimodal Large Language Models,10.1109/tits.2026.3672914,WOS:001719678800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Understanding User Intent in Code-Mixed Sexual and Reproductive Health Queries in Urban India: Hierarchical Classification Approach Using Large Language Models,10.2196/86545,WOS:001729287100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,TextCoT: Zoom-In for Enhanced Multimodal Text-Rich Image Understanding,10.1145/3785474,WOS:001772904200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Cell type annotation for scATAC-seq via DNA large language model and graph domain adaptation,10.1371/journal.pcbi.1014226,WOS:001753870400004
+excluded,no-prespecified-benchmark,,SUPP-1,2026,GlycanGT: a pretrained graph transformer framework for glycan graph representation and generative learning,10.1093/bioinformatics/btag147,WOS:001747440100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Navigating CLIPedia: Architectonic instruments for querying and questing a latent encyclopedia,10.1016/j.foar.2025.08.003,WOS:001742483400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Predicting antibody-antigen affinity with a dual-level representation model,10.1093/bioinformatics/btag109,WOS:001737444000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,From insufficient to sufficient: Hierarchical semantic alignment for remote sensing image-text retrieval,10.1016/j.eswa.2026.132140,WOS:001737267400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Autonomous inverse modeling of complex groundwater systems via a physics-integrated large language model multi-agent framework,10.1016/j.watres.2026.125886,WOS:001744729700003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,ChatCEA: a knowledge-driven intelligent service agent for controlled environment agriculture,10.1016/j.compag.2026.111733,WOS:001746307500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,TrCLIP-VAD : Weak supervised video anomaly detection by improving CLIP training with text rewriting,10.1016/j.neunet.2026.108951,WOS:001745637400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Towards intelligent mobile on-device assistants: low-level text-to-actions with GPT LLMs,10.1007/s13748-026-00435-x,WOS:001739796000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,DCANet: Diffusion-Coded Attention Network for Cross-Domain Semantic Noise Mitigation and Multi-Scale Context Fusion,10.3390/electronics15081667,WOS:001749667800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Semantic-guided adaptive multi-scale enhancement for transmission-line risk assessment,10.1007/s00371-026-04474-2,WOS:001747072300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,From detection to explanation: Understanding and interpreting anomalous code-based transactions on blockchains,10.1016/j.eswa.2026.132403,WOS:001759954000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,HG-RAG: Hierarchical Graph-Based Retrieval-Augmented Generation for Metabolomics,10.3837/tiis.2026.04.021,WOS:001759081600021
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Pathogenicity prediction for noncanonical splice-altering variants based on multimodal feature fusion,10.1093/bib/bbag291,WOS:001783966300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,TSEDTA: a transformer-based neural network with SMILES transformer and ESM2 embeddings for drug-target binding affinity prediction,10.1093/bioinformatics/btag298,WOS:001775644200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LIVA: A Multi-Agent LLM-Assisted System for IoT Vulnerability Analysis,10.1109/tdsc.2026.3665343,WOS:001765040500049
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-Label Smart Contract Vulnerability Detection Using Graph Contrastive Learning With Multi-View Fusion,10.1109/tdsc.2026.3656558,WOS:001765029300049
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SceneVTG plus plus : Controllable Multilingual Visual Text Generation in the Wild,10.1109/tcsvt.2026.3656228,WOS:001760423000023
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Beyond LLaVA-HD: Diving Into High-Resolution Multimodal Large Language Models,10.1109/tpami.2026.3650761,WOS:001732663000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-granularity Prompt Learning with vision-language model for few-shot remote sensing image scene classification,10.1016/j.isprsjprs.2026.03.013,WOS:001721202400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A knowledge graph-driven generation framework for perceptual decomposition and serial logical reasoning with large language models,10.1016/j.engappai.2026.114212,WOS:001702785200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Engineering a Scalable Laboratory Infrastructure for Assembly Language Scaffolding: Design and Deployment of a Locally Optimized GenAI Assistant for the CODE-2 Educational Architecture,10.1002/cae.70196,WOS:001760405200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,The detectability paradox: bilingual medical report generation with open-weight models and the limits of human oversight,10.1093/jamia/ocag070,WOS:001758485000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,PatchCLIP enables region specific contrastive health record and image joint training with patch embedding loss,10.1038/s41598-026-52235-x,WOS:001761369300009
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Empirical performance characterization of local LLM pipeline on resource-constrained edge platform,10.1007/s43538-026-00760-8,WOS:001762530700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,GridPrune: From Where to look to What to select in visual token pruning for MLLMs,10.1016/j.neucom.2026.133887,WOS:001769027000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Learning the PTM code through a coarse-to-fine mechanism-aware framework,10.1038/s41467-026-73148-3,WOS:001824108200009
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Large Language Model Guided Graph Capsule Network with Local-Enhanced Alignment for Fake News Detection,10.1016/j.ipm.2026.104900,WOS:001778986700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Semantic-Oriented Robust Sentence Level Text Watermark for Large Language Models,10.1109/tcss.2026.3687267,WOS:001772967600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,River Meander Development by Bar-Push and Bank-Pull During Cyclic Hydrographs in a Field-Scale Experimental Channel,10.1029/2025wr043155,WOS:001770141200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Textless, Tiny, and Private: Hashed n-Grams With LLM-Teacher Distillation and Local Differential Privacy for Mental-Health Screening on Social Media",10.1109/tcss.2026.3693692,WOS:001779927600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Clinical agents fail silently on patient identity,10.1016/j.ijmedinf.2026.106514,WOS:001787110200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Can LLMs Hack Enterprise Networks? Autonomous Assumed Breach Penetration-Testing Active Directory Networks,10.1145/3766895,WOS:001847471500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Toward edge-intelligent consumer robots: a decoupled RL-LLM architecture for robust navigation under partial observability,10.1007/s44443-026-00870-9,WOS:001839634100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Development of Earth Science Data Literacy Instructional Materials for a Science High School for the Gifted and Analysis of the Implementation of NGSS Science and Engineering Practices,10.5467/jkess.2026.47.3.361,WOS:001830127200009
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Relation-Aware Proxy Hashing for Cross-Modal Retrieval,10.1145/3811910,WOS:001829278200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A Mobile Robot Framework for Learning to Detect New Objects With Large Language Models,10.1115/1.4071863,WOS:001803880000007
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LPC: Efficient Lossless Parameter Compression for Deploying LLM Inference on Edge Systems,10.1109/les.2025.3616900,WOS:001792316700012
+excluded,no-prespecified-benchmark,,SUPP-1,2026,HKD-CPI: high-order knowledge distillation enhanced inductive compound-protein interaction prediction,10.1093/bioinformatics/btag290,WOS:001780696200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MARVEL: a multi-agent research validator and enabler using large language models,10.1088/2632-2153/ae68ba,WOS:001768826300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,An end-to-end vision-language framework with LLM-based reasoning for decision-oriented tomato leaf disease management in greenhouse environments,10.1016/j.compag.2026.111692,WOS:001731849800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,PILOT: A promptable interleaved layout-aware OCR transformer,10.1007/s10032-026-00590-w,WOS:001781921500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,OfflineRealtimeTranslator: A fully offline android application for Russian-to-Chinese simultaneous interpretation using on-device LLM inference,10.1016/j.softx.2026.102764,WOS:001789201700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MVFAN-Kcr: A Multi-View Feature Fusion and Attention-Based Network for Lysine Crotonylation Site Identification,10.1007/s12539-026-00846-3,WOS:001783120700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Reinforcement Learning-Enhanced Large Language Models for Automated Modeling of Nuclear Thermal-Hydraulic Systems: A Plan-and-Act Agent Framework,10.3390/app16125885,WOS:001801901600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,ONE-FOR-ALL: Towards unified zero-shot anomaly detection via adaptive prompt learning,10.1016/j.patcog.2026.114123,WOS:001798567600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Implementing a quality assurance and maintenance framework for standardized clinical terminology data in a multi-institutional setting,10.1186/s12911-026-03595-x,WOS:001852537600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Surg-NAT plus : negation-aware vision-language refinement for fine-grained surgical understanding,10.1007/s11548-026-03722-z,WOS:001792027800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Automated Flow and local LLM-Driven clinical Context Engineering: Precision colorectal cancer recurrence registry,10.1016/j.ijmedinf.2026.106383,WOS:001720727300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Collaborative denoising and semantic preservation: A sequential recommendation model via frequency-aware diffusion and KAN,10.1016/j.eswa.2026.131778,WOS:001711178700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,VISA-Agent: A Visual Symbolic Agent for Reasoning-Intensive Multimodal Retrieval,10.3390/math14122197,WOS:001802926300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Reconstructing shared visual experiences from human brain activity across individuals,10.1016/j.media.2026.104157,WOS:001806290700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Vision-Language Complementary Dual-Centroid learning for unsupervised person re-identification,10.1016/j.patcog.2026.114278,WOS:001806507100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MiddleCLIP: Unleashing the potential of the middle layers in CLIP for training-free open-vocabulary semantic segmentation,10.1016/j.neucom.2026.134289,WOS:001807033700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A benchmark of large language models for spatially informed proposal generation in local search for the p-median problem,10.1016/j.compenvurbsys.2026.102467,WOS:001808333600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,RealKGC: Relation-constrained large language models for inductive knowledge graph completion,10.1016/j.knosys.2026.116415,WOS:001812298000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A lightweight defense mechanism against next-generation of phishing emails using distilled attention-augmented BiLSTM,10.1016/j.jisa.2026.104552,WOS:001812234800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SOCbot: Using Large Language Models to Dynamically Measure and Classify Occupations in Surveys,10.1177/00491241261461516,WOS:001806059800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Text answer guided RGB-D saliency detection,10.1016/j.eswa.2026.133396,WOS:001813739200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,TransKla: A Local-Global Cross-Attention Based Transformer Approach for Prediction of Lysine Lactylation Sites,10.1021/acs.jcim.6c01478,WOS:001807981100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A paper-to-code agentic framework for energy communities: data-driven decision support using LLMs as scientific translators rather than generative approximators,10.1108/jkm-02-2026-0222,WOS:001805278100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,PlanTwin: Privacy-Preserving Planning Abstractions for Cloud-Assisted LLM Agents,10.1109/tsc.2026.3695494,WOS:001843477800002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A parallel dual-stream state-space module for reliable and efficient biomedical relation extraction,10.1371/journal.pcbi.1014480,WOS:001836159100004
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Clara: A Cross-Modal Learning Framework for Enhanced Vulnerability Detection,10.1109/tdsc.2026.3691741,WOS:001835398300006
+excluded,no-prespecified-benchmark,,SUPP-1,2026,IRC-Bench: Recognizing Entities from Contextual Cues in First-Person Reminiscences,10.3390/make8070186,WOS:001832594000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Automated Localization of Affected Libraries and Versions from Vulnerability Reports,10.1109/tse.2026.3688559,WOS:001824167400011
+excluded,no-prespecified-benchmark,,SUPP-1,2026,ARKE: An ontology-driven framework for automated mapping of local radiology procedure terms to the LOINC-RadLex playbook using large language model,10.1016/j.jbi.2026.105071,WOS:001816008200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,KLaR: fusing knowledge graphs and language models for biomedical target discovery,10.1093/bioinformatics/btag320,WOS:001812864900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM-Empowered Decision-Focused Learning for the Operation of Local Energy Communities,10.1109/tsg.2026.3678781,WOS:001801457800021
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Soft Label Pruning and Quantization for Large-Scale Dataset Distillation,10.1109/tpami.2026.3664488,WOS:001786026100028
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Codebook Transfer With Vision-to-Language Translation for Vector Quantization,10.1109/tpami.2026.3667935,WOS:001786026100029
+excluded,no-prespecified-benchmark,,SUPP-1,2026,ReVul-CoT: Towards effective software vulnerability assessment with retrieval-augmented generation and chain-of-thought prompting,10.1016/j.jss.2026.112855,WOS:001724541100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multimodal fusion with LLM content via hierarchical progressive transformer for explainable fake news detection,10.1016/j.ipm.2026.104700,WOS:001707672000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Large language models in rheumatology-centered research: A scoping review of model openness and reporting practices,10.1016/j.semarthrit.2026.152994,WOS:001819066000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,FMAgent: Autonomous multi-agent system for fluid mechanics,10.1016/j.aei.2026.104988,WOS:001820158000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Detecting jurisdiction compliance gaps in process plant engineering with regulatory RAG,10.1016/j.jlp.2026.106100,WOS:001821008000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MoDe: Multi-modal discriminative priors for prompt tuning,10.1016/j.neucom.2026.133555,WOS:001745195500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Evaluating foundation model integration strategies for detecting PII in java software engineering pipelines,10.1007/s10664-026-10919-y,WOS:001814240800002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Knowledge-injected prompt tuning with semantic regularization for fine-grained image recognition,10.1016/j.knosys.2026.116115,WOS:001779812300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Open-source offline-deployable retrieval-augmented large language model for assisting pancreatic cancer staging,10.1007/s11604-026-02049-8,WOS:001816668800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SteuerLLM: local specialized large language model for German tax law analysis,10.1038/s41598-026-58485-z,WOS:001817453600003
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A memetic algorithm with large language model for multi-objective flexible job shop scheduling with variable speed,10.1016/j.asoc.2026.115911,WOS:001823550900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,NeuroPpred-PSCG:A Multimodal Framework Using ProtT5and Structural Features for Neuropeptide Prediction Based on GatedCross-Attention Mechanism and Multiscale Gated Convolution,10.1021/acs.jcim.6c01123,WOS:001819021500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Imbalance between regulatory instruments and objectives in China's green building development policies,10.1016/j.envdev.2026.101527,WOS:001825549500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,EMO-LLaMA: Enhancing Facial Emotion Understanding with Instruction Tuning,10.1007/s11263-026-02918-9,WOS:001820704200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Lightweight and Effective Coded-Slang Detection for Cyber-Drug Intelligence,10.3390/electronics15143138,WOS:001831795600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MathGoal: A Python package for domain-aware mathematical problem-solving workflows,10.1016/j.softx.2026.102887,WOS:001826329200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,DGEvo: Automatic heuristic design via dual-feature-guided evolution with large language models for job shop scheduling problem with fixed preventive maintenance,10.1016/j.swevo.2026.102477,WOS:001826583800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Technical Developments in Radiology: Enhancing Research Workflows with PACScrawler,10.1007/s10278-026-02130-8,WOS:001826174600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,DGDS: Reliability-Gated Neuro-Symbolic Learning for Roman Urdu Hate Speech Detection,10.3390/app16157394,WOS:001847778800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Bridging the semantic gap for zero-shot object counting with language-augmented pseudo-exemplars,10.1016/j.patrec.2026.07.026,WOS:001832381700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Frontier-LLM measurement of protectionist intensity in official WTO documents: Evidence from emerging economies,10.1016/j.inteco.2026.100735,WOS:001836761200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM-Powered Federated Intrusion Detection for Network Threat Behaviors in IoT Systems,10.3837/tiis.2026.07.021,WOS:001841470200021
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Relation extraction for diet, non-communicable disease and biomarker associations (RECoDe): a CoDiet study",10.1093/bioinformatics/btag439,WOS:001856280900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Beyond the Protocol: Unveiling Attack Vectors in the Model Context Protocol (MCP) Ecosystem,10.1109/tse.2026.3694876,WOS:001850154200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Extracting Conditional Expressions as Local Variables: Frequency, Motivation, and Automated Recommendation",10.1109/tse.2026.3700827,WOS:001850154200007
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Prompted Contrastive Learning for Skeleton-Based Action Recognition,10.1109/tcsvt.2026.3680904,WOS:001841877600024
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-View Chest X-Ray Vision-Language Pre-Training via Semantic-Aware Masked Language Modeling and High-Order Alignment,10.1109/tmi.2026.3700856,WOS:001841924100029
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLMENAS: Evolutionary Neural Architecture Search via Large Language Model Guidance,10.1109/tevc.2026.3670336,WOS:001837833800010
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MF2LLM: A Multiview Multimodal Fusion Framework With Large Language Models for Ponzi Scheme Detection on Ethereum,10.1109/jiot.2026.3694119,WOS:001830652600008
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Test-free fault localization using large language models and a Transformer-Mamba hybrid architecture,10.1016/j.infsof.2026.108165,WOS:001759517400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,EmbBERT: Attention under 2 MB memory,10.1016/j.neunet.2026.108800,WOS:001717328300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"Balancing Security and Performance in LLM Agents: Spotlight-Guard, a Layered Defense Against Indirect Prompt Injection",10.3390/app16157662,WOS:001846615800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,GALACLIP: Bridging global alignment and local reasoning via cost aggregation for zero-shot semantic segmentation,10.1016/j.knosys.2026.116368,WOS:001796353500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,HiFTLLM-Rail: A Hierarchical Fine-Tuned LLM for Spatio-Temporal Forecasting in Urban Railway Transit Systems,10.1109/tits.2026.3715544,WOS:001843672600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Closed-loop evaluation of LLM agents for embedded software development,10.1016/j.sysarc.2026.103937,WOS:001842624400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Intelligent support for soil and water conservation compliance: decision assistance capabilities of prompt-enhanced large language models,10.1007/s10506-026-09531-8,WOS:001839564600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,LLM-Enabled Multi-Agent Collaborative Instrument Control for Automated Microelectronic Testing,10.34133/adi.0202,WOS:001839903500001
+excluded,out-of-time-window,,SUPP-1,2027,NERLLM: Efficient integration of local NER models and large language models for named entity recognition,10.1016/j.eswa.2026.133821,WOS:001845187200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,SemGLoC: A Semantic-guided Global-Local Contrastive framework for skeleton-based action recognition,10.1016/j.imavis.2026.106148,WOS:001848303400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Can large language models assist choice modelling? Insights into prompting strategies and current models' capabilities,10.1016/j.jocm.2026.100623,WOS:001848426900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Dynamic concept memory and contrastive feature generation for robust generalized zero-shot learning,10.1007/s00371-026-04692-8,WOS:001847525300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-output machine-learning benchmark and Pareto-based decision support for electron-beam welding of thin-walled titanium structures with comparative synthetic-data augmentation,10.1007/s00170-026-18892-y,WOS:001848815600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Multi-Agent debate system based on large language models: structured deliberation and validation in satellite communications,10.1007/s10844-026-01086-z,WOS:001848666400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,MSG: a unified multi-space graph index for efficient high-dimensional multi-vector search,10.1007/s11432-025-4793-9,WOS:001853388700001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,"D3Fuzz: Dynamic, directed and decaying LLM-driven fuzzing for deep learning libraries",10.1016/j.infsof.2026.108289,WOS:001851198400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,VulKnow: Enhancing Vulnerability Detection With Structured Knowledge and Large Language Models,10.1109/jiot.2026.3697600,WOS:001852612800049
+excluded,no-prespecified-benchmark,,SUPP-1,2026,VSID-BERT: A Lightweight SLM Framework for Unmasking VSI-DDoS Attacks in Serverless Cloud-Edge Continuum,10.1007/s11334-026-00660-6,WOS:001849785500002
+excluded,no-prespecified-benchmark,,SUPP-1,2026,BinVulRAG: Knowledge-Level Retrieval-Augmented Detection of Known Vulnerabilities in Binary Functions,10.3390/electronics15163666,WOS:001858883900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Teacher-guided residual calibration for product-quantized cross-modal retrieval,10.1016/j.knosys.2026.116763,WOS:001852275000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Modosaic: A multimodal experimentation platform for computer-vision dataset generation and validation,10.1016/j.softx.2026.102938,WOS:001854253200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Reconciling Manufacturer Claims with Measured Degradation in Commercial Lithium-Ion Cells: A Provenance-Aware Knowledge Graph with Coverage-Gated Abstention,10.3390/batteries12080314,WOS:001859166300001
+excluded,out-of-time-window,,SUPP-1,2027,Multimodal denoising diffusion model for anomaly detection,10.1016/j.patcog.2026.114632,WOS:001855982500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A human-verifiable execution-time DAG refinement framework for LLM-driven multi-robot construction task planning,10.1007/s10015-026-01138-1,WOS:001854144000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A hybrid reasoning framework for artificial intelligence assessment rubric generation in human and automated contexts: Evidence from an undergraduate programming course,10.1016/j.caeai.2026.100663,WOS:001858262200001
+excluded,out-of-time-window,,SUPP-1,2027,Synergistic mixed-precision quantization for MoE LLMs: Integrating cooperative shapley attribution with profiling-few fuzzy rule interpolation,10.1016/j.ins.2026.124025,WOS:001858031500001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Quantization Meets dLLMs: A Systematic Study of Post-training Quantization for Diffusion LLMs,10.1007/s11633-025-1624-x,WOS:001857594600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,HistActor: Summon your favorite historical persona,10.1016/j.eswa.2026.132510,WOS:001759380100001
+excluded,out-of-time-window,,SUPP-1,2027,Synergizing small and large experts within CoSE-MFND for multimodal fake news detection,10.1016/j.ins.2026.124036,WOS:001861210800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Explainable DNN for smart contract vulnerability detection in the Metaverse,10.1016/j.hcc.2025.100374,WOS:001836571000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,PE Civil Bench: Advancing Agentic Retrieval-Augmented Generation Performance of Large Language Models on Exam Problems and Automated Component Design,10.1016/j.cacaie.2026.100126,WOS:001810936200001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Energy-efficient large language models,10.1016/j.future.2026.108483,WOS:001732066800001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Expanding then fusing: Weakly-supervised remote sensing semantic segmentation via progressive multi-modal fusion,10.1016/j.patcog.2026.113392,WOS:001710689300001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,RS-MoE: Coupled expert compression via activation-peak guided collaborative decomposition,10.1016/j.knosys.2026.116244,WOS:001808271000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,KAN-boosted Chinese online abuse detection framework with sentiment and toxicity fusion through global-local-differential attention,10.1016/j.eswa.2026.132732,WOS:001779761400001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Hierarchical graph transformer with adaptive community integration for smart contract vulnerability detection,10.1016/j.eswa.2026.132639,WOS:001773461000001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,A Zero-Shot Explainable Doctor Ranking Framework with Large Language Models,10.26599/bdma.2025.9020098,WOS:001853534600005
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Internalizing reasoning via chain-of-thought and retrieval augmentation for multimodal sentiment analysis,10.1016/j.inffus.2026.104491,WOS:001783880100001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,OACodec: Audio attribute disentanglement via orthogonal disentanglement and mutual information minimization,10.1016/j.neunet.2026.109128,WOS:001782674600001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Hierarchical intra-inter modal adaptation for vision-language models,10.1016/j.patcog.2026.114200,WOS:001798973900001
+excluded,no-prespecified-benchmark,,SUPP-1,2026,Extracting Biomedical Entities from Clinical Records: A Comparative Study of Large Language Model Approaches,10.1080/08839514.2026.2700905,WOS:001823953600001
+included,benchmark+local-family-or-deployment,HumanEval,MAIN,2026,Large Language Models for Fault Localization: An Empirical Study,10.1142/s021819402650052x,WOS:001849662100001
+included,benchmark+local-family-or-deployment,SWE-bench,MAIN,2026,Intelligent automated code review and software quality evaluation: a survey of AutoML and large language model techniques,10.1007/s10515-026-00668-z,WOS:001855028900007

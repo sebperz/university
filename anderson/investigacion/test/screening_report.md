@@ -6,24 +6,32 @@
 
 ---
 
-## 1. PRISMA Flow (Scopus only — first core database executed)
+## 1. PRISMA Flow (Scopus + WoS title/abstract passes executed)
 
 ```
-Records identified (total):             903   = 369 + 446 + 88
-├── MAIN (codegen × benchmarks)        369
-├── SUPP-1 (local/on-device coding)    446
-└── SUPP-2 (model-family × benchmarks)  88
+Records identified (total):             1,495   = 903 (Scopus) + 592 (WoS)   [+ arXiv 897 pending merge]
 
-Duplicates removed (DOI/title):          94   → 809 unique
-Records screened (title/abstract):      809
-├── Excluded (no benchmark outcome):    427
-├── Excluded (benchmark but no local-model signal):  244
-└── Auto-included (benchmark + local family/feasibility):  138 → 116 after tighter local-family check
+Scopus:
+  Scopus records identified:            903   = 369 + 446 + 88 (MAIN + SUPP-1 + SUPP-2)
+  ├── Duplicates removed (DOI/title):    94   → 809 unique
+  ├── Excluded (no benchmark outcome):  427
+  ├── Excluded (benchmark but no local-model signal):  244
+  └── Auto-included:  138 → 116 after tighter local-family check
 
-Full-text assessed (pending):          116  (co-reviewer pass + RoB)
+WoS (2026-09-01, wos_screen.py):
+  WoS records identified:               592   = 76 + 512 + 4 (MAIN + SUPP-1 + SUPP-2)
+  ├── Duplicates removed (intra-WoS):    11
+  ├── Duplicates removed (vs Scopus):   151   → 430 new records screened
+  ├── Excluded (no benchmark outcome):  417
+  ├── Excluded (out of time window):      7   [2022 / 2027-Early-Access]
+  ├── Excluded (benchmark but no local-model signal):    4
+  └── Auto-included:                     2
+
+Combined auto-included candidate set:  118   (116 Scopus + 2 WoS; co-review pending)
+Full-text assessed (pending):          118  (co-reviewer pass + RoB)
 ```
 
-**Note:** These are **Scopus-only** counts. The PRISMA flow must be re-run after WoS/IEEE/ACM/arXiv/ACL are added (arXiv API already returned 897 hits in the earlier pass — to be merged). Full flow diagram to be finalized once all databases are executed.
+**Note:** Scopus counts are Scopus-only; WoS counts come from the 2026-09-01 export screen (`wos_screening_log.csv`, per-record audit trail). The PRISMA flow must be re-run after IEEE/ACM/arXiv/ACL are added (arXiv API already returned 897 hits in the earlier pass — to be merged, including WoS-vs-arXiv dedup).
 
 ---
 
@@ -72,6 +80,10 @@ The tight screen required a **named feasible-local model family** (Qwen2.5-Coder
 
 ## 5. Next Steps
 
-1. **Co-reviewer human pass** on the 116 (confirm feasibility + extractable score) → final included set + RoB table.
-2. Merge arXiv + WoS/IEEE/ACM/ACL → re-run dedup + screening → complete PRISMA flow.
+1. **Co-reviewer human pass** on the 118 (116 Scopus + 2 WoS; confirm feasibility + extractable score) → final included set + RoB table.
+2. Merge arXiv + IEEE/ACM/ACL → re-run dedup + screening → complete PRISMA flow.
+
+**WoS additions (2026-09-01):** 2 records appended to the candidate list —
+- *Large Language Models for Fault Localization: An Empirical Study* (2026, 10.1142/s021819402650052x) — evaluates Qwen2.5-Coder-32B-Instruct (open-weight) on HumanEval.
+- *Intelligent automated code review and software quality evaluation: a survey of AutoML and large language models* (2026, 10.1007/s10515-026-00668-z) — survey covering Code Llama with SWE-bench.
 3. Extract model × benchmark × score rows with provenance tags (scope.txt §7) → merged dataset for meta-regression.
