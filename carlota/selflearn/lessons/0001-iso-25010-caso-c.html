@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lección 1 · ISO 25010 y el Caso C</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script defer src="../assets/quiz.js"></script>
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Lección 1 de 5 · Módulo 1 (primera mitad)</p>
+<h1>ISO/IEC 25010: el vocabulario de la calidad</h1>
+<p class="lede">Objetivo de hoy: entender qué es una norma de calidad de software, qué son sus características y subcaracterísticas, y por qué cada exigencia del Caso C pertenece a una subcaracterística concreta — no a la que más suene.</p>
+</header>
+
+<div class="meta-card">
+<p><strong>Tu victoria de hoy:</strong> sabrás decir exactamente por qué «el sistema debe aguantar picos» es un requisito de <em>Flexibilidad → Escalabilidad</em> y no de <em>Rendimiento</em> — con la norma en la mano.</p>
+</div>
+
+<h2>1. Qué es ISO/IEC 25010</h2>
+<p>Es una <strong>norma internacional de calidad de software</strong>. La organiza la ISO (Organización Internacional de Normalización) junto con la IEC (Comisión Electrotécnica Internacional) — por eso el nombre lleva «ISO/IEC». Una norma aquí no es una ley: es un <em>acuerdo mundial sobre cómo nombrar y organizar</em> los aspectos de calidad, para que dos equipos distintos hablen el mismo idioma.</p>
+<p>Su aportación clave: la calidad no es un concepto único, es un <strong>modelo con 9 características</strong>, y cada característica se divide en <strong>subcaracterísticas</strong>. El modelo se llama «modelo de calidad de producto» y es la piedra angular de la familia ISO/IEC 25000 (apodada <em>SQuaRE</em>: <em>Systems and software Quality Requirements and Evaluation</em>).</p>
+<blockquote>«La calidad de un sistema es el grado en que el sistema satisface las necesidades declaradas e implícitas de sus interesados.» — <a href="https://iso25000.com/index.php/es/normas-iso-25000/iso-25010">ISO/IEC 25010, portal oficial ISO/IEC 25000</a></blockquote>
+
+<h2>2. Las 9 características, una por una</h2>
+<p>No memorices: entiende qué pregunta responde cada una. La tabla completa con subcaracterísticas está en el <a href="../reference/glosario.html">glosario</a>; aquí van con una frase que las fija:</p>
+<table>
+<tr><th>Característica</th><th>Qué pregunta responde</th><th>Ejemplo cotidiano</th></tr>
+<tr><td><strong>Adecuación funcional</strong></td><td>¿Hace lo que promete, y bien?</td><td>La calculadora calcula correctamente el 7 × 6</td></tr>
+<tr><td><strong>Eficiencia de rendimiento</strong></td><td>¿Lo hace en el tiempo esperado y sin desperdiciar recursos?</td><td>La app abre en 2 s y no drena la batería</td></tr>
+<tr><td><strong>Compatibilidad</strong></td><td>¿Convive e intercambia información con otros sistemas?</td><td>El PDF se abre en cualquier visor</td></tr>
+<tr><td><strong>Capacidad de interacción</strong></td><td>¿Es fácil de usar, aprender y perdonar errores? (antes: «usabilidad»)</td><td>No necesitas manual para enviar un mensaje</td></tr>
+<tr><td><strong>Fiabilidad</strong></td><td>¿Funciona sin fallar, aguanta fallos y se recupera?</td><td>El cajero automático opera aunque falle un servidor</td></tr>
+<tr><td><strong>Seguridad</strong></td><td>¿Defiende datos y funciones frente a acciones maliciosas?</td><td>Nadie entra a tu cuenta sin tu contraseña</td></tr>
+<tr><td><strong>Mantenibilidad</strong></td><td>¿Se puede modificar sin romper cosas ni adivinar?</td><td>Arreglar un bug de un módulo no rompe otro</td></tr>
+<tr><td><strong>Flexibilidad</strong></td><td>¿Se adapta a nuevos contextos y cargas? (antes: «portabilidad»)</td><td>La app funciona en iOS, Android y más países</td></tr>
+<tr><td><strong>Seguridad de la operación</strong> (safety)</td><td>¿Evita dañar a personas, bienes o el entorno?</td><td>El robot industrial se detiene ante un operador cerca</td></tr>
+</table>
+<p class="cite">Ojo con el falso amigo: <em>safety</em> (seguridad de la operación: no hacer daño) ≠ <em>security</em> (seguridad informática: defenderse de ataques). En español ambas se traducen «seguridad»; la norma las distingue.</p>
+
+<h2>3. El Caso C en una frase</h2>
+<p>Un <strong>motor de emparejamiento geoespacial masivo de alta concurrencia</strong>. Descompongamos ese titular, porque cada palabra esconde un requisito:</p>
+<ul>
+<li><strong>Motor de emparejamiento (matching)</strong>: el componente que recibe una orden («cliente A quiere comprar en la tienda X») y decide qué repartidor la lleva.</li>
+<li><strong>Geoespacial</strong>: decide usando coordenadas (latitud/longitud) — «el repartidor más cercano libre».</li>
+<li><strong>40.000 repartidores activos en tiempo real</strong>: cada app publica su posición continuamente; el índice de posiciones se actualiza sin parar.</li>
+<li><strong>Alta concurrencia</strong>: muchos eventos simultáneos compiten por los mismos recursos (dos órdenes queriendo al mismo repartidor = <strong>condición de carrera</strong>).</li>
+<li><strong>Picos extremos de tráfico</strong>: la carga no es constante — un evento viral puede multiplicarla por 3 en minutos.</li>
+</ul>
+<p>De ese titular salen los 4 atributos que tu actividad exige cuantificar: <strong>Rendimiento, Fiabilidad, Seguridad y Escalabilidad</strong>. Cada uno vive en una característica ISO 25010 — y este es el mapeo exacto:</p>
+
+<table>
+<tr><th>Atributo pedido</th><th>Característica ISO 25010</th><th>Subcaracterísticas que usarás</th><th>Seña del Caso C</th></tr>
+<tr><td><strong>Rendimiento</strong></td><td>Eficiencia de rendimiento</td><td>comportamiento en el tiempo · <strong>capacidad</strong> · utilización de recursos</td><td>asignar cada orden antes de que el cliente abandone (ms, RPS)</td></tr>
+<tr><td><strong>Fiabilidad</strong></td><td>Fiabilidad</td><td><strong>disponibilidad</strong> · <strong>tolerancia a fallos</strong> · recuperabilidad</td><td>si cae un nodo, el matching no se detiene y no se pierden órdenes</td></tr>
+<tr><td><strong>Seguridad</strong></td><td>Seguridad</td><td><strong>autenticidad</strong> · <strong>integridad</strong> · confidencialidad · resistencia</td><td>que nadie suplante a un repartidor ni falsifique posiciones</td></tr>
+<tr><td><strong>Escalabilidad</strong></td><td>Flexibilidad</td><td><strong>escalabilidad</strong> (crecer o encoger con la carga)</td><td>absorber un evento masivo multiplicando réplicas, sin reescribir nada</td></tr>
+</table>
+
+<h2>4. Las subcaracterísticas que usarás, definidas</h2>
+<p>Estas son las que nombrarás en tu matriz del Módulo 1 — la norma las define así (parafraseado del texto oficial):</p>
+<table>
+<tr><th>Subcaracterística</th><th>Definición de la norma (paraphrase)</th><th>En el Caso C</th></tr>
+<tr><td><strong>Comportamiento en el tiempo</strong> (time behaviour)</td><td>grado en que los tiempos de respuesta y procesamiento cumplen los requisitos</td><td>cada orden se asigna en ≤ 200 ms</td></tr>
+<tr><td><strong>Capacidad</strong> (capacity)</td><td>grado en que los límites máximos de un parámetro del producto cumplen los requisitos</td><td>sostener 2.000 órdenes por minuto</td></tr>
+<tr><td><strong>Utilización de recursos</strong></td><td>grado en que los recursos usados (CPU, memoria, red) cumplen los requisitos</td><td>no disparar el coste de cómputo en cada pico</td></tr>
+<tr><td><strong>Disponibilidad</strong> (availability)</td><td>grado en que el sistema está operativo y accesible cuando se requiere</td><td>el matching funciona ≥ 99,95% del tiempo</td></tr>
+<tr><td><strong>Tolerancia a fallos</strong> (fault tolerance)</td><td>grado en que el sistema opera como se espera pese a fallos de hardware o software</td><td>caída de un nodo ⇒ el resto sigue asignando</td></tr>
+<tr><td><strong>Recuperabilidad</strong> (recoverability)</td><td>grado en que, tras una interrupción o fallo, el sistema recupera los datos y restaura su estado</td><td>tras el fallo, ninguna orden aceptada se pierde</td></tr>
+<tr><td><strong>Autenticidad</strong> (authenticity)</td><td>grado en que se puede probar que la identidad de un sujeto o recurso es la que dice ser</td><td>probar que quien publica la posición es realmente R-77</td></tr>
+<tr><td><strong>Integridad</strong> (integrity)</td><td>grado en que el estado del sistema y sus datos están protegidos contra modificación no autorizada</td><td>una orden no puede quedar con dos repartidores</td></tr>
+<tr><td><strong>Confidencialidad</strong></td><td>grado en que los datos son accesibles solo para quien está autorizado</td><td>las posiciones de repartidores no se filtran a terceros</td></tr>
+<tr><td><strong>Resistencia</strong> (resistance)</td><td>grado en que el sistema sostiene su operación mientras está bajo ataque</td><td>sigue asignando pese a un ataque de falsificación masiva</td></tr>
+<tr><td><strong>Escalabilidad</strong> (scalability)</td><td>grado en que el producto puede manejar cargas crecientes o decrecientes, o adaptar su capacidad a la variabilidad</td><td>triplicar réplicas ante un evento masivo</td></tr>
+</table>
+
+<div class="callout warn"><span class="tag">La trampa más común</span><em>Escalabilidad</em> NO vive en «Eficiencia de rendimiento»: en ISO/IEC 25010:2023 es una subcaracterística de <strong>Flexibilidad</strong>. La diferencia operativa: <em>rendimiento</em> = cómo responde <strong>hoy, con esta carga</strong> (límite máximo alcanzado); <em>escalabilidad</em> = cómo cambia de capacidad <strong>cuando la carga crece o mengua</strong> (adaptarse a la variabilidad). «Sostiene 2.000 órdenes/min» es capacidad (rendimiento); «triplica su capacidad en 60 s cuando la carga se triplica» es escalabilidad (flexibilidad).</div>
+
+<h2>5. Comprueba tu clasificación</h2>
+<div class="quiz" data-quiz data-title="Clasifica en ISO 25010">
+<script type="application/json">
+[
+  {
+    "q": "«Ante la caída de un nodo, el motor sigue asignando órdenes sin intervención humana».",
+    "options": ["tolerancia a fallos", "utilización de recursos", "protección de errores de uso"],
+    "correct": 0,
+    "explain": "Fiabilidad → tolerancia a fallos: opera como se espera pese al fallo de hardware."
+  },
+  {
+    "q": "«Solo repartidores autenticados pueden publicar su posición; nadie más puede escribir».",
+    "options": ["confidencialidad de datos", "autenticidad de la identidad", "instalabilidad del producto"],
+    "correct": 1,
+    "explain": "Seguridad → autenticidad: probar que la identidad es la que dice ser. Si fuera 'solo lectura autorizada' sería confidencialidad."
+  },
+  {
+    "q": "«El sistema sostiene 2.000 órdenes por minuto sin degradar su latencia».",
+    "options": ["capacidad del sistema", "escalabilidad del sistema", "recuperabilidad del sistema"],
+    "correct": 0,
+    "explain": "Eficiencia de rendimiento → capacidad: límite máximo de carga soportada. Escalabilidad es la capacidad de CRECER cuando la carga crece más allá."
+  },
+  {
+    "q": "«Con carga ×3, el sistema añade réplicas en 60 s y mantiene su p99».",
+    "options": ["capacidad del sistema", "escalabilidad del sistema", "interoperabilidad del sistema"],
+    "correct": 1,
+    "explain": "Flexibilidad → escalabilidad: adaptar la capacidad a la variabilidad de la carga."
+  }
+]
+</script>
+</div>
+
+<h2>6. Lectura primaria recomendada (15 min)</h2>
+<p><strong>ISO/IEC 25010 en el <a href="https://www.iso.org/obp/ui/#iso:std:isoiec:25010:en">OBP oficial de ISO</a></strong> (el <em>Online Browsing Platform</em>: navegador oficial de normas ISO) — es la fuente que la actividad exige citar. Si el OBP resulta incómodo, léelo en la <a href="https://iso25000.com/index.php/es/normas-iso-25000/iso-25010">réplica en español del portal ISO/IEC 25000</a>, pero <em>cita siempre el OBP</em>.</p>
+
+<nav class="lesson-nav">
+<a href="../reference/glosario.html">Glosario completo</a>
+<a href="0002-escenarios-sei-cuantificados.html">Lección 2: escenarios SEI →</a>
+</nav>
+
+<div class="ask">💬 <strong>Recuerda:</strong> soy tu profesor y estoy a un mensaje de distancia. Pregúntame lo que sea — «¿por qué interoperabilidad no es seguridad?» — antes de avanzar a la Lección 2.</div>
+
+<footer class="doc-footer">Lección 1/5 · fuente: ISO/IEC 25010:2023 (OBP oficial · portal ISO/IEC 25000).</footer>
+</main>
+</body>
+</html>

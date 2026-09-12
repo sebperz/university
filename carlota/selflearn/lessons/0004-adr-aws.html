@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lección 4 · ADR formato AWS</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script defer src="../assets/quiz.js"></script>
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Lección 4 de 5 · Módulo 3</p>
+<h1>El ADR: documentar una decisión como en AWS</h1>
+<p class="lede">Objetivo de hoy: entender qué es un ADR, cómo funciona su ciclo de vida, y cómo se estructura la elección de una decisión estructural — con la teoría CAP aplicada al Caso C como ejemplo completo.</p>
+</header>
+
+<div class="meta-card">
+<p><strong>Tu victoria de hoy:</strong> sabrás redactar un ADR con las 8 secciones del formato AWS, escribir un Contexto como «fuerzas en tensión» (no como solución) y defender un trade-off de consistencia (CAP) con argumentos.</p>
+</div>
+
+<h2>1. El diccionario de esta lección</h2>
+<table>
+<tr><th>Término</th><th>Definición</th></tr>
+<tr><td><strong>ADR</strong></td><td><em>Architecture Decision Record</em>: documento corto que registra UNA decisión arquitectónica — su contexto, la decisión y sus consecuencias. Los ADR acumulados forman el «registro de decisiones» (decision log) del proyecto.</td></tr>
+<tr><td><strong>Decisión arquitectónicamente significativa</strong></td><td>la que afecta la estructura del sistema (microservicios…), los requisitos no funcionales, las dependencias (acoplamiento), las interfaces (APIs) o las técnicas de construcción (librerías, frameworks). Eso decide cuándo hace falta un ADR.</td></tr>
+<tr><td><strong>Ciclo de vida</strong></td><td><code>Proposed</code> (propuesta en revisión) → <code>Accepted</code> (aceptada e <strong>inmutable</strong>) o <code>Rejected</code> (rechazada, con motivo). Si cambia el criterio: se escribe un ADR nuevo y el anterior pasa a <code>Superseded</code> (suplantado) — nunca se edita.</td></tr>
+<tr><td><strong>Two-way door</strong></td><td>«puerta de ida y vuelta» (AWS): decisión reversible y barata de cambiar — conviene decidir rápido y probar, en vez de discutir sin fin. Las irreversibles (one-way) sí merecen estudio largo.</td></tr>
+<tr><td><strong>Teorema CAP</strong></td><td>en un sistema distribuido, ante una <em>partición de red</em> (los nodos no se ven entre sí), debes elegir: <strong>C</strong>onsistencia (todos ven los mismos datos, aunque rechaces trabajo) o <strong>A</strong>lta disponibilidad (sigues aceptando trabajo, aunque las réplicas diverjan). La <strong>P</strong> (tolerar particiones) no es opcional: las redes fallan.</td></tr>
+<tr><td><strong>Partición de red</strong></td><td>fallo que divide la red: dos grupos de nodos operativos que no pueden comunicarse entre sí.</td></tr>
+<tr><td><strong>Consistencia fuerte (CP)</strong></td><td>toda lectura devuelve la última escritura; los nodos se coordinan (consenso) antes de responder. Precio: latencia extra y bloqueos ante particiones.</td></tr>
+<tr><td><strong>Consistencia eventual (AP)</strong></td><td>sigues respondiendo sin coordinación; las réplicas <em>convergen</em> si dejas de escribir («eventualmente»). Precio: lecturas temporalmente divergentes.</td></tr>
+<tr><td><strong>Lock (bloqueo)</strong></td><td>primitiva que garantiza que solo una entidad ejecuta una operación crítica a la vez.</td></tr>
+<tr><td><strong>SET NX EX / TTL</strong></td><td>comando de Redis para crear un lock atómico: <code>SET clave valor NX EX 10</code> = crea la clave «solo si no existe» (NX) con expiración de 10 segundos (EX/TTL, <em>time-to-live</em>). Si dos procesos compiten, solo uno logra crearla: hay un único ganador. El TTL evita locks eternos si el ganador muere.</td></tr>
+<tr><td><strong>Redis</strong></td><td>base de datos <em>en memoria</em> (muy rápida, datos volátiles/repliables) con tipos geoespaciales: <code>GEOADD</code>/<code>GEOSEARCH</code> guardan y consultan por coordenadas. Ideal para el índice de posiciones.</td></tr>
+<tr><td><strong>PostgreSQL</strong></td><td>base de datos relacional transaccional: garantiza <code>ACID</code> (atomicidad, consistencia, aislamiento, durabilidad). Buena como «fuente de verdad» de asignaciones.</td></tr>
+<tr><td><strong>Fuente de verdad</strong></td><td>(<em>source of truth</em>) el almacén autoritativo: si hay desacuerdo entre copias, lo que diga este almacén es lo válido.</td></tr>
+<tr><td><strong>Kafka</strong></td><td>broker de mensajería: cola distribuida y duradera que desacopla productores de consumidores y amortigua picos (el productor no espera al consumidor).</td></tr>
+<tr><td><strong>Transaccional</strong></td><td>que agrupa operaciones en una transacción: o se ejecutan todas, o ninguna (no quedan estados a medias).</td></tr>
+<tr><td><strong>Reconciliación</strong></td><td>proceso en segundo plano que compara réplicas divergentes y las hace converger (y su desfase se monitoriza con métricas).</td></tr>
+<tr><td><strong>Idempotencia</strong></td><td>repetir la misma operación produce el mismo efecto que ejecutarla una vez — vital al reintentar mensajes tras un fallo (evita órdenes duplicadas).</td></tr>
+</table>
+
+<h2>2. Qué es un ADR y por qué AWS lo promueve</h2>
+<p>Un ADR documenta UNA decisión estructural. AWS insiste en que lo valioso no es el «cómo» sino el <strong>«por qué»</strong>:</p>
+<blockquote>«One of the most powerful aspects of the ADR structure is that it focuses on the reason for the decision rather than how the team implemented it.» — <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/adr-process.html">AWS Prescriptive Guidance — ADR process</a></blockquote>
+<p>De las 10 prácticas del <a href="https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/">blog AWS de arquitectura</a> destacan para un ADR académico: <strong>una sola decisión por documento</strong> (dividir si hace falta), decisiones en «two-way door» decididas rápido, y ADRs aceptados <strong>inmutables</strong> — la evolución se documenta encadenando ADRs, no editando el pasado.</p>
+
+<h2>3. Las 8 secciones del formato AWS</h2>
+<table>
+<tr><th>Sección</th><th>Qué va ahí</th></tr>
+<tr><td><strong>Título</strong></td><td>la decisión en una frase</td></tr>
+<tr><td><strong>Estado</strong></td><td><code>Proposed</code> / <code>Accepted</code> / <code>Rejected</code> / <code>Superseded</code></td></tr>
+<tr><td><strong>Fecha</strong></td><td>formato ISO-8601: <code>2026-09-07</code></td></tr>
+<tr><td><strong>Contexto</strong></td><td>el problema y las fuerzas en juego: requisitos, restricciones, alternativas. Sin vender la solución.</td></tr>
+<tr><td><strong>Decisión</strong></td><td>qué se adopta, en voz activa («Usamos…»), elegida entre las alternativas</td></tr>
+<tr><td><strong>Consecuencias</strong></td><td>dos listas: <em>Positivas</em> y <em>Negativas</em> — siempre ambas (el trade-off asumido)</td></tr>
+<tr><td><strong>Cumplimiento</strong></td><td>cómo se audita que se respeta la decisión (reglas verificables, pruebas, métricas)</td></tr>
+<tr><td><strong>Notas</strong></td><td>autor, versión, changelog</td></tr>
+</table>
+<p class="cite">Plantilla completa lista para copiar: <a href="../reference/plantilla-adr.html">cheat sheet ADR AWS</a> · fuente: <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/appendix.md">apéndice con ejemplo de AWS Prescriptive Guidance</a>.</p>
+
+<h2>4. Ejemplo completo: elegir consistencia en el Caso C</h2>
+<h3>El Contexto como tensiones</h3>
+<ul>
+<li><strong>Latencia</strong>: RQ-01 exige asignar en p99 ≤ 200 ms con 2.000 órdenes/min → el consenso entre nodos por cada escritura es inviable.</li>
+<li><strong>Escalado</strong>: RQ-04 exige ×3 de capacidad en ≤ 60 s → réplicas sin estado o particionables.</li>
+<li><strong>Integridad</strong>: una orden no puede quedar con dos repartidores (la condición de carrera de la Lección 3, Escenario A).</li>
+<li><strong>CAP</strong>: ante partición, elegir C (rechazar trabajo) o A (seguir sirviendo con divergencia temporal).</li>
+</ul>
+
+<h3>El veredicto CAP</h3>
+<table>
+<tr><th>Estrategia</th><th>En una partición…</th><th>Veredicto para el Caso C</th></tr>
+<tr><td><strong>CP</strong> — consistencia fuerte (coordinar cada asignación)</td><td>se rechaza trabajo en la zona aislada</td><td>✗ revienta RQ-01/RQ-04: latencia de consenso en picos</td></tr>
+<tr><td><strong>AP</strong> — consistencia eventual (índice local + reconciliación)</td><td>sigue asignando por zona; las réplicas convergen después</td><td>✓ cumple latencia y escalado; el <strong>lock atómico con TTL</strong> (SET NX EX) mata la condición de carrera</td></tr>
+<tr><td><strong>CA</strong></td><td>no existe: en distribuido, P es obligatorio</td><td>— trampa conceptual; no la presentes como opción</td></tr>
+</table>
+
+<div class="callout tip"><span class="tag">El matiz que diferencia un ADR bueno</span>«Eventual» no significa «sin control»: la doble asignación se evita con un <strong>lock atómico</strong> (SET NX EX en Redis) sobre el repartidor, la convergencia se acota con un <strong>job de reconciliación</strong> con métrica de desfase, y los reintentos son <strong>idempotentes</strong>. Eso — el mecanismo que hace viable el trade-off — es lo que conviertes en la sección Cumplimiento.</div>
+
+<h3>La Decisión, en una frase</h3>
+<pre><code>## Decisión
+Usamos consistencia eventual con un índice geoespacial en memoria (Redis Geo)
+para el emparejamiento en caliente, un lock atómico con TTL por repartidor
+para eliminar condiciones de carrera, y PostgreSQL como fuente de verdad
+transaccional; Kafka amortigua los picos entre ingesta y emparejamiento.</code></pre>
+<p>Las Consecuencias van en dos columnas (formato del apéndice AWS): Positivas (cumple p99, escala horizontal, absorbe picos) y <strong>Negativas</strong> (durante partición las zonas divergen ≤ 500 ms; exige reconciliación y monitorización del desfase; dos motores de datos que mantener). Un ADR sin coste asumido parece publicidad, no ingeniería.</p>
+
+<h2>5. Comprueba tu comprensión</h2>
+<div class="quiz" data-quiz data-title="Auditoría de ADR">
+<script type="application/json">
+[
+  {
+    "q": "En el Contexto de un ADR AWS, lo correcto es escribir…",
+    "options": ["la solución elegida", "las fuerzas en tensión", "el plan de despliegue"],
+    "correct": 1,
+    "explain": "El contexto lista requisitos, restricciones y alternativas en juego; la solución va en la sección Decisión."
+  },
+  {
+    "q": "Para el Caso C, elegir consistencia fuerte (CP) rompe sobre todo…",
+    "options": ["RQ-01 y RQ-04", "RQ-03 y RQ-02", "ningún requisito"],
+    "correct": 0,
+    "explain": "La coordinación por escritura dispara la latencia (RQ-01) y frena el escalado horizontal (RQ-04)."
+  },
+  {
+    "q": "La condición de carrera de la doble asignación se elimina con…",
+    "options": ["más réplicas del índice", "un lock atómico con TTL", "una cola más grande"],
+    "correct": 1,
+    "explain": "El lock (SET NX EX) garantiza un único ganador por repartidor; réplicas y colas no lo evitan."
+  },
+  {
+    "q": "Tu ADR-001 fue aceptado y el criterio cambió: según AWS, tú…",
+    "options": ["editas el ADR-001", "borras el ADR-001", "escribes ADR-002 que lo suplanta"],
+    "correct": 2,
+    "explain": "Los ADR aceptados son inmutables; el nuevo marca al anterior como Superseded y queda el historial."
+  }
+]
+</script>
+</div>
+
+<h2>6. Lectura primaria recomendada (20 min)</h2>
+<p><strong><a href="https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/">AWS Blog — Master ADRs</a></strong> (lectura obligatoria, ~8 min) y luego el <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/adr-process.html">proceso ADR de AWS Prescriptive Guidance</a> con su <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/appendix.md">ejemplo completo</a> — el modelo de las 8 secciones.</p>
+
+<nav class="lesson-nav">
+<a href="0003-gherkin-bdd.html">← Lección 3: Gherkin</a>
+<a href="../reference/plantilla-adr.html">Plantilla ADR</a>
+<a href="0005-trazabilidad-uml.html">Lección 5: trazabilidad →</a>
+</nav>
+
+<div class="ask">💬 <strong>Recuerda:</strong> si tu Decisión ocupa más de tres líneas, probablemente estás decidiendo dos cosas — AWS manda separarlas. Trae tu borrador y lo desglosamos juntos.</div>
+
+<footer class="doc-footer">Lección 4/5 · AWS Architecture Blog (2025) · AWS Prescriptive Guidance — ADR process & appendix · CAP (Brewer, 2012).</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lección 5 · Trazabilidad y secuencia UML</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script defer src="../assets/quiz.js"></script>
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Lección 5 de 5 · Módulo 4</p>
+<h1>Trazabilidad: del requisito al pipeline CI/CD</h1>
+<p class="lede">Objetivo de hoy: leer y construir un diagrama de secuencia UML, y entender la matriz de trazabilidad que conecta cada requisito con su componente, su despliegue y sus pruebas automáticas — el cierre de la cadena completa.</p>
+</header>
+
+<div class="meta-card">
+<p><strong>Tu victoria de hoy:</strong> sabrás leer un diagrama de secuencia (líneas de vida, activaciones, fragmentos alt/par/opt) y construir la cadena de 4 eslabones: requisito → componente → despliegue → pruebas.</p>
+</div>
+
+<h2>1. El diccionario de esta lección</h2>
+<table>
+<tr><th>Término</th><th>Definición</th></tr>
+<tr><td><strong>UML</strong></td><td><em>Unified Modeling Language</em>: notación gráfica estándar (Object Management Group) para modelar software. El diagrama de secuencia es uno de sus tipos.</td></tr>
+<tr><td><strong>Diagrama de secuencia</strong></td><td>muestra el intercambio de mensajes entre participantes a lo largo del tiempo (arriba = antes, abajo = después).</td></tr>
+<tr><td><strong>Línea de vida</strong></td><td>caja + línea vertical punteada: un participante (app, gateway, servicio, BD) y su línea temporal.</td></tr>
+<tr><td><strong>Activación</strong></td><td>rectángulo fino sobre la línea de vida: el participante está procesando algo en ese tramo.</td></tr>
+<tr><td><strong>Mensaje síncrono</strong></td><td>flecha continua con punta llena: el emisor <em>espera</em> la respuesta antes de seguir.</td></tr>
+<tr><td><strong>Mensaje asíncrono</strong></td><td>flecha con punta abierta: el emisor dispara y sigue (fire-and-forget) — típico de eventos y colas.</td></tr>
+<tr><td><strong>Mensaje de retorno</strong></td><td>flecha discontinua: la respuesta que vuelve al emisor.</td></tr>
+<tr><td><strong>Fragmento alt / par / opt</strong></td><td>marco con etiqueta: <code>alt</code> = alternativas mutuamente excluyentes (cada rama con su guarda <code>[condición]</code>); <code>par</code> = pasos en paralelo; <code>opt</code> = opcional (solo si la guarda se cumple).</td></tr>
+<tr><td><strong>Trazabilidad</strong></td><td>capacidad de seguir la cadena de un requisito a lo largo de todo el sistema: quién lo implementa, dónde corre y qué lo verifica.</td></tr>
+<tr><td><strong>Matriz de trazabilidad</strong></td><td>tabla con una fila por requisito y columnas: componente que lo implementa, estrategia de despliegue, pruebas que lo verifican.</td></tr>
+<tr><td><strong>CI/CD</strong></td><td><em>Continuous Integration / Continuous Delivery</em>: integración continua (cada cambio se compila y prueba automáticamente) y entrega/despliegue continuo (el código verificado sale a producción de forma automatizada).</td></tr>
+<tr><td><strong>Pipeline</strong></td><td>la «tubería» automatizada del CI/CD: build → pruebas unitarias → BDD/Gherkin → carga → despliegue.</td></tr>
+<tr><td><strong>k6</strong></td><td>herramienta open source de pruebas de carga: ejecuta scripts que simulan miles de usuarios/peticiones y verifica umbrales (p99, throughput).</td></tr>
+<tr><td><strong>Prueba de caos</strong></td><td>inyectar fallos deliberadamente (matar un nodo, cortar la red) y comprobar que el sistema se recupera según lo especificado.</td></tr>
+<tr><td><strong>Prueba de spike</strong></td><td>prueba de carga con un pico abrupto: verifica el comportamiento del auto-escalado ante ráfagas.</td></tr>
+<tr><td><strong>Kubernetes (K8s)</strong></td><td>orquestador de contenedores: gestiona réplicas, reinicios y despliegues sin downtime.</td></tr>
+<tr><td><strong>HPA</strong></td><td><em>Horizontal Pod Autoscaler</em> (Kubernetes): añade o quita réplicas automáticamente según métricas (CPU, longitud de cola).</td></tr>
+<tr><td><strong>PodDisruptionBudget</strong></td><td>regla de Kubernetes: cuántas réplicas deben seguir vivas durante mantenimientos — protege la disponibilidad.</td></tr>
+<tr><td><strong>WAF</strong></td><td><em>Web Application Firewall</em>: cortafuegos de aplicación que filtra tráfico malicioso en el borde de la red.</td></tr>
+<tr><td><strong>JWT</strong></td><td><em>JSON Web Token</em>: token firmado que acredita identidad y permisos (el «pase» del repartidor en cada petición).</td></tr>
+<tr><td><strong>HMAC</strong></td><td><em>Hash-based Message Authentication Code</em>: firma de mensajes con clave compartida — demuestra que el mensaje no fue alterado ni falsificado.</td></tr>
+<tr><td><strong>Rate limiting</strong></td><td>limitar la tasa de peticiones por cliente: protege contra abuso y ataques de denegación.</td></tr>
+<tr><td><strong>Mermaid / PlantUML</strong></td><td>lenguajes de texto→diagrama: escribes la secuencia como texto y la herramienta genera el diagrama — ideal para repos y entregas.</td></tr>
+</table>
+
+<h2>2. Leer un diagrama de secuencia: la secuencia de asignación</h2>
+<p>La secuencia típica del Caso C — verla con el diagrama SVG completo en el <a href="../reference/trazabilidad-uml.html">cheat sheet de trazabilidad y UML</a>:</p>
+<ol>
+<li><code>App repartidor → API Gateway</code>: PATCH de posición (con JWT). <strong>Mensaje asíncrono</strong>: la telemetría no espera respuesta.</li>
+<li><code>API Gateway → Motor de matching</code>: verifica token + rate limit.</li>
+<li><code>Motor → Redis Geo</code>: <code>GEOADD</code> actualiza el índice; ACK en ~10 ms (retorno discontinuo).</li>
+<li><code>Marketplace → Motor</code>: POST /ordenes (mensaje síncrono: el cliente espera).</li>
+<li><strong>Fragmento <code>alt</code></strong>: <code>[lock SETNX R-77 OK]</code> → asigna y escribe en PostgreSQL (transacción) → devuelve <code>201</code> en p99 ≤ 200 ms · <code>[lock falla]</code> → <code>409</code> y la orden reempareja.</li>
+</ol>
+<p>El paso 5 es la condición de carrera de la Lección 3 convertida en notación gráfica: el <code>alt</code> es el <code>Entonces</code> del escenario Gherkin, el lock es la decisión del ADR, y «p99 ≤ 200 ms» es la medida del RQ-01. <strong>Una sola historia contada en cuatro documentos</strong> — eso es trazabilidad.</p>
+
+<h2>3. La matriz de trazabilidad: 4 eslabones</h2>
+<table>
+<tr><th>RQ (Mód. 1)</th><th>Componente que lo implementa</th><th>Estrategia de despliegue</th><th>Suite de pruebas CI/CD</th></tr>
+<tr><td><code>RQ-01</code> p99 ≤ 200 ms</td><td>Motor de matching + Redis Geo</td><td>réplicas K8s con HPA</td><td>k6 (umbral p99) + Gherkin <code>@matching</code></td></tr>
+<tr><td><code>RQ-02</code> disp. ≥ 99,95% · RTO ≤ 30 s</td><td>clúster Redis + Kafka buffer</td><td>multi-zona, sin downtime</td><td>caos (matar nodo) + Gherkin <code>@fallo-critico</code></td></tr>
+<tr><td><code>RQ-03</code> ≥ 99,9% falsificados rechazados</td><td>API Gateway (JWT + rate limit)</td><td>WAF en el borde</td><td>tests de seguridad + Gherkin <code>@seguridad</code></td></tr>
+<tr><td><code>RQ-04</code> ×3 en ≤ 60 s</td><td>Kafka particionada + consumidores sin estado</td><td>auto-escalado horizontal</td><td>spike test k6 + verificación HPA</td></tr>
+</table>
+
+<div class="callout tip"><span class="tag">La regla de oro de la trazabilidad</span><strong>No dejes ningún eslabón vacío.</strong> Requisito sin prueba automática = opinión; componente sin requisito = sobre-ingeniería. Y la métrica del test debe ser <strong>idéntica</strong> a la medida de respuesta del Módulo 1: «p99 ≤ 200 ms» aparece en los dos sitios, palabra por palabra.</div>
+
+<h2>4. Comprueba tu comprensión</h2>
+<div class="quiz" data-quiz data-title="Auditoría de trazabilidad">
+<script type="application/json">
+[
+  {
+    "q": "El eslabón que verifica automáticamente un RQ en cada despliegue es…",
+    "options": ["la línea de vida", "la suite de pruebas CI/CD", "el mensaje asíncrono"],
+    "correct": 1,
+    "explain": "Sin tests en el pipeline, el requisito se queda en intención documentada."
+  },
+  {
+    "q": "En la secuencia, que App→Gateway no espere respuesta se dibuja como…",
+    "options": ["mensaje asíncrono abierto", "mensaje síncrono lleno", "retorno discontinuo"],
+    "correct": 0,
+    "explain": "La telemetría de posición es fire-and-forget: flecha con punta abierta."
+  },
+  {
+    "q": "La rama [lock concedido] / [lock fallido] del matching se modela con…",
+    "options": ["un fragmento alt", "un fragmento par", "dos activaciones"],
+    "correct": 0,
+    "explain": "alt = alternativas mutuamente excluyentes con guardas entre corchetes."
+  },
+  {
+    "q": "Si tu matriz conecta RQ-01 con k6 pero el umbral del test es «rápido», falla porque…",
+    "options": ["k6 no mide latencia", "el umbral no es la medida del RQ", "faltan réplicas"],
+    "correct": 1,
+    "explain": "El test debe usar la misma métrica del RQ (p99 ≤ 200 ms): trazabilidad palabra por palabra."
+  }
+]
+</script>
+</div>
+
+<h2>5. Lectura primaria recomendada (10 min)</h2>
+<p><strong><a href="https://mermaid.js.org/syntax/sequenceDiagram.html">Mermaid — sequenceDiagram</a></strong>: dibuja tu secuencia en texto (15 líneas → diagrama renderizado). Refuerzo conceptual: <a href="https://martinfowler.com/bliki/GivenWhenThen.html">Fowler</a> (el Entonces observable = el retorno del diagrama) y la sección <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/appendix.md">Cumplimiento del ejemplo AWS</a> (es la columna Pruebas de tu matriz).</p>
+
+<nav class="lesson-nav">
+<a href="0004-adr-aws.html">← Lección 4: ADR</a>
+<a href="../reference/trazabilidad-uml.html">Cheat sheet trazabilidad</a>
+<a href="../reference/glosario.html">Glosario</a>
+</nav>
+
+<div class="ask">💬 <strong>Recuerda:</strong> cuando tengas tus 4 módulos en borrador, pídeme una revisión cruzada: comprobaré que cada RQ, escenario, ADR y prueba usan las mismas métricas. Esa coherencia es lo que distingue una entrega sólida.</div>
+
+<footer class="doc-footer">Lección 5/5 · UML 2.5 (OMG) · Mermaid/PlantUML · AWS Prescriptive Guidance.</footer>
+</main>
+</body>
+</html>

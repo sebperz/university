@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glosario — Calidad de software (Caso C)</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Documento de referencia · imprímelo y tenlo al lado</p>
+<h1>Glosario del curso</h1>
+<p class="lede">Cada término se usa con este significado exacto en todas las lecciones. Cita ISO/IEC 25010:2023, SEI (Bass, Clements y Kazman), Cucumber y AWS Prescriptive Guidance como fuentes.</p>
+</header>
+
+<h2>Calidad y requisitos</h2>
+<table>
+<tr><th>Término</th><th>Definición operativa</th></tr>
+<tr><td><strong>Atributo de calidad</strong></td><td>Propiedad medible del sistema que no es funcionalidad (p. ej., latencia, disponibilidad). Responde a «<em>qué bien</em> lo hace», no a «qué hace».</td></tr>
+<tr><td><strong>Requisito funcional</strong></td><td>Lo que el sistema <em>debe hacer</em>: asignar una orden a un repartidor.</td></tr>
+<tr><td><strong>Requisito de atributo de calidad</strong></td><td>Cómo debe hacerlo: en ≤ 200 ms (p99), aun con 40.000 repartidores conectados.</td></tr>
+<tr><td><strong>Adjetivo abstracto</strong></td><td>Palabra sin métrica («rápido», «robusto», «escalable», «seguro»). Prohibida en la matriz del Módulo 1: toda afirmación debe llevar número, umbral y condición.</td></tr>
+<tr><td><strong>Trade-off</strong></td><td>Intercambio inevitable entre atributos (más seguridad ⇒ más latencia). Los ADR documentan qué trade-off se eligió y por qué.</td></tr>
+<tr><td><strong>SLA / SLO</strong></td><td>Objetivo de servicio medible (SLO) y su compromiso contractual (SLA), p. ej. disponibilidad mensual ≥ 99,95%.</td></tr>
+<tr><td><strong>Percentil p99</strong></td><td>Valor bajo el cual cae el 99% de las mediciones. «p99 ≤ 200 ms» tolera que 1 de cada 100 peticiones sea más lenta.</td></tr>
+</table>
+
+<h2>ISO/IEC 25010 (9 características de calidad de producto)</h2>
+<table>
+<tr><th>Característica</th><th>Subcaracterísticas</th></tr>
+<tr><td><strong>Adecuación funcional</strong></td><td>completitud, corrección, apropiación funcional</td></tr>
+<tr><td><strong>Eficiencia de rendimiento</strong></td><td>comportamiento en el tiempo, utilización de recursos, <strong>capacidad</strong></td></tr>
+<tr><td><strong>Compatibilidad</strong></td><td>coexistencia, interoperabilidad</td></tr>
+<tr><td><strong>Capacidad de interacción (usabilidad)</strong></td><td>aprendibilidad, operabilidad, protección ante errores del usuario…</td></tr>
+<tr><td><strong>Fiabilidad</strong></td><td>fiabilidad propiamente dicha (faultlessness), <strong>disponibilidad</strong>, <strong>tolerancia a fallos</strong>, <strong>recuperabilidad</strong></td></tr>
+<tr><td><strong>Seguridad</strong></td><td><strong>confidencialidad</strong>, <strong>integridad</strong>, no repudio, responsabilidad (accountability), autenticidad, resistencia</td></tr>
+<tr><td><strong>Mantenibilidad</strong></td><td>modularidad, reusabilidad, analizabilidad, modificabilidad, <strong>testeabilidad</strong></td></tr>
+<tr><td><strong>Flexibilidad (portabilidad)</strong></td><td>adaptabilidad, <strong>escalabilidad</strong>, instalabilidad, reemplazabilidad</td></tr>
+<tr><td><strong>Seguridad de la operación (safety)</strong></td><td>restricción operacional, identificación de riesgos, fail-safe…</td></tr>
+</table>
+<p class="cite">Fuente: <a href="https://www.iso.org/obp/ui/#iso:std:isoiec:25010:en">ISO/IEC 25010 en el OBP oficial</a> · réplica legible en <a href="https://iso25000.com/index.php/es/normas-iso-25000/iso-25010">iso25000.com (ES)</a>.</p>
+
+<h2>Escenario de atributo de calidad (patrón SEI)</h2>
+<table>
+<tr><th>Parte</th><th>Pregunta que responde</th></tr>
+<tr><td><strong>Fuente del estímulo</strong></td><td>¿De dónde viene? (usuario, servicio externo, nodo interno, atacante)</td></tr>
+<tr><td><strong>Estímulo</strong></td><td>¿Qué evento llega al sistema?</td></tr>
+<tr><td><strong>Artefacto</strong></td><td>¿Qué parte se ve afectada? (motor de matching, cola, BD…)</td></tr>
+<tr><td><strong>Entorno</strong></td><td>¿Bajo qué condiciones? (operación normal, sobrecarga, caída parcial)</td></tr>
+<tr><td><strong>Respuesta</strong></td><td>¿Qué debe hacer el sistema?</td></tr>
+<tr><td><strong>Medida de respuesta</strong></td><td>¿Cómo se verifica? (números: ms, %, RPS, eventos/hora)</td></tr>
+</table>
+<p class="cite">Fuente: <a href="https://medium.com/@anil.goyal0057/quality-attribute-scenario-a-way-to-define-software-quality-requirements-71dd82f4be1b">Goyal (2023), resumen del patrón SEI</a>; ver también <a href="https://www.sei.cmu.edu/our-work/software-architecture/">SEI — Software Architecture</a>. Detalle y plantilla: <a href="anatomia-sei.html">anatomía SEI</a>.</p>
+
+<h2>Gherkin / BDD</h2>
+<table>
+<tr><th>Término</th><th>Definición operativa</th></tr>
+<tr><td><strong>BDD</strong></td><td>Desarrollo guiado por comportamiento: los criterios de aceptación son ejemplos concretos ejecutables.</td></tr>
+<tr><td><strong>Gherkin</strong></td><td>DSL de Cucumber para escribir esos ejemplos. Localizable con <code># language: es</code>.</td></tr>
+<tr><td><strong>Dado (Given)</strong></td><td>Estado inicial del sistema (precondición). Sin interacciones del usuario.</td></tr>
+<tr><td><strong>Cuando (When)</strong></td><td>El evento o acción que se especifica (uno por escenario).</td></tr>
+<tr><td><strong>Entonces (Then)</strong></td><td>Resultado esperado <strong>observable</strong> (salida del sistema), no estado interno oculto.</td></tr>
+<tr><td><strong>Y / Pero (And/But)</strong></td><td>Encadenan pasos del mismo tipo para legibilidad.</td></tr>
+<tr><td><strong>Scenario Outline / Examples</strong></td><td>Plantilla paramétrica (<code>&lt;param&gt;</code>) ejecutada una vez por fila de la tabla Examples.</td></tr>
+</table>
+<p class="cite">Fuente: <a href="https://martinfowler.com/bliki/GivenWhenThen.html">Fowler — GivenWhenThen</a>; <a href="https://cucumber.io/docs/gherkin/reference/">Cucumber — Gherkin Reference</a>. Detalle: <a href="gherkin-referencia.html">referencia Gherkin</a>.</p>
+
+<h2>ADR (Architecture Decision Record)</h2>
+<table>
+<tr><th>Término</th><th>Definición operativa</th></tr>
+<tr><td><strong>ADR</strong></td><td>Documento corto e inmutable que captura una decisión arquitectónica: contexto, decisión, consecuencias.</td></tr>
+<tr><td><strong>Ciclo de vida</strong></td><td><code>Proposed → Accepted</code> (o <code>Rejected</code>); si cambia el criterio, un ADR nuevo <code>supersedes</code> al anterior, que no se edita.</td></tr>
+<tr><td><strong>Two-way door</strong></td><td>Decisión reversible y barata de cambiar: AWS recomienda decidir rápido en vez de discutir sin fin.</td></tr>
+<tr><td><strong>Decisión arquitectónicamente significativa</strong></td><td>Afecta estructura (microservicios), requisitos no funcionales, dependencias, interfaces o técnicas de construcción.</td></tr>
+</table>
+<p class="cite">Fuente: <a href="https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/">AWS Blog — Master ADRs</a>; <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/adr-process.html">AWS Prescriptive Guidance — proceso</a>. Plantilla: <a href="plantilla-adr.html">plantilla ADR AWS</a>.</p>
+
+<h2>Sistemas distribuidos (contexto del Caso C)</h2>
+<table>
+<tr><th>Término</th><th>Definición operativa</th></tr>
+<tr><td><strong>Teorema CAP</strong></td><td>Ante una partición de red, un nodo debe elegir entre consistencia (C) o disponibilidad (A); P es obligatorio en sistemas distribuidos.</td></tr>
+<tr><td><strong>Consistencia fuerte</strong></td><td>Toda lectura devuelve la última escritura: los nodos se coordinan antes de responder (CP).</td></tr>
+<tr><td><strong>Consistencia eventual</strong></td><td>Las réplicas convergen si no llegan nuevas escrituras: se responde rápido y se reconcilia después (AP).</td></tr>
+<tr><td><strong>Condición de carrera</strong></td><td>Dos operaciones simultáneas compiten por el mismo recurso y el resultado depende del orden de ejecución (p. ej., doble asignación de un repartidor).</td></tr>
+<tr><td><strong>Bloqueo / lock</strong></td><td>Primitiva que garantiza que una sola entidad ejecute la operación crítica (setnx con TTL, fila atómica).</td></tr>
+<tr><td><strong>Idempotencia</strong></td><td>Repetir la misma operación produce el mismo efecto que ejecutarla una vez (clave de idempotencia en el mensaje).</td></tr>
+<tr><td><strong>Cola / broker</strong></td><td>Mensajería asíncrona (p. ej., Kafka) que desacopla productores y consumidores y amortigua picos.</td></tr>
+<tr><td><strong>API Gateway</strong></td><td>Punto de entrada único: autenticación, rate limiting, enrutamiento.</td></tr>
+<tr><td><strong>Backpressure</strong></td><td>Mecanismo para no saturar: si el consumidor va lento, se retiene/rechaza carga en vez de colapsar.</td></tr>
+<tr><td><strong>Circuit breaker</strong></td><td>Interruptor que corta llamadas a un servicio caído y permite degradación controlada con reintento periódico.</td></tr>
+<tr><td><strong>Escalado horizontal</strong></td><td>Añadir réplicas (más instancias) en vez de máquinas más grandes; requiere estado compartido o particionado.</td></tr>
+</table>
+
+<h2>Verificación y CI/CD</h2>
+<table>
+<tr><th>Término</th><th>Definición operativa</th></tr>
+<tr><td><strong>Prueba de carga</strong></td><td>Reproduce el pico esperado (p. ej., k6 con 2.000 órdenes/min) y mide p99/throughput contra la medida de respuesta.</td></tr>
+<tr><td><strong>Prueba de caos</strong></td><td>Inyecta fallos (matan un nodo) y verifica el escenario Gherkin de recuperación.</td></tr>
+<tr><td><strong>Pipeline CI/CD</strong></td><td>Secuencia automatizada: build → pruebas unitarias → BDD/Gherkin → carga → despliegue.</td></tr>
+<tr><td><strong>Matriz de trazabilidad</strong></td><td>Tabla que conecta cada requisito con el componente que lo implementa y las pruebas que lo verifican.</td></tr>
+<tr><td><strong>Diagrama de secuencia UML</strong></td><td>Muestra el intercambio de mensajes en el tiempo entre participantes (líneas de vida, activaciones, <code>alt</code>/<code>par</code>).</td></tr>
+</table>
+
+<nav class="lesson-nav">
+<a href="anatomia-sei.html">Anatomía SEI</a>
+<a href="gherkin-referencia.html">Gherkin</a>
+<a href="plantilla-adr.html">Plantilla ADR</a>
+<a href="trazabilidad-uml.html">Trazabilidad y UML</a>
+</nav>
+
+<footer class="doc-footer">Curso AP-REQ-AV-2026 · Caso C · fuentes: ISO/IEC 25010:2023, SEI, Cucumber, AWS.</footer>
+</main>
+</body>
+</html>

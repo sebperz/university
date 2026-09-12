@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lección 3 · Gherkin: comportamientos complejos</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script defer src="../assets/quiz.js"></script>
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Lección 3 de 5 · Módulo 2</p>
+<h1>Gherkin: especificar el comportamiento con ejemplos ejecutables</h1>
+<p class="lede">Objetivo de hoy: entender qué es BDD, cómo funciona el DSL Gherkin y cómo se especifican los comportamientos difíciles — fallo crítico de infraestructura, degradación de un servicio externo y condición de carrera — con ejemplos del Caso C.</p>
+</header>
+
+<div class="meta-card">
+<p><strong>Tu victoria de hoy:</strong> sabrás leer y escribir escenarios Dado-Cuando-Entonces correctos, y detectar el error más común: un <em>Entonces</em> que mira la base de datos en vez de algo observable.</p>
+</div>
+
+<h2>1. El diccionario de esta lección</h2>
+<table>
+<tr><th>Término</th><th>Definición</th></tr>
+<tr><td><strong>BDD</strong></td><td><em>Behavior-Driven Development</em> (desarrollo guiado por comportamiento): escribir primero los criterios de aceptación como <em>ejemplos concretos</em> que luego se vuelven pruebas ejecutables. Nació de manos de Dan North y Chris Matts.</td></tr>
+<tr><td><strong>DSL</strong></td><td><em>Domain-Specific Language</em>: lenguaje pequeño hecho a medida de un dominio (aquí, especificar comportamiento), a diferencia de un lenguaje de propósito general (Java, Python).</td></tr>
+<tr><td><strong>Gherkin</strong></td><td>el DSL de la herramienta <em>Cucumber</em> para escribir esos ejemplos en texto plano, localizable a 70+ idiomas — incluido el español.</td></tr>
+<tr><td><strong>Cucumber</strong></td><td>el motor de BDD más usado: lee archivos Gherkin (<code>.feature</code>) y ejecuta cada paso contra el sistema.</td></tr>
+<tr><td><strong>Keyword (palabra clave)</strong></td><td>las palabras que estructuran un archivo Gherkin: <code>Característica</code>, <code>Escenario</code>, <code>Dado</code>, <code>Cuando</code>, <code>Entonces</code>, <code>Y</code>…</td></tr>
+<tr><td><strong>Precondición</strong></td><td>estado que el sistema debe tener ANTES del evento que se estudia; lo expresan los pasos <code>Dado</code>.</td></tr>
+<tr><td><strong>Aserción</strong></td><td>comprobación automática que pasa o falla; el paso <code>Entonces</code> se implementa como una aserción.</td></tr>
+<tr><td><strong>Observable</strong></td><td>lo que un observador externo puede ver: una respuesta HTTP, una notificación, un mensaje en una cola, una métrica. Lo opuesto: el estado interno oculto (una fila de la BD).</td></tr>
+<tr><td><strong>Data Table</strong></td><td>tabla Gherkin (con <code>|</code>) para pasar varios datos a un paso — p. ej., listar repartidores con su posición.</td></tr>
+<tr><td><strong>Scenario Outline</strong></td><td><code>Esquema del escenario</code>: plantilla con parámetros <code>&lt;así&gt;</code> que se ejecuta una vez por fila de su tabla <code>Ejemplos</code>.</td></tr>
+<tr><td><strong>Tag</strong></td><td>etiqueta con <code>@</code> para agrupar/filtrar escenarios (<code>@carrera</code>, <code>@fallo-critico</code>); en CI/CD se usa para decidir qué suite corre.</td></tr>
+<tr><td><strong>Background</strong></td><td><code>Antecedentes</code>: pasos <code>Dado</code> comunes a todos los escenarios del archivo; se ejecutan antes de cada escenario.</td></tr>
+<tr><td><strong>Timeout</strong></td><td>tiempo máximo que una llamada espera respuesta antes de darse por fallida. Clave para «degradación»: si el proveedor tarda > 200 ms, corta y usa el plan B.</td></tr>
+<tr><td><strong>Cache / caché</strong></td><td>copia local de un resultado anterior para no recalcularlo ni volver a pedirlo — el plan B natural cuando un servicio externo va lento.</td></tr>
+<tr><td><strong>Circuit breaker</strong></td><td>«interruptor»: si un servicio falla repetidamente, se «abre» y sus llamadas se rechazan al instante (sin esperar timeouts) durante un tiempo, para que se recupere sin arrastrarnos.</td></tr>
+</table>
+<p class="cite">Sintaxis oficial: <a href="https://cucumber.io/docs/gherkin/reference/">Cucumber — Gherkin Reference</a> · <a href="https://cucumber.io/docs/gherkin/languages/">Gherkin localizado (es)</a>. Método: <a href="https://martinfowler.com/bliki/GivenWhenThen.html">Fowler — GivenWhenThen</a>. Cheat sheet imprimible: <a href="../reference/gherkin-referencia.html">referencia Gherkin</a>.</p>
+
+<h2>2. La lógica de los tres momentos (Fowler)</h2>
+<blockquote>«The <strong>given</strong> part describes the state of the world before you begin the behavior… the <strong>when</strong> section is that behavior… the <strong>then</strong> section describes the changes you expect.» — <a href="https://martinfowler.com/bliki/GivenWhenThen.html">Fowler, GivenWhenThen (2013)</a></blockquote>
+<ul>
+<li><strong>Dado</strong> = <em>precondición</em>. Pone el sistema en un estado conocido (equivale al «setup» de las pruebas clásicas, o a <em>Arrange</em> del patrón Arrange-Act-Assert).</li>
+<li><strong>Cuando</strong> = <em>el evento</em>. La acción que especificas (uno solo por escenario; equivale a <em>Act</em>).</li>
+<li><strong>Entonces</strong> = <em>resultado observable</em>. La aserción que compara lo esperado con lo ocurrido (equivale a <em>Assert</em>).</li>
+</ul>
+
+<h2>3. El esqueleto mínimo</h2>
+<pre><code><span class="cmt"># language: es   ← SIEMPRE en la primera línea para keywords en español</span>
+<span class="kw">Característica:</span> Emparejamiento geoespacial de órdenes
+
+  <span class="kw">Escenario:</span> Asignación sin competencia
+    <span class="kw">Dado</span> que el repartidor <span class="str">"R-77"</span> está libre en la zona centro
+    <span class="kw">Cuando</span> llega la orden <span class="str">"O-1001"</span> para recogida en la plaza mayor
+    <span class="kw">Entonces</span> la orden queda asignada a <span class="str">"R-77"</span> en ≤ <span class="num">200</span> ms
+      <span class="kw">Y</span> el repartidor recibe la notificación de asignación</code></pre>
+<p>Regla práctica de Cucumber: <strong>3-5 pasos por escenario</strong>. Más pasos = pierde poder expresivo; parte el escenario.</p>
+
+<h2>4. Los tres comportamientos difíciles (Caso C)</h2>
+<p>Los tres usan el mismo patrón: <em>estado preparado → evento que rompe algo → resultado observable y medible</em>. Cada escenario conecta con un requisito del Módulo 1 (RQ-01 rendimiento, RQ-02 fiabilidad) — así la especificación forma una cadena coherente.</p>
+
+<h3>Escenario A · Condición de carrera (doble asignación)</h3>
+<pre><code>  <span class="kw">Escenario:</span> Dos órdenes compiten por el mismo repartidor libre
+    <span class="kw">Dado</span> que el repartidor <span class="str">"R-77"</span> está libre en la zona centro
+      <span class="kw">Y</span> su posición fue actualizada hace menos de <span class="num">10</span> segundos
+      <span class="kw">Y</span> dos instancias del motor reciben <span class="str">"O-1001"</span> y <span class="str">"O-1002"</span> simultáneamente
+    <span class="kw">Cuando</span> ambas instancias intentan asignar su orden a <span class="str">"R-77"</span>
+    <span class="kw">Entonces</span> exactamente <span class="num">1</span> asignación es confirmada con <span class="num">201</span>
+      <span class="kw">Y</span> la orden perdedora recibe <span class="num">409</span> y reempareja con otro repartidor
+      <span class="kw">Y</span> ninguna orden queda registrada con dos repartidores</code></pre>
+<p>Nota: los códigos <code>201</code> (creado) y <code>409</code> (conflicto) son <em>respuestas HTTP observables</em> — perfecto para un Entonces. Verifica RQ-02 y la integridad (ISO 25010 → Seguridad → integridad).</p>
+
+<h3>Escenario B · Fallo crítico de infraestructura</h3>
+<pre><code>  <span class="kw">Escenario:</span> Caída del nodo maestro de posiciones durante hora punta
+    <span class="kw">Dado</span> que el clúster de índice geoespacial opera con <span class="num">3</span> nodos sanos
+      <span class="kw">Y</span> hay <span class="num">40.000</span> repartidores publicando posición
+    <span class="kw">Cuando</span> el nodo maestro falla de forma abrupta
+    <span class="kw">Entonces</span> un nodo réplica asume el rol en ≤ <span class="num">30</span> segundos
+      <span class="kw">Y</span> ninguna orden aceptada se pierde
+      <span class="kw">Y</span> las posiciones en tránsito se reprocesan sin duplicados</code></pre>
+<p>Este escenario es la versión ejecutable de tu RQ-02: los «≤ 30 segundos» son el <strong>RTO</strong> y «ninguna orden aceptada se pierde» es el <strong>RPO = 0</strong> (ver Lección 2). Verificado en CI/CD con pruebas de caos.</p>
+
+<h3>Escenario C · Degradación controlada de servicio externo</h3>
+<pre><code>  <span class="kw">Escenario:</span> El proveedor de rutas responde fuera de tiempo
+    <span class="kw">Dado</span> que el proveedor externo de rutas excede su timeout de <span class="num">200</span> ms
+      <span class="kw">Y</span> existe una ruta cacheada con antigüedad menor a <span class="num">15</span> minutos
+    <span class="kw">Cuando</span> llega la solicitud de ruta para la orden <span class="str">"O-2003"</span>
+    <span class="kw">Entonces</span> el sistema entrega la ruta cacheada en ≤ <span class="num">300</span> ms
+      <span class="kw">Y</span> marca la respuesta con la bandera <span class="str">"ruta-cacheada"</span>
+      <span class="kw">Y</span> el circuito hacia el proveedor queda abierto por <span class="num">60</span> segundos</code></pre>
+<p>«Degradación <em>controlada</em>» significa esto: el servicio externo falla, pero el sistema tiene un plan B predefinido (caché, circuit breaker) y el usuario sigue siendo atendido — con calidad ligeramente menor pero con garantías medibles.</p>
+
+<h2>5. Comprueba tu comprensión</h2>
+<div class="quiz" data-quiz data-title="Auditoría de escenarios Gherkin">
+<script type="application/json">
+[
+  {
+    "q": "«Dado que el usuario pulsa el botón asignar». ¿Qué regla rompe?",
+    "options": ["Entonces no es observable", "Dado contiene una acción", "Falta la data table"],
+    "correct": 1,
+    "explain": "Pulsar es una interacción = evento (Cuando). El Dado solo fija estados previos."
+  },
+  {
+    "q": "«Entonces la fila de asignaciones tiene estado=OK en la BD». ¿Por qué es débil?",
+    "options": ["Dado contiene una acción", "Entonces no es observable", "Falta la data table"],
+    "correct": 1,
+    "explain": "Fowler y Cucumber: el Entonces debe verificar salidas del sistema (HTTP, notificación, cola), no estado interno oculto."
+  },
+  {
+    "q": "Dos órdenes compiten por R-77. ¿Cuál Entonces demuestra integridad mejor?",
+    "options": ["una sola asignación confirmada", "el motor funciona sin errores", "las órdenes quedan procesadas"],
+    "correct": 0,
+    "explain": "«Una sola asignación confirmada» es específico, contable y verificable; las otras son vagas."
+  },
+  {
+    "q": "Para probar el mismo escenario con timeout de 200 y 400 ms usarías…",
+    "options": ["dos Características", "un Antecedentes por caso", "un Esquema del escenario"],
+    "correct": 2,
+    "explain": "Esquema del escenario (Scenario Outline) + tabla Ejemplos: misma lógica, valores distintos."
+  }
+]
+</script>
+</div>
+
+<h2>6. Lectura primaria recomendada (15 min)</h2>
+<p><strong><a href="https://martinfowler.com/bliki/GivenWhenThen.html">Fowler — GivenWhenThen</a></strong> (lectura obligatoria, 5 min) y después la <a href="https://cucumber.io/docs/gherkin/reference/">referencia oficial de Gherkin</a> con su <a href="https://cucumber.io/docs/gherkin/languages/">localización al español</a>.</p>
+
+<nav class="lesson-nav">
+<a href="0002-escenarios-sei-cuantificados.html">← Lección 2: SEI</a>
+<a href="../reference/gherkin-referencia.html">Cheat sheet Gherkin</a>
+<a href="0004-adr-aws.html">Lección 4: ADR →</a>
+</nav>
+
+<div class="ask">💬 <strong>Recuerda:</strong> pégame cualquier escenario que escribas y te lo audito con el test de Fowler línea por línea. Es la revisión más rentable de esta lección.</div>
+
+<footer class="doc-footer">Lección 3/5 · Fowler (2013) · Cucumber Gherkin Reference · keywords localizadas (es).</footer>
+</main>
+</body>
+</html>

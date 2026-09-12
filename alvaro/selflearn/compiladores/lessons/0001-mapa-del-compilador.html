@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 · El mapa del compilador</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Lección 01 · Compiladores</span>
+    <span>Objetivo: ubicar cada fase</span>
+  </div>
+
+  <h1>El mapa del compilador</h1>
+  <p class="subtitulo">Un compilador no es una caja negra: es una cadena de fases, y cada fase tiene un trabajo y un tipo de error que le pertenece. Si dominas esto, ya resolviste varias preguntas del examen.</p>
+
+  <div class="caja idea">
+    <span class="etiqueta">La idea de hoy</span>
+    <p>Un compilador traduce código de un lenguaje a otro pasando por <strong>representaciones cada vez más cercanas al significado</strong>, y luego cada vez más cercanas a la máquina. Primero <em>entiende</em> (análisis), después <em>produce</em> (síntesis).</p>
+    <p style="margin-bottom:0">Visualízalo como subir y bajar una montaña: subes desde el texto crudo hasta el significado, y bajas desde el significado hasta el código ejecutable. <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">(Nystrom, <em>Crafting Interpreters</em>, cap. 2)</a></p>
+  </div>
+
+  <h2>Las dos mitades (y algo en el medio)</h2>
+  <p>El recorrido se suele dividir así, y esta división es una pregunta clásica de examen (<a href="https://es.wikipedia.org/wiki/Compilador">Wikipedia ES: Compilador</a>):</p>
+
+  <table>
+    <thead>
+      <tr><th>Parte</th><th>Qué hace</th><th>Fases</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Front-end</strong><br><span class="mono" style="font-size:0.72rem">análisis</span></td>
+        <td>Entiende el programa. Depende del <em>lenguaje fuente</em>, no de la máquina.</td>
+        <td>Léxico → Sintáctico → Semántico</td>
+      </tr>
+      <tr>
+        <td><strong>Middle-end</strong><br><span class="mono" style="font-size:0.72rem">representación</span></td>
+        <td>Representación intermedia y optimización, independiente de lenguaje y máquina.</td>
+        <td>Código intermedio → Optimización</td>
+      </tr>
+      <tr>
+        <td><strong>Back-end</strong><br><span class="mono" style="font-size:0.72rem">síntesis</span></td>
+        <td>Produce el código. Depende de la <em>arquitectura destino</em>.</td>
+        <td>Generación de código</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="caja clave">
+    <span class="etiqueta">Trampa de examen</span>
+    <p style="margin-bottom:0">El <strong>análisis léxico NO verifica la gramática</strong>. Solo convierte caracteres en <em>tokens</em>. Decir que verifica la estructura gramatical es <strong>falso</strong>: eso es el análisis sintáctico.</p>
+  </div>
+
+  <h2>Cada fase, en una línea</h2>
+  <ol>
+    <li><strong>Análisis léxico</strong> (scanner/lexer): lee el texto de izquierda a derecha y lo agrupa en <em>tokens</em>. Descarta espacios y comentarios. Errores: un carácter o símbolo que no forma ningún token válido.</li>
+    <li><strong>Análisis sintáctico</strong> (parser): agrupa los tokens según la <em>gramática</em> y construye un árbol. Errores: estructura incorrecta, paréntesis o llaves sin cerrar, falta un <code>;</code>.</li>
+    <li><strong>Análisis semántico</strong>: comprueba el <em>significado</em> — que los tipos sean compatibles, que las variables existan, que el ámbito sea correcto. Errores: sumar un número con un texto, usar una variable no declarada.</li>
+    <li><strong>Código intermedio</strong>: representación neutra (p. ej. código de tres direcciones) que separa la lógica del programa del hardware concreto.</li>
+    <li><strong>Optimización</strong>: reescribe el código intermedio para que sea más eficiente, sin cambiar lo que hace.</li>
+    <li><strong>Generación de código</strong>: traduce a código máquina o ensamblador para la arquitectura destino.</li>
+  </ol>
+
+  <h2>Tabla de referencia rápida</h2>
+  <table>
+    <thead>
+      <tr><th>Fase</th><th>Entrada → Salida</th><th>Error típico que detecta</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Léxico</td><td>caracteres → tokens</td><td>símbolo mal formado (p. ej. <code>12abc</code>)</td></tr>
+      <tr><td>Sintáctico</td><td>tokens → árbol (AST)</td><td>paréntesis faltante, estructura inválida</td></tr>
+      <tr><td>Semántico</td><td>árbol → árbol anotado</td><td>tipos incompatibles, variable no declarada</td></tr>
+      <tr><td>Optimización</td><td>IR → IR mejorado</td><td>—</td></tr>
+      <tr><td>Generación</td><td>IR → código máquina</td><td>—</td></tr>
+    </tbody>
+  </table>
+
+  <p>Tienes la versión imprimible de todo esto en <a href="../reference/0002-mapa-fases.html">la referencia: Mapa de fases</a> y las definiciones en <a href="../reference/0001-glosario.html">el glosario</a>.</p>
+
+  <h2>Practica: 12 preguntas</h2>
+  <p>Responde una por una. Recibirás la explicación al instante: eso es lo que construye memoria a largo plazo.</p>
+
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "El análisis léxico es responsable de verificar que la estructura gramatical del programa sea correcta.",
+      "resp": false,
+      "explica": "El análisis léxico solo convierte el código fuente en tokens. Verificar la estructura gramatical es tarea del análisis sintáctico." },
+
+    { "tipo": "vf",
+      "pregunta": "El análisis sintáctico detecta errores como paréntesis faltantes o una estructura gramatical incorrecta.",
+      "resp": true,
+      "explica": "El parser comprueba que la secuencia de tokens cumpla las reglas de la gramática; un paréntesis sin cerrar rompe esa estructura." },
+
+    { "tipo": "vf",
+      "pregunta": "El front-end del compilador incluye la generación de código objeto.",
+      "resp": false,
+      "explica": "La generación de código pertenece al back-end. El front-end son análisis léxico, sintáctico y semántico." },
+
+    { "tipo": "vf",
+      "pregunta": "El análisis semántico comprueba la compatibilidad de tipos entre los operandos de una operación.",
+      "resp": true,
+      "explica": "La verificación de tipos es el componente principal del análisis semántico: comprueba que cada operador reciba operandos permitidos." },
+
+    { "tipo": "vf",
+      "pregunta": "El análisis léxico trabaja directamente sobre la secuencia de caracteres del código fuente.",
+      "resp": true,
+      "explica": "El lexer lee el flujo de caracteres y lo agrupa en tokens; es la primera fase." },
+
+    { "tipo": "vf",
+      "pregunta": "Un error al sumar un número entero con una cadena de texto lo detecta el análisis sintáctico.",
+      "resp": false,
+      "explica": "Sintácticamente `1 + \"hola\"` puede ser válido. Es el análisis semántico el que detecta que los tipos no son compatibles." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué fase convierte la secuencia de caracteres del código fuente en una secuencia de tokens?",
+      "opciones": [
+        "Análisis léxico",
+        "Análisis sintáctico",
+        "Análisis semántico",
+        "Optimización de código"
+      ],
+      "resp": 0,
+      "explica": "El analizador léxico (scanner o lexer) produce los tokens a partir de los caracteres." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué fase construye el árbol de sintaxis abstracta (AST)?",
+      "opciones": [
+        "Análisis léxico",
+        "Análisis sintáctico",
+        "Análisis semántico",
+        "Generación de código"
+      ],
+      "resp": 1,
+      "explica": "El parser agrupa los tokens jerárquicamente y construye el árbol sintáctico." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Cuál es el orden correcto de las fases del front-end?",
+      "opciones": [
+        "Sintáctico → léxico → semántico",
+        "Léxico → semántico → sintáctico",
+        "Léxico → sintáctico → semántico",
+        "Semántico → léxico → sintáctico"
+      ],
+      "resp": 2,
+      "explica": "Primero se forman los tokens (léxico), luego se estructura el árbol (sintáctico) y después se comprueba el significado (semántico)." },
+
+    { "tipo": "unica",
+      "pregunta": "El código intermedio permite principalmente…",
+      "opciones": [
+        "separar la lógica del programa de la arquitectura del hardware",
+        "detectar los errores gramaticales antes del análisis sintáctico",
+        "almacenar los identificadores junto a su tipo y su ámbito",
+        "ejecutar el programa directamente sin generar código máquina"
+      ],
+      "resp": 0,
+      "explica": "El IR es una representación neutra: ni depende del lenguaje fuente ni de la máquina destino. Eso permite reutilizar front-ends y back-ends." },
+
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles de las siguientes corresponden a fases del front-end del compilador?",
+      "opciones": [
+        "Análisis sintáctico",
+        "Análisis semántico",
+        "Análisis léxico",
+        "Optimización"
+      ],
+      "resp": [0, 1, 2],
+      "explica": "Front-end = léxico + sintáctico + semántico. La optimización es una fase de la parte de síntesis (middle/back-end)." },
+
+    { "tipo": "relacionar",
+      "pregunta": "Relaciona cada fase del compilador con su función.",
+      "izquierda": [
+        "Análisis léxico",
+        "Análisis sintáctico",
+        "Análisis semántico",
+        "Optimización"
+      ],
+      "derecha": [
+        "Convertir caracteres en tokens",
+        "Construir el árbol sintáctico",
+        "Verificar la compatibilidad de tipos",
+        "Mejorar la eficiencia del código"
+      ],
+      "resp": { "0": 0, "1": 1, "2": 2, "3": 3 },
+      "explica": "Léxico → tokens; sintáctico → árbol; semántico → tipos; optimización → eficiencia. Ojo: en tu examen la retroalimentación aparecía invertida; este es el mapeo correcto." }
+  ]
+  </script>
+
+  <h2>Para profundizar</h2>
+  <div class="caja pista">
+    <span class="etiqueta">Fuente primaria recomendada</span>
+    <p style="margin-bottom:0"><a href="https://craftinginterpreters.com/a-map-of-the-territory.html">Robert Nystrom, <em>Crafting Interpreters</em>, capítulo 2: "A Map of the Territory"</a>. Es gratuito, riguroso y explica todo el recorrido del compilador mejor que casi cualquier apunte. Léelo una vez completo; no memorices, solo ubica las fases.</p>
+  </div>
+
+  <div class="nav no-imprimir">
+    <span>— inicio del curso —</span>
+    <a href="../reference/0001-glosario.html">Glosario →</a>
+  </div>
+
+  <div class="pie">
+    <p><strong>¿Algo no cuadra?</strong> Soy tu profesor: pregúntame lo que quieras en el chat. Puedo explicarte cualquier fase con otro ejemplo, ponerte más preguntas de un tipo, o hacerte un simulacro completo.</p>
+    <p>Lección 01 · <a href="../reference/0002-mapa-fases.html">Mapa de fases (referencia)</a> · <a href="../reference/0001-glosario.html">Glosario (referencia)</a></p>
+  </div>
+
+</div>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

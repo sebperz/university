@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 · Simulacro de examen 1</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Lección 02 · Compiladores</span>
+    <span>Simulacro · 25 preguntas · 30 min</span>
+  </div>
+
+  <h1>Simulacro de examen 1</h1>
+  <p class="subtitulo">Formato de examen real: V/F, opción única, opción múltiple y relacionar. Sin pistas hasta que entregues. Ponte el cronómetro y hazlo de un tirón.</p>
+
+  <div class="caja idea">
+    <span class="etiqueta">Antes de empezar</span>
+    <ul style="margin-bottom:0">
+      <li>Ten a mano papel y lápiz; no mires las referencias ni el glosario.</li>
+      <li>Si dudas, marca lo que más te suene y sigue. No te bloquees.</li>
+      <li>Al entregar verás tu nota y la respuesta correcta de cada pregunta <em>con su explicación</em>.</li>
+    </ul>
+  </div>
+
+  <div class="quiz examen" data-quiz data-exam data-minutos="30"></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "El front-end del compilador depende de la arquitectura destino.",
+      "resp": false,
+      "explica": "El front-end depende del lenguaje fuente, no de la máquina. La dependencia de la arquitectura es del back-end." },
+
+    { "tipo": "vf",
+      "pregunta": "El análisis léxico opera sobre el flujo de caracteres del código fuente.",
+      "resp": true,
+      "explica": "Es la primera fase y su entrada es el texto crudo; su salida, la secuencia de tokens." },
+
+    { "tipo": "vf",
+      "pregunta": "La tabla de símbolos registra el ámbito de cada identificador.",
+      "resp": true,
+      "explica": "Guarda nombre, tipo, dirección de memoria y ámbito, para verificar el uso correcto de los identificadores." },
+
+    { "tipo": "vf",
+      "pregunta": "Un compilador cruzado genera código para la misma máquina en la que se ejecuta.",
+      "resp": false,
+      "explica": "El cruzado genera código para una plataforma distinta de aquella donde corre." },
+
+    { "tipo": "vf",
+      "pregunta": "Un compilador JIT compila todo el programa antes de ejecutarlo.",
+      "resp": false,
+      "explica": "El JIT traduce fragmentos durante la ejecución, según se necesitan, y no produce un ejecutable permanente por adelantado." },
+
+    { "tipo": "vf",
+      "pregunta": "En el AST de `2 * 3 + 4`, la suma es el nodo raíz.",
+      "resp": true,
+      "explica": "La multiplicación tiene mayor precedencia y se agrupa primero; la suma queda como raíz." },
+
+    { "tipo": "vf",
+      "pregunta": "El análisis sintáctico detecta tipos incompatibles entre operandos.",
+      "resp": false,
+      "explica": "Los tipos los verifica el análisis semántico. El sintáctico se ocupa de la estructura gramatical." },
+
+    { "tipo": "vf",
+      "pregunta": "La optimización puede reescribir el código siempre que conserve su significado.",
+      "resp": true,
+      "explica": "Optimizar es mejorar la eficiencia manteniendo la misma funcionalidad." },
+
+    { "tipo": "vf",
+      "pregunta": "Un transpilador produce código máquina como salida.",
+      "resp": false,
+      "explica": "Produce código fuente en otro lenguaje de alto nivel; deja la traducción a máquina al compilador del lenguaje destino." },
+
+    { "tipo": "vf",
+      "pregunta": "El análisis semántico construye el árbol de sintaxis abstracta.",
+      "resp": false,
+      "explica": "Lo construye el análisis sintáctico. El semántico lo recorre y lo anota con tipos y otra información." },
+
+    { "tipo": "vf",
+      "pregunta": "Un compilador de varias pasadas lee el código fuente más de una vez antes de generar el código.",
+      "resp": true,
+      "explica": "A diferencia del de una sola pasada, necesita releer el fuente para completar el trabajo." },
+
+    { "tipo": "vf",
+      "pregunta": "El bytecode es una forma de código intermedio pensada para una máquina virtual.",
+      "resp": true,
+      "explica": "El bytecode se ejecuta en una VM y suele tener instrucciones de un byte." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué fase descarta los comentarios del código fuente?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Optimización"],
+      "resp": 0,
+      "explica": "El lexer descarta comentarios y espacios porque no aportan significado sintáctico." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué fase construye el árbol de sintaxis abstracta?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Generación de código"],
+      "resp": 1,
+      "explica": "El parser agrupa los tokens según la gramática y construye el árbol." },
+
+    { "tipo": "unica",
+      "pregunta": "En `x = \"a\" + 1;`, ¿qué fase detecta el error?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Generación de código"],
+      "resp": 2,
+      "explica": "La estructura es válida, pero los tipos no son compatibles: eso es un error semántico." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador se ejecuta en una plataforma y genera código para otra?",
+      "opciones": ["Compilador cruzado", "Compilador nativo", "Compilador incremental", "Compilador de arranque"],
+      "resp": 0,
+      "explica": "Esa es la definición del compilador cruzado." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador recompila solo las partes que cambiaron?",
+      "opciones": ["Compilador incremental", "Compilador JIT", "Compilador cruzado", "Compilador nativo"],
+      "resp": 0,
+      "explica": "El incremental reutiliza el trabajo previo y solo recompila lo modificado." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué estructura separa la lógica del programa de la arquitectura del hardware?",
+      "opciones": ["El código intermedio", "La tabla de símbolos", "La secuencia de tokens", "El archivo objeto"],
+      "resp": 0,
+      "explica": "El IR es neutro respecto del lenguaje y de la máquina, y sirve de puente entre ambos." },
+
+    { "tipo": "unica",
+      "pregunta": "Traducir TypeScript a JavaScript es un ejemplo de…",
+      "opciones": ["Transpilación", "Ensamblado", "Descompilación", "Enlazado"],
+      "resp": 0,
+      "explica": "Ambos son lenguajes de alto nivel; la traducción entre ellos es transpilación." },
+
+    { "tipo": "unica",
+      "pregunta": "En `while (x > 0)`, el token `while` pertenece a la categoría…",
+      "opciones": ["Palabra clave", "Identificador", "Literal", "Operador"],
+      "resp": 0,
+      "explica": "`while` es una palabra reservada del lenguaje." },
+
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles de las siguientes son fases del front-end?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Optimización"],
+      "resp": [0, 1, 2],
+      "explica": "Front-end = léxico + sintáctico + semántico. La optimización va después." },
+
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles son categorías comunes de tokens?",
+      "opciones": ["Identificadores", "Literales", "Operadores", "Algoritmos"],
+      "resp": [0, 1, 2],
+      "explica": "Un algoritmo no es un token; las otras tres sí son categorías léxicas." },
+
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles de los siguientes son tipos o categorías de compiladores?",
+      "opciones": ["Compilador cruzado", "Compilador JIT", "Compilador optimizador", "Compilador de excepciones"],
+      "resp": [0, 1, 2],
+      "explica": "Cruzado, JIT y optimizador son categorías reales; `compilador de excepciones` no existe." },
+
+    { "tipo": "relacionar",
+      "pregunta": "Relaciona cada fase con su función.",
+      "izquierda": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Optimización"],
+      "derecha": ["Convertir caracteres en tokens", "Construir el árbol sintáctico", "Verificar la compatibilidad de tipos", "Mejorar la eficiencia del código"],
+      "resp": { "0": 0, "1": 1, "2": 2, "3": 3 },
+      "explica": "Léxico → tokens; sintáctico → árbol; semántico → tipos; optimización → eficiencia." },
+
+    { "tipo": "relacionar",
+      "pregunta": "Relaciona cada fase con su producto principal.",
+      "izquierda": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Generación de código"],
+      "derecha": ["Secuencia de tokens", "Árbol de sintaxis abstracta", "Árbol anotado con tipos", "Código máquina o ensamblador"],
+      "resp": { "0": 0, "1": 1, "2": 2, "3": 3 },
+      "explica": "La representación se vuelve cada vez más abstracta al subir y más concreta al bajar." }
+  ]
+  </script>
+
+  <h2>Después del simulacro</h2>
+  <div class="caja pista">
+    <span class="etiqueta">Qué hacer con el resultado</span>
+    <ul style="margin-bottom:0">
+      <li><strong>≥ 85:</strong> estás listo. Haz un segundo simulacro al día siguiente para confirmar.</li>
+      <li><strong>70–84:</strong> repasa las preguntas falladas y la sección correspondiente del <a href="../reference/0003-banco-preguntas.html">banco</a>.</li>
+      <li><strong>&lt; 70:</strong> vuelve a <a href="0001-mapa-del-compilador.html">la lección 01</a> y a las chuletas antes de repetir.</li>
+    </ul>
+  </div>
+
+  <div class="nav no-imprimir">
+    <a href="0001-mapa-del-compilador.html">← Lección 01</a>
+    <a href="../reference/0003-banco-preguntas.html">Banco de preguntas →</a>
+  </div>
+
+  <div class="pie">
+    <p><strong>¿Quieres otro simulacro, o más preguntas de un tema?</strong> Pídelo en el chat. También puedo explicarte cualquiera de estas preguntas con más detalle.</p>
+    <p>Lección 02 · Simulacro 1 · <a href="../reference/0001-glosario.html">Glosario</a> · <a href="../reference/0002-mapa-fases.html">Mapa de fases</a></p>
+  </div>
+
+</div>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

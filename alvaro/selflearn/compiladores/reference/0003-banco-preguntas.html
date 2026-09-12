@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Banco de preguntas · Compiladores</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Referencia · Compiladores</span>
+    <span>50 preguntas · estilo examen</span>
+  </div>
+
+  <h1>Banco de preguntas</h1>
+  <p class="subtitulo">Preguntas tipo examen (V/F, opción única, opción múltiple y relacionar), agrupadas por tema. Responde una por una; la explicación aparece al instante.</p>
+
+  <div class="caja pista">
+    <span class="etiqueta">Cómo sacarle partido</span>
+    <p style="margin-bottom:0">No las hagas todas de corrido. Empieza por la sección que acabas de estudiar, y vuelve a las demás en días distintos. Recordar con esfuerzo es lo que fija el conocimiento; releer no.</p>
+  </div>
+
+  <h2>A · Fases del compilador</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "El análisis sintáctico convierte el código fuente en una secuencia de tokens.",
+      "resp": false,
+      "explica": "Eso lo hace el análisis léxico. El sintáctico toma los tokens y construye la estructura gramatical." },
+    { "tipo": "vf",
+      "pregunta": "El análisis semántico reúne información sobre los tipos para la posterior generación de código.",
+      "resp": true,
+      "explica": "Además de detectar errores de significado, el análisis semántico anota tipos que necesitan las fases siguientes." },
+    { "tipo": "vf",
+      "pregunta": "La generación de código pertenece al back-end del compilador.",
+      "resp": true,
+      "explica": "El back-end depende de la arquitectura destino; la generación de código es su fase característica." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué fase agrupa jerárquicamente los tokens en frases gramaticales?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Optimización"],
+      "resp": 1,
+      "explica": "El parser agrupa los tokens según las reglas de la gramática y forma así la estructura jerárquica." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué fase descarta los espacios en blanco y los comentarios?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Generación de código"],
+      "resp": 0,
+      "explica": "El lexer los descarta porque no aportan significado (salvo en lenguajes con indentación significativa)." },
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles de las siguientes son fases de análisis (front-end)?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Optimización de código"],
+      "resp": [0, 1, 2],
+      "explica": "Las tres primeras forman el front-end. La optimización no analiza: transforma la representación intermedia." },
+    { "tipo": "relacionar",
+      "pregunta": "Relaciona cada fase con su producto principal.",
+      "izquierda": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Generación de código"],
+      "derecha": ["Secuencia de tokens", "Árbol de sintaxis (AST)", "Árbol anotado con tipos", "Código máquina o ensamblador"],
+      "resp": { "0": 0, "1": 1, "2": 2, "3": 3 },
+      "explica": "Cada fase transforma la representación de la anterior: caracteres → tokens → árbol → árbol con tipos → código." },
+    { "tipo": "vf",
+      "pregunta": "Un programa con errores de análisis no debería llegar a la generación de código objeto.",
+      "resp": true,
+      "explica": "Solo se genera código cuando el programa está libre de errores de análisis (léxico, sintáctico y semántico)." }
+  ]
+  </script>
+
+  <h2>B · Análisis léxico</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "Todo token lleva obligatoriamente un valor asociado.",
+      "resp": false,
+      "explica": "El valor es opcional. Para palabras clave y signos de puntuación suele bastar el nombre del token." },
+    { "tipo": "vf",
+      "pregunta": "El analizador léxico reconoce categorías como identificadores, literales y operadores.",
+      "resp": true,
+      "explica": "Son categorías comunes de tokens, junto con palabras clave y signos de puntuación." },
+    { "tipo": "unica",
+      "pregunta": "En el código `while (x > 0)`, ¿qué categoría tiene el token `while`?",
+      "opciones": ["Palabra clave", "Identificador", "Literal", "Operador"],
+      "resp": 0,
+      "explica": "Los nombres reservados del lenguaje son palabras clave (keywords)." },
+    { "tipo": "unica",
+      "pregunta": "¿Cómo se llama la regla por la que el lexer toma la cadena válida más larga posible?",
+      "opciones": ["Maximal munch", "Análisis semántico", "Precedencia de operadores", "Resolución de ámbito"],
+      "resp": 0,
+      "explica": "La regla del maximal munch (emparejamiento más largo) evita que `whilex` se parta en `while` y `x`." },
+    { "tipo": "vf",
+      "pregunta": "Las expresiones regulares pueden emparejar cualquier número de paréntesis balanceados.",
+      "resp": false,
+      "explica": "No pueden contar; los paréntesis balanceados requieren una estructura recursiva que solo puede manejar el parser." },
+    { "tipo": "unica",
+      "pregunta": "¿Cuántos tokens produce el lexer para `x = a + b * 2;`?",
+      "opciones": ["Ocho tokens", "Seis tokens", "Siete tokens", "Nueve tokens"],
+      "resp": 0,
+      "explica": "x, =, a, +, b, *, 2, ; → ocho tokens. Los espacios no generan token." },
+    { "tipo": "vf",
+      "pregunta": "Un analizador léxico puede implementarse con autómatas finitos.",
+      "resp": true,
+      "explica": "El reconocimiento de tokens es una coincidencia de patrones regulares, ideal para autómatas finitos." },
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles son categorías comunes de tokens en lenguajes de programación?",
+      "opciones": ["Identificadores", "Literales", "Operadores", "Algoritmos"],
+      "resp": [0, 1, 2],
+      "explica": "Identificadores, literales y operadores son categorías de tokens; un algoritmo no es un token." }
+  ]
+  </script>
+
+  <h2>C · Análisis sintáctico</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "En el AST de `2 + 3 * 4`, el operador `+` es la raíz del árbol.",
+      "resp": true,
+      "explica": "Por precedencia, `3 * 4` se agrupa primero; `+` queda como raíz con `2` a la izquierda y el producto a la derecha." },
+    { "tipo": "vf",
+      "pregunta": "En una expresión, la multiplicación se evalúa antes que la suma por precedencia de operadores.",
+      "resp": true,
+      "explica": "La precedencia decide qué subexpresión se agrupa primero, y eso determina la forma del árbol." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué construcción requiere recursión y por eso queda fuera del análisis léxico?",
+      "opciones": ["Emparejar paréntesis", "Reconocer un identificador", "Leer un número entero", "Saltar un espacio en blanco"],
+      "resp": 0,
+      "explica": "Emparejar paréntesis exige contar anidamiento; las construcciones léxicas no requieren recursión." },
+    { "tipo": "vf",
+      "pregunta": "El parser produce un árbol que refleja el anidamiento de la gramática.",
+      "resp": true,
+      "explica": "Estructura jerárquica y recursiva: por eso un árbol, y no una simple lista." },
+    { "tipo": "unica",
+      "pregunta": "Un paréntesis que abre y nunca cierra, ¿qué fase lo reporta?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Generación de código"],
+      "resp": 1,
+      "explica": "Es un error de estructura gramatical, y eso es competencia del parser." },
+    { "tipo": "multiple",
+      "pregunta": "¿Qué tareas corresponden al análisis sintáctico?",
+      "opciones": ["Construir el árbol sintáctico", "Comprobar reglas gramaticales", "Detectar tipos incompatibles", "Convertir caracteres en tokens"],
+      "resp": [0, 1],
+      "explica": "Construir el árbol y verificar la gramática son sintácticas; los tipos son semánticos y los tokens son léxicos." },
+    { "tipo": "unica",
+      "pregunta": "En el AST de `(2 + 3) * 4`, ¿cuál es la raíz?",
+      "opciones": ["El producto", "La suma", "El número 2", "El número 4"],
+      "resp": 0,
+      "explica": "Los paréntesis fuerzan a que la suma se agrupe primero, así que el producto queda como raíz." }
+  ]
+  </script>
+
+  <h2>D · Análisis semántico</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "El análisis semántico verifica que los operandos de un operador sean de un tipo permitido.",
+      "resp": true,
+      "explica": "Esta verificación de tipos es el componente principal del análisis semántico." },
+    { "tipo": "vf",
+      "pregunta": "Usar una variable que nunca se declaró es un error sintáctico.",
+      "resp": false,
+      "explica": "La sentencia puede ser gramaticalmente correcta. Es un error semántico: el identificador no existe en la tabla de símbolos." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué estructura consulta el análisis semántico para conocer el tipo de una variable?",
+      "opciones": ["La tabla de símbolos", "La secuencia de tokens", "El flujo de caracteres", "El código máquina"],
+      "resp": 0,
+      "explica": "La tabla de símbolos asocia cada identificador con su tipo, su dirección y su ámbito." },
+    { "tipo": "unica",
+      "pregunta": "En `int x; x = \"hola\";`, ¿qué fase detecta el problema?",
+      "opciones": ["Análisis léxico", "Análisis sintáctico", "Análisis semántico", "Optimización"],
+      "resp": 2,
+      "explica": "Asignar una cadena a una variable entera es un error de tipos, y los tipos los comprueba el análisis semántico." },
+    { "tipo": "vf",
+      "pregunta": "El análisis semántico puede añadir información de tipo a los nodos del árbol.",
+      "resp": true,
+      "explica": "El árbol se construye en la fase sintáctica, pero el semántico lo anota con tipos y otra información." },
+    { "tipo": "multiple",
+      "pregunta": "¿Qué tareas corresponden al análisis semántico?",
+      "opciones": ["Verificar compatibilidad de tipos", "Comprobar que los identificadores existan", "Construir el árbol sintáctico", "Emitir instrucciones de máquina"],
+      "resp": [0, 1],
+      "explica": "Tipos y existencia de identificadores son semánticos; el árbol es sintáctico y las instrucciones son del back-end." },
+    { "tipo": "vf",
+      "pregunta": "El análisis semántico se apoya en la estructura jerárquica que produjo el análisis sintáctico.",
+      "resp": true,
+      "explica": "Recorre el árbol para identificar operadores y operandos y comprobar sus tipos." }
+  ]
+  </script>
+
+  <h2>E · Estructuras de datos</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "La tabla de símbolos almacena nombre, tipo, dirección de memoria y ámbito de los identificadores.",
+      "resp": true,
+      "explica": "Esa información permite al compilador verificar el uso correcto de cada identificador." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué estructura permite separar la lógica del programa de la arquitectura del hardware?",
+      "opciones": ["El código intermedio", "La secuencia de tokens", "El árbol de análisis concreto", "El archivo de código fuente"],
+      "resp": 0,
+      "explica": "El IR es neutro: no depende del lenguaje fuente ni de la máquina destino, y sirve de puente entre ambos." },
+    { "tipo": "vf",
+      "pregunta": "El árbol de sintaxis abstracta se construye durante el análisis sintáctico.",
+      "resp": true,
+      "explica": "El parser es quien lo construye a partir de los tokens." },
+    { "tipo": "unica",
+      "pregunta": "¿Cuál es una forma típica de código intermedio?",
+      "opciones": ["Código de tres direcciones", "Código fuente original", "Ejecutable final", "Archivo de texto sin formato"],
+      "resp": 0,
+      "explica": "El código de tres direcciones es una IR común, similar al ensamblador, con a lo sumo tres operandos por instrucción." },
+    { "tipo": "vf",
+      "pregunta": "La tabla de símbolos es utilizada únicamente por el análisis léxico.",
+      "resp": false,
+      "explica": "Interactúa con casi todas las fases: léxico, sintáctico, semántico, y también optimización y generación de código." },
+    { "tipo": "vf",
+      "pregunta": "El AST conserva todos los detalles de los paréntesis tal como se escribieron.",
+      "resp": false,
+      "explica": "El AST captura la estructura esencial, no la sintaxis concreta; los paréntesis quedan implícitos en la forma del árbol." }
+  ]
+  </script>
+
+  <h2>F · Tipos de compiladores</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "Un compilador JIT compila todo el programa antes de ejecutarlo, generando un ejecutable permanente.",
+      "resp": false,
+      "explica": "El JIT traduce fragmentos durante la ejecución, según se necesitan, para mejorar el rendimiento en tiempo real." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué tipo de compilador se ejecuta en una plataforma pero genera código para otra distinta?",
+      "opciones": ["Compilador cruzado", "Compilador nativo", "Compilador incremental", "Compilador JIT"],
+      "resp": 0,
+      "explica": "El compilador cruzado (cross-compiler) genera código para una arquitectura diferente a la que lo ejecuta." },
+    { "tipo": "vf",
+      "pregunta": "Un compilador nativo genera código para la misma arquitectura en la que se ejecuta.",
+      "resp": true,
+      "explica": "Ese es justamente el contraste con el compilador cruzado." },
+    { "tipo": "vf",
+      "pregunta": "Un compilador de una sola pasada necesita leer el código fuente varias veces.",
+      "resp": false,
+      "explica": "De una sola pasada genera el código con una única lectura; el de varias pasadas es el que relee." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador recompila solo las partes del programa que cambiaron?",
+      "opciones": ["Compilador incremental", "Compilador cruzado", "Compilador JIT", "Compilador de arranque"],
+      "resp": 0,
+      "explica": "El incremental reutiliza trabajo previo y recompila únicamente lo que cambió." },
+    { "tipo": "vf",
+      "pregunta": "Un compilador optimizador modifica la funcionalidad del programa para hacerlo más rápido.",
+      "resp": false,
+      "explica": "Optimiza conservando el significado: mismo comportamiento, mejor eficiencia." },
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador suele formar parte de un intérprete y traduce fragmentos según se necesitan?",
+      "opciones": ["JIT", "Cruzado", "Incremental", "Nativo"],
+      "resp": 0,
+      "explica": "El JIT vive dentro de un runtime o máquina virtual y compila en caliente las zonas más usadas." },
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles de los siguientes son tipos o categorías de compiladores?",
+      "opciones": ["Compilador cruzado", "Compilador JIT", "Compilador optimizador", "Algoritmo de ordenamiento"],
+      "resp": [0, 1, 2],
+      "explica": "Cruzado, JIT y optimizador son categorías de compiladores; un algoritmo de ordenamiento no lo es." }
+  ]
+  </script>
+
+  <h2>G · Transpiladores y compilador vs intérprete</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "Un transpilador traduce entre lenguajes de nivel similar y produce código fuente como salida.",
+      "resp": true,
+      "explica": "También llamado compilador fuente a fuente. La salida es código en otro lenguaje de alto nivel, no máquina." },
+    { "tipo": "unica",
+      "pregunta": "¿Cómo se llama traducir código TypeScript a JavaScript?",
+      "opciones": ["Transpilación", "Ensamblado", "Enlazado", "Descompilación"],
+      "resp": 0,
+      "explica": "TypeScript se transpila a JavaScript, que es de un nivel de abstracción similar." },
+    { "tipo": "vf",
+      "pregunta": "Un intérprete nunca compila nada internamente; siempre ejecuta el fuente directamente.",
+      "resp": false,
+      "explica": "Muchos intérpretes, como CPython, primero compilan a bytecode y luego lo ejecutan en una máquina virtual." },
+    { "tipo": "vf",
+      "pregunta": "La diferencia clave es que un compilador produce un resultado que el usuario ejecuta después.",
+      "resp": true,
+      "explica": "El compilador traduce y no ejecuta; el intérprete ejecuta el programa desde el fuente." },
+    { "tipo": "unica",
+      "pregunta": "¿Cuál es un ejemplo típico de lenguaje que se transpila a JavaScript para correr en el navegador?",
+      "opciones": ["TypeScript", "Assembler", "Máquina virtual", "Bytecode"],
+      "resp": 0,
+      "explica": "Como JavaScript fue durante mucho tiempo el único lenguaje del navegador, muchos lenguajes se transpilan a él." },
+    { "tipo": "vf",
+      "pregunta": "Un compilador puede generar bytecode y una máquina virtual ejecutarlo después.",
+      "resp": true,
+      "explica": "Es el modelo de Java, Python o C#: compilación a bytecode más ejecución en una VM." },
+    { "tipo": "multiple",
+      "pregunta": "¿Qué características corresponden a un transpilador?",
+      "opciones": ["Entrada y salida en lenguajes de alto nivel", "Reutiliza el compilador del lenguaje destino", "Genera código máquina directamente", "Ejecuta el programa durante la traducción"],
+      "resp": [0, 1],
+      "explica": "El transpilador produce código fuente y deja que las herramientas del lenguaje destino hagan el resto." }
+  ]
+  </script>
+
+  <div class="nav no-imprimir">
+    <a href="../lessons/0001-mapa-del-compilador.html">← Lección 01</a>
+    <a href="0001-glosario.html">Glosario →</a>
+  </div>
+
+  <div class="pie">
+    <p>Referencia · Compiladores · Fuentes: <a href="https://es.wikipedia.org/wiki/Compilador">Wikipedia ES: Compilador</a>, <a href="https://en.wikipedia.org/wiki/Lexical_analysis">Lexical analysis</a>, <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">Crafting Interpreters</a>.</p>
+    <p><strong>¿Quieres más preguntas de un tema, o un simulacro completo?</strong> Pídelo en el chat y lo genero.</p>
+  </div>
+
+</div>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>

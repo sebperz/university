@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glosario · Compiladores</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Referencia · Compiladores</span>
+    <span>Actualizado en la lección 01</span>
+  </div>
+
+  <h1>Glosario</h1>
+  <p class="subtitulo">El vocabulario canónico del curso. Si una lección y el glosario se contradicen, gana el glosario. Términos en inglés entre paréntesis cuando son el estándar.</p>
+
+  <h2>Traductores</h2>
+  <dl class="glosario">
+    <dt>Compilador</dt>
+    <dd>Programa que traduce código de un lenguaje fuente a otro lenguaje destino (normalmente de alto nivel a bajo nivel: ensamblador, bytecode o código máquina) sin ejecutarlo. <span class="alias">alias a evitar: traductor en general</span></dd>
+
+    <dt>Intérprete</dt>
+    <dd>Programa que toma el código fuente y lo ejecuta directamente, sin producir un ejecutable separado. Muchos intérpretes compilan internamente a bytecode (p. ej. CPython).</dd>
+
+    <dt>Transpilador</dt>
+    <dd>Compilador que traduce entre dos lenguajes de <em>nivel similar</em> y produce código fuente como salida, no código máquina. <span class="alias">también: compilador fuente a fuente, transcompiler</span></dd>
+
+    <dt>Compilador cruzado (cross-compiler)</dt>
+    <dd>Compilador que se ejecuta en una plataforma pero genera código para una plataforma o arquitectura distinta.</dd>
+
+    <dt>Compilador JIT (just-in-time)</dt>
+    <dd>Compilador que traduce fragmentos de código a máquina <em>durante la ejecución</em> del programa, según se necesitan. No genera un ejecutable permanente por adelantado.</dd>
+
+    <dt>Compilador nativo</dt>
+    <dd>Compilador que genera código máquina para la misma arquitectura en la que se ejecuta.</dd>
+
+    <dt>Compilador incremental</dt>
+    <dd>Compilador que recompila solo las partes del programa que cambiaron, reutilizando el trabajo previo.</dd>
+
+    <dt>Compilador de una pasada / de varias pasadas</dt>
+    <dd>De una sola pasada: genera el código con una única lectura del fuente. De varias: necesita leerlo varias veces antes de producir el código.</dd>
+
+    <dt>Compilador de arranque (bootstrap compiler)</dt>
+    <dd>Compilador temporal que se usa para compilar una versión más definitiva o mejor optimizada del compilador de un lenguaje.</dd>
+  </dl>
+
+  <h2>Partes y fases</h2>
+  <dl class="glosario">
+    <dt>Front-end</dt>
+    <dd>Parte que <em>analiza</em> el código fuente y depende del lenguaje fuente: análisis léxico, sintáctico y semántico. <span class="alias">en español: analizador</span></dd>
+
+    <dt>Back-end</dt>
+    <dd>Parte que <em>sintetiza</em> el código destino y depende de la arquitectura: generación de código. <span class="alias">en español: generador</span></dd>
+
+    <dt>Análisis léxico (scanning, lexing)</dt>
+    <dd>Primera fase. Lee el flujo de caracteres y lo agrupa en tokens; descarta espacios y comentarios. Error típico: símbolo mal formado.</dd>
+
+    <dt>Análisis sintáctico (parsing)</dt>
+    <dd>Segunda fase. Agrupa los tokens según la gramática y construye un árbol. Error típico: estructura inválida, paréntesis faltante.</dd>
+
+    <dt>Análisis semántico</dt>
+    <dd>Tercera fase. Comprueba el significado: compatibilidad de tipos, declaración de identificadores, ámbitos. Error típico: tipos incompatibles.</dd>
+
+    <dt>Optimización</dt>
+    <dd>Fase que reescribe el código intermedio para hacerlo más eficiente conservando su significado.</dd>
+
+    <dt>Generación de código (code gen)</dt>
+    <dd>Fase final del back-end: convierte la representación intermedia en código máquina o ensamblador para la arquitectura destino.</dd>
+
+    <dt>Fase de análisis / fase de síntesis</dt>
+    <dd>Las dos grandes tareas: análisis = comprobar y entender el fuente; síntesis = generar el código objeto.</dd>
+  </dl>
+
+  <h2>Estructuras de datos</h2>
+  <dl class="glosario">
+    <dt>Token</dt>
+    <dd>Unidad mínima con significado que produce el analizador léxico. Consta de un <em>nombre</em> de categoría y, opcionalmente, un <em>valor</em>. Ej.: <code>(identificador, "x")</code>.</dd>
+
+    <dt>Lexema</dt>
+    <dd>La secuencia concreta de caracteres del código fuente que corresponde a un token. En <code>x = 2;</code>, los lexemas son <code>x</code>, <code>=</code>, <code>2</code>, <code>;</code>.</dd>
+
+    <dt>Patrón</dt>
+    <dd>La regla que describe cómo se reconoce un lexema de cierta categoría (a menudo una expresión regular). Ej.: identificador = <code>[a-zA-Z_][a-zA-Z_0-9]*</code>.</dd>
+
+    <dt>Maximal munch (regla del emparejamiento más largo)</dt>
+    <dd>Criterio del lexer: siempre toma la cadena más larga posible que forme un token válido.</dd>
+
+    <dt>Árbol de sintaxis abstracta (AST)</dt>
+    <dd>Representación en árbol del programa que captura su estructura esencial, sin detalles de la sintaxis concreta. Lo construye el parser.</dd>
+
+    <dt>Árbol de análisis sintáctico (parse tree)</dt>
+    <dd>Árbol que refleja fielmente las reglas de la gramática aplicadas, con más detalle que el AST.</dd>
+
+    <dt>Tabla de símbolos</dt>
+    <dd>Estructura que guarda información de los identificadores (nombre, tipo, dirección, ámbito). La usan casi todas las fases, no solo una.</dd>
+
+    <dt>Ámbito (scope)</dt>
+    <dd>Región del programa donde un nombre se refiere a una declaración concreta. Clave para la resolución de nombres.</dd>
+
+    <dt>Código intermedio (IR)</dt>
+    <dd>Representación interna del programa, independiente del lenguaje fuente y de la máquina destino. Facilita la optimización y la portabilidad. Ej.: código de tres direcciones.</dd>
+
+    <dt>Bytecode</dt>
+    <dd>Código intermedio para una máquina virtual, con instrucciones normalmente de un byte, ejecutado por un intérprete de bytecode.</dd>
+
+    <dt>Máquina virtual (VM)</dt>
+    <dd>Programa que emula una máquina hipotética para ejecutar bytecode en tiempo de ejecución.</dd>
+  </dl>
+
+  <div class="caja pista">
+    <span class="etiqueta">Cómo se usa</span>
+    <p style="margin-bottom:0">Añade aquí un término solo cuando ya puedas usarlo correctamente. El glosario es un registro de conocimiento comprimido, no una lista para leer de corrido.</p>
+  </div>
+
+  <div class="nav no-imprimir">
+    <a href="../lessons/0001-mapa-del-compilador.html">← Lección 01</a>
+    <a href="0002-mapa-fases.html">Mapa de fases →</a>
+  </div>
+
+  <div class="pie">
+    <p>Referencia · Compiladores · Fuentes: <a href="https://es.wikipedia.org/wiki/Compilador">Wikipedia ES: Compilador</a>, <a href="https://en.wikipedia.org/wiki/Lexical_analysis">Lexical analysis</a>, <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">Crafting Interpreters</a>.</p>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Especificación técnica de requisitos: Caso C, logística de última milla</title>
+<style>
+  @page { margin: 2cm; }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    max-width: 17cm;
+    margin: 2cm auto;
+    padding: 0 1cm;
+    color: #1a1a1a;
+  }
+  code, pre { font-family: "Roboto Mono", Consolas, monospace; }
+  .titulo { font-size: 15pt; font-weight: bold; text-align: center; margin-bottom: 0.2cm; }
+  .nombre { font-weight: bold; font-style: italic; text-align: right; line-height: 1.4; }
+  h2 { font-weight: bold; font-size: 13pt; margin-top: 0.8cm; margin-bottom: 0.2cm; }
+  h3 { font-weight: bold; font-style: italic; font-size: 12pt; margin-top: 0.5cm; margin-bottom: 0.15cm; }
+  p { margin: 0 0 0.3cm 0; text-align: justify; }
+  .encabezado {
+    border-left: 3px solid #1a3a5c;
+    background: #f4f6f8;
+    padding: 0.3cm 0.5cm;
+    margin: 0.5cm 0;
+  }
+  .encabezado p { margin: 0; text-align: left; }
+  pre {
+    background: #f4f6f8;
+    border-left: 3px solid #1a3a5c;
+    padding: 0.3cm 0.5cm;
+    font-size: 10pt;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    margin: 0.2cm 0 0.5cm 0;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 10.5pt;
+    line-height: 1.35;
+    margin: 0.2cm 0 0.3cm 0;
+  }
+  thead tr { border-top: 1.5pt solid #000; border-bottom: 0.75pt solid #000; }
+  tbody tr:last-child { border-bottom: 1.5pt solid #000; }
+  th { font-weight: bold; text-align: center; padding: 0.12cm 0.15cm; }
+  td { padding: 0.12cm 0.15cm; vertical-align: top; text-align: left; }
+  td.el { font-weight: bold; }
+  .nota-tabla { font-size: 10pt; margin-bottom: 0.5cm; }
+</style>
+</head>
+<body>
+
+<h1 class="titulo">Documento de especificación técnica de requisitos de software: sistema de logística de última milla georreferenciado</h1>
+<p class="nombre">Islender Arturo Alfonso Contreras<br>Juan Sebastian Perez Galvis</p>
+
+<div class="encabezado">
+  <p><strong>Contexto seleccionado:</strong> Caso C: Sistema de Logística de Última Milla Georreferenciado.</p>
+  <p><strong>Integrantes del grupo de ingeniería:</strong></p>
+  <p>1. Islender Arturo Alfonso Contreras</p>
+  <p>2. Juan Sebastian Perez Galvis</p>
+  <p><strong>Código de actividad:</strong> AP-REQ-AV-2026</p>
+</div>
+
+<p>El presente documento desarrolla la actividad evaluativa sobre el Caso C, un motor de emparejamiento geoespacial de alta concurrencia que procesa la ubicación de 40,000 repartidores activos en tiempo real para asignarlos a órdenes de compra entrantes. El documento se organiza en cuatro módulos: la matriz de atributos de calidad según la anatomía del SEI, la especificación de comportamiento en Gherkin, el registro de decisión arquitectónica en formato AWS y el mapa de trazabilidad hacia el pipeline de CI/CD.</p>
+
+<h2>Módulo 1: matriz de escenarios de atributos de calidad (SEI)</h2>
+
+<p>Los cuatro requisitos de calidad del sistema se especifican con los seis elementos de la anatomía del SEI, de modo que cada enunciado queda sujeto a una métrica verificable y queda excluido todo adjetivo abstracto. La Tabla 1 presenta la matriz completa: cada columna desarrolla un requisito y cada fila corresponde a uno de los seis elementos SEI.</p>
+
+<p><strong>Tabla 1</strong></p>
+<p><em>Matriz de escenarios de atributos de calidad del sistema de última milla (formato SEI)</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:14%">Elemento SEI</th>
+      <th style="width:21.5%">NFR-01: Rendimiento</th>
+      <th style="width:21.5%">NFR-02: Fiabilidad</th>
+      <th style="width:21.5%">NFR-03: Seguridad</th>
+      <th style="width:21.5%">NFR-04: Escalabilidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="el">Fuente</td>
+      <td>Sistema de comercio del cliente</td>
+      <td>Fallo de infraestructura (hardware o red)</td>
+      <td>Aplicación de repartidor comprometida o atacante externo</td>
+      <td>Flota completa de repartidores</td>
+    </tr>
+    <tr>
+      <td class="el">Estímulo</td>
+      <td>Publicación de una orden de compra que requiere asignación inmediata de repartidor</td>
+      <td>Desconexión abrupta del nodo primario del clúster de base de datos geoespacial</td>
+      <td>Peticiones al endpoint <code>/api/v1/orders/{id}/accept</code> con token JWT expirado o con algoritmo de firma distinto de RS256, y telemetría GPS con desplazamientos físicamente imposibles</td>
+      <td>Salto de 5,000 a 60,000 actualizaciones de ubicación por segundo durante una campaña promocional</td>
+    </tr>
+    <tr>
+      <td class="el">Entorno</td>
+      <td>Operación normal, 40,000 repartidores activos</td>
+      <td>Hora pico de demanda</td>
+      <td>Producción, operación normal</td>
+      <td>Pico de demanda en hora de almuerzo</td>
+    </tr>
+    <tr>
+      <td class="el">Artefacto</td>
+      <td>Motor de emparejamiento OrderMatcher</td>
+      <td>Clúster PostgreSQL/PostGIS gestionado con Patroni</td>
+      <td>API Gateway y servicio de identidad</td>
+      <td>Pipeline de ingesta Kafka y consumidores del servicio de tracking</td>
+    </tr>
+    <tr>
+      <td class="el">Respuesta</td>
+      <td>Selecciona al repartidor disponible más cercano y notifica su aplicación móvil</td>
+      <td>Promueve automáticamente la réplica sincronizada y reconstruye el índice geoespacial en memoria</td>
+      <td>Rechaza la petición, registra la anomalía y revoca la sesión del dispositivo</td>
+      <td>Escalado horizontal (HPA) de consumidores y reparto de particiones por geocelda</td>
+    </tr>
+    <tr>
+      <td class="el">Medida</td>
+      <td>P99 &lt; 500 ms entre la publicación de la orden y la notificación al repartidor. Verificable con k6 y Prometheus</td>
+      <td>RTO &lt; 5 s, RPO = 0 y tasa de error &lt; 0.5% durante la conmutación. Verificable con Chaos Mesh</td>
+      <td>Bloqueo en &lt; 50 ms y detección de suplantación de ubicación (&gt; 300 km/h) en &lt; 1 s. Verificable con OWASP ZAP</td>
+      <td>Lag de consumo &lt; 2 s, CPU &lt; 70% estabilizada en &lt; 90 s y cero mensajes perdidos. Verificable con k6, HPA y Prometheus</td>
+    </tr>
+  </tbody>
+</table>
+<p class="nota-tabla"><em>Nota.</em> Los identificadores NFR-01 a NFR-04 se retoman en los escenarios BDD del Módulo 2, en la decisión arquitectónica del Módulo 3 y en el mapa de trazabilidad del Módulo 4.</p>
+
+<h2>Módulo 2: especificación de comportamiento en Gherkin (BDD)</h2>
+
+<p>Los tres escenarios siguientes cubren los comportamientos complejos exigidos: una condición de carrera sobre la asignación de pedidos, un fallo crítico de infraestructura y la degradación controlada de un servicio externo. Cada escenario expresa en su cláusula final las métricas de red y los códigos HTTP verificables.</p>
+
+<h3>Escenario 1: asignación exclusiva de un pedido ante aceptación concurrente</h3>
+<pre>Escenario: Asignación exclusiva de un pedido ante aceptación concurrente
+Dado que el pedido #73521 está en estado 'DISPONIBLE' con versión de registro v1
+Y el Repartidor_A y el Repartidor_B visualizan el mismo pedido a menos de 800 metros
+  del punto de recogida
+Cuando ambos repartidores envían la petición POST /api/v1/orders/73521/accept
+  exactamente en el mismo milisegundo (t0)
+Entonces el componente OrderMatcher ejecuta un bloqueo optimista (Optimistic Locking)
+  sobre la versión v1 del registro
+Y la petición del Repartidor_A muta el estado a 'ASIGNADO', incrementa la versión a v2
+  y publica el evento OrderAssigned en Kafka
+Y la petición del Repartidor_B falla con una excepción transaccional por conflicto de versión
+Y la API Gateway retorna HTTP 409 Conflict al Repartidor_B en menos de 80 ms
+Y la aplicación del Repartidor_B muestra el mensaje 'El pedido ya fue tomado por otro operador'</pre>
+
+<h3>Escenario 2: conmutación por error del clúster geoespacial en hora pico</h3>
+<pre>Escenario: Conmutación por error del clúster geoespacial en hora pico
+Dado que la plataforma opera en hora pico con 40,000 repartidores transmitiendo ubicación
+Y el clúster PostgreSQL/PostGIS atiende escrituras con dos réplicas sincronizadas
+Cuando el nodo primario del clúster de base de datos se desconecta abruptamente en t0
+Entonces Patroni detecta la falla y promueve la réplica sincronizada como nuevo primario
+Y el servicio OrderMatcher reconecta y reanuda las escrituras sin intervención humana
+Y el índice geoespacial en memoria se reconstruye desde el nuevo primario en menos de 5 segundos
+Y ningún pedido en estado 'ASIGNADO' pierde su registro (RPO = 0)
+Y las peticiones concurrentes durante la conmutación reciben HTTP 503 con la cabecera
+  Retry-After, con tasa de error inferior al 0.5%</pre>
+
+<h3>Escenario 3: degradación controlada del proveedor de ruteo externo</h3>
+<pre>Escenario: Degradación controlada del proveedor de ruteo externo
+Dado que el cálculo de tiempos de llegada depende del proveedor externo de mapas
+Y la caché Redis almacena matrices de tiempo de viaje por geocelda con vigencia de 15 minutos
+Cuando el proveedor de ruteo responde con latencia superior a 2 segundos en más del 20%
+  de las llamadas
+Entonces el circuit breaker del servicio de ruteo abre el circuito y suspende las llamadas
+  externas por 30 segundos
+Y el sistema calcula las asignaciones con la última matriz de tiempos cacheada, marcada
+  como estimación
+Y las órdenes siguen asignándose con P99 menor a 500 ms
+Y la métrica routing_fallback_active pasa a 1 y el panel de operaciones registra el modo
+  degradado
+Y al expirar la ventana, el circuito pasa a estado half-open y reanuda las llamadas externas
+  de forma gradual</pre>
+
+<h2>Módulo 3: registro de decisión arquitectónica (ADR)</h2>
+
+<h3>ADR-001: modelo de consistencia híbrido para la asignación de pedidos y la telemetría de ubicación</h3>
+
+<p><strong><em>Estado.</em></strong> Aceptado.</p>
+
+<p><strong><em>Contexto.</em></strong> El motor de emparejamiento procesa la ubicación de 40,000 repartidores en tiempo real y asigna órdenes de compra entrantes. El teorema CAP establece que, ante una partición de red, un sistema distribuido no puede garantizar simultáneamente consistencia fuerte y disponibilidad completa. Los requisitos del Módulo 1 empujan en direcciones opuestas: la asignación de pedidos no admite duplicados, pues la condición de carrera del Escenario 1 exige que una sola petición gane y el resto reciba HTTP 409, mientras que la ingesta de telemetría no puede bloquearse durante picos de 60,000 actualizaciones por segundo, tal como exige NFR-04. Un único modelo de consistencia para ambos flujos sacrificaría uno de los dos requisitos, de modo que la decisión requiere separarlos.</p>
+
+<p><strong><em>Decisión.</em></strong> El sistema separa el plano transaccional del plano de telemetría. La asignación de pedidos corre sobre PostgreSQL con PostGIS en un modelo CP, con bloqueo optimista por versión de registro y réplica sincronizada gestionada por Patroni para la conmutación por error. La telemetría de ubicación corre sobre Kafka en un modelo AP, con particiones por geocelda (geohash de 6 caracteres) y consistencia eventual. Redis Cluster actúa como capa de lectura del estado de disponibilidad de los repartidores y como caché de las matrices de tiempo de viaje del proveedor de ruteo.</p>
+
+<p><strong><em>Justificación técnica.</em></strong> El bloqueo optimista resuelve la condición de carrera sin sostener bloqueos distribuidos de larga duración, y mantiene el P99 de asignación por debajo de 500 ms que exige NFR-01, porque las transacciones rechazadas abortan en milisegundos al detectar el conflicto de versión. PostGIS aporta índices GiST para consultas de proximidad sobre la posición de la flota. El particionado por geocelda acota el reordenamiento de mensajes a una zona concreta y permite escalar los consumidores de forma horizontal, lo que sostiene la métrica de lag inferior a 2 segundos de NFR-04. En contra, el despliegue de tres tecnologías de datos aumenta la carga operativa del equipo y la consistencia eventual de las ubicaciones puede mostrar posiciones desfasadas hasta 2 segundos. El riesgo operativo se mitiga con los sondeos de salud de Kubernetes y las pruebas de caos del pipeline, y el desfase de posición resulta tolerable para el seguimiento de entregas.</p>
+
+<p><strong><em>Consecuencias del sistema.</em></strong> Durante una partición de red, las órdenes de las zonas afectadas dejan de asignarse temporalmente en lugar de asignarse dos veces, de modo que el plano transaccional favorece la integridad sobre la disponibilidad. Los reportes analíticos consolidados sobre la posición de la flota presentan un desfase de hasta 5 minutos, compromiso aceptado por la gerencia. La posición de un repartidor visible para el cliente final puede desfasarse hasta 2 segundos, margen tolerable para el seguimiento de entregas de última milla.</p>
+
+<h2>Módulo 4: trazabilidad y verificación en pipeline</h2>
+
+<p>Cada requisito de negocio se conecta con su escenario BDD, con los componentes de arquitectura que lo materializan y con la suite de pruebas automáticas que lo verifica en cada integración. Se documentan tres mapas, uno por escenario.</p>
+
+<h3>Mapa de trazabilidad 1: exclusividad en la asignación de pedidos</h3>
+
+<p><strong><em>Requisito de negocio ID.</em></strong> REQ-LOG-01, asignación exclusiva de pedidos: cada orden entrante se asigna a exactamente un repartidor.</p>
+
+<p><strong><em>Escenario BDD vinculado.</em></strong> Escenario 1, asignación exclusiva de un pedido ante aceptación concurrente.</p>
+
+<p><strong><em>Componentes de arquitectura afectados.</em></strong> API Gateway Envoy, servicio OrderMatcher en Go, PostgreSQL 16 con PostGIS para el registro versionado, Redis Cluster para el estado de disponibilidad de repartidores y Kafka para el evento OrderAssigned. La estrategia de despliegue ubica OrderMatcher y la base de datos en el mismo clúster regional para acotar la latencia del bloqueo optimista.</p>
+
+<p><strong><em>Herramientas de automatización en CI/CD.</em></strong> Pruebas de concurrencia con Testcontainers que lanzan gorutinas simultáneas contra la misma versión de registro y afirman un único ganador, suite Gherkin ejecutada con Godog en GitHub Actions, pruebas de carga con k6 sobre el endpoint de aceptación y monitoreo de la tasa de respuestas 409 con Prometheus y Grafana.</p>
+
+<h3>Mapa de trazabilidad 2: continuidad ante fallas de infraestructura</h3>
+
+<p><strong><em>Requisito de negocio ID.</em></strong> REQ-LOG-02, continuidad del servicio de asignación ante fallas de infraestructura.</p>
+
+<p><strong><em>Escenario BDD vinculado.</em></strong> Escenario 2, conmutación por error del clúster geoespacial en hora pico.</p>
+
+<p><strong><em>Componentes de arquitectura afectados.</em></strong> Clúster PostgreSQL/PostGIS gestionado con Patroni, índice geoespacial en memoria del servicio de tracking y sondeos de salud de Kubernetes que expulsan el nodo fallido del balanceo. El despliegue distribuye las réplicas en tres zonas de disponibilidad para que la pérdida de una zona no degrade el quórum.</p>
+
+<p><strong><em>Herramientas de automatización en CI/CD.</em></strong> Chaos Mesh inyecta la caída del nodo primario en el entorno de staging, un job nocturno de GitHub Actions ejecuta la conmutación y afirma RTO &lt; 5 s con RPO = 0, pruebas de integración verifican la reconstrucción del índice y las alertas de tasa de error del umbral de 0.5% se configuran en Prometheus con visualización en Grafana.</p>
+
+<h3>Mapa de trazabilidad 3: resiliencia frente al proveedor de ruteo externo</h3>
+
+<p><strong><em>Requisito de negocio ID.</em></strong> REQ-LOG-03, asignación resiliente frente a dependencias externas de ruteo.</p>
+
+<p><strong><em>Escenario BDD vinculado.</em></strong> Escenario 3, degradación controlada del proveedor de ruteo externo.</p>
+
+<p><strong><em>Componentes de arquitectura afectados.</em></strong> Servicio de ruteo con circuit breaker implementado con gobreaker, Redis Cluster como caché de matrices de tiempo de viaje por geocelda y panel de operaciones con el indicador de modo degradado. La estrategia de despliegue mantiene la caché en la misma región que el servicio de emparejamiento para que el fallback no supere el P99 de 500 ms.</p>
+
+<p><strong><em>Herramientas de automatización en CI/CD.</em></strong> Pruebas de contrato con WireMock que simulan latencias superiores a 2 segundos y errores 5xx del proveedor, pruebas de carga con k6 embebidas en GitHub Actions que verifican el P99 con el circuito abierto, aserción sobre la métrica routing_fallback_active en las pruebas de integración y alertas SLO sobre el tiempo en modo degradado configuradas en Grafana.</p>
+
+</body>
+</html>

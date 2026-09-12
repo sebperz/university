@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Conceptos Fundamentales de Arquitectura de Software</title>
+<style>
+  @page {
+    size: Letter;
+    margin: 2.54cm;
+    @top-right {
+      content: counter(page);
+      font-family: "Times New Roman", serif;
+      font-size: 12pt;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Times New Roman", serif;
+    font-size: 12pt;
+    color: #000;
+    line-height: 2;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  .sheet {
+    max-width: 21.59cm;
+    margin: 0 auto;
+    padding: 2.54cm;
+  }
+  @media print {
+    .sheet { padding: 0; margin: 0; width: 100%; max-width: none; }
+  }
+
+  p { text-align: justify; }
+
+  .titlepage h1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 12pt;
+    margin-top: 6em;
+    margin-bottom: 0;
+  }
+  .titlepage .authorblock {
+    text-align: center;
+    margin-top: 4em;
+  }
+  .titlepage .authorblock p {
+    text-align: center;
+    margin: 0;
+  }
+
+  .fill { color: #444; }
+
+  h1.level1 {
+    text-align: center;
+    font-weight: bold;
+    font-size: 12pt;
+    margin: 1.5em 0 0.5em 0;
+  }
+  h2.level2 {
+    text-align: left;
+    font-weight: bold;
+    font-size: 12pt;
+    margin: 1.2em 0 0.4em 0;
+  }
+  h3.level3 {
+    text-align: left;
+    font-weight: bold;
+    font-style: italic;
+    font-size: 12pt;
+    margin: 1.1em 0 0.3em 0;
+  }
+
+  p.l4 {
+    text-indent: 1.27cm;
+    margin: 1em 0 0.3em 0;
+    text-align: justify;
+  }
+
+  p.body { text-indent: 1.27cm; margin: 0; }
+
+  p.note-rule {
+    text-indent: 0;
+    margin: 0.5em 0;
+    font-style: italic;
+  }
+
+  .ai {
+    font-family: "Times New Roman", serif;
+    font-size: 12pt;
+    margin: 0.5em 1.27cm 1em 1.27cm;
+    border-left: 2px solid #999;
+    padding-left: 1em;
+    text-align: left;
+    white-space: normal;
+  }
+  .prompt {
+    font-family: "Times New Roman", serif;
+    font-size: 12pt;
+    margin: 0.5em 1.27cm 1em 1.27cm;
+    background: #f5f5f5;
+    padding: 0.4em 0.8em;
+    text-align: left;
+    white-space: pre-wrap;
+  }
+
+  .label { font-style: italic; }
+
+  table.apa {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.8em 0;
+    font-size: 12pt;
+  }
+  table.apa { border-top: 1px solid #000; border-bottom: 1px solid #000; }
+  table.apa thead th { border-bottom: 1px solid #000; }
+  table.apa th, table.apa td {
+    padding: 0.2em 0.6em;
+    vertical-align: top;
+    text-align: left;
+  }
+  table.apa thead th { text-align: center; }
+
+  p.tablenum {
+    font-weight: bold;
+    margin: 1.2em 0 0 0;
+    text-indent: 0;
+    text-align: left;
+  }
+  p.tabletitle {
+    font-style: italic;
+    margin: 0 0 0.2em 0;
+    text-indent: 0;
+    text-align: left;
+  }
+  p.tablenote {
+    font-size: 12pt;
+    margin: 0.2em 0 1em 0;
+    text-indent: 0;
+    text-align: left;
+  }
+  p.tablenote span.notalabel { font-style: italic; }
+
+  figure.showimg { margin: 0.6em 0; text-align: center; page-break-inside: avoid; }
+  figure.showimg img { max-width: 100%; height: auto; border: 1px solid #999; }
+
+  p.ref {
+    text-indent: -1.27cm;
+    margin: 0 0 0 1.27cm;
+    text-align: left;
+  }
+
+  .pagebreak { page-break-after: always; }
+
+  @media screen {
+    .sheet { border: 1px solid #ddd; margin: 1em auto; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="titlepage">
+    <h1>Conceptos Fundamentales de Arquitectura de Software</h1>
+
+    <div class="authorblock">
+      <p>Juan Sebastian Perez Galvis</p>
+      <p>Código: 202413228925</p>
+      <p>Ingeniería de Sistemas · Facultad de Ingenierías</p>
+      <p>Universidad Simón Bolívar</p>
+      <p>Curso: Arquitectura de Software · Código 5111</p>
+      <p>Docente: Oswaldo Enrique Laguado Aguilar</p>
+      <p>23 de agosto de 2026</p>
+    </div>
+  </div>
+
+  <div class="pagebreak"></div>
+
+  <h1 class="level1">Introducción</h1>
+
+  <p class="body">El presente informe desarrolla la actividad de la primera unidad del curso de Arquitectura de Software, dedicada a los conceptos fundamentales de la materia y al uso de la inteligencia artificial como apoyo y no como sustituto del razonamiento. La guía plantea que una arquitectura no es un dibujo sino una cadena de decisiones conscientes, y que en esta materia lo que se evalúa no es la respuesta de la herramienta sino la calidad del encargo y la finura del análisis con que se compara (Universidad Simón Bolívar, 2026).</p>
+
+  <p class="body">El documento se organiza en tres bloques. El ejercicio de manejo del prompt, la sección 4, muestra cómo un encargo bien formulado cambia el resultado frente a uno redactado con prisa. Las preguntas individuales, la sección 6, recorren los seis conceptos de la unidad y los encadenan: los atributos de calidad condicionan la arquitectura, esta se concreta en capas y niveles, y el patrón Modelo-Vista-Controlador ordena el interior de una de esas capas. Los puntos en pareja, la sección 7, contrastan dos definiciones de arquitectura y defienden una decisión de diseño reconociendo sus renuncias. Todo se apoya en libros físicos del Sistema de Bibliotecas de la Universidad, cuya portada y contraportada se anexan al final, tal como pide la actividad de biblioteca.</p>
+
+  <div class="pagebreak"></div>
+
+  <h1 class="level1">4 · Ejercicio de Manejo del Prompt</h1>
+
+  <p class="body">La sección 4 de la guía propone un ejercicio doble: escribir un prompt propio sobre un tema del curso y demostrar que se entiende por qué uno funciona y el otro no. Lo que se califica, dice la guía, no es la respuesta de la herramienta sino la calidad del prompt redactado y la finura del análisis con que se compara (Universidad Simón Bolívar, 2026). Este documento desarrolla el ejercicio completo con el encargo A, en el orden que pide la sección 4.2.</p>
+
+  <h2 class="level2">4.1 · Encargo Elegido</h2>
+
+  <p class="l4"><strong>a) El Encargo Elegido.</strong> Opción A: explicar por qué en una aplicación web se separa el servidor web del servidor de base de datos, y qué implica esa separación para la conectividad entre ambos.</p>
+  <p class="body">Se escogió esta opción porque aborda la primera decisión de despliegue que se enfrenta al pasar de una aplicación de clase a un entorno de producción, y porque la segunda parte del enunciado, la conectividad, obliga a decir lo que un prompt vago suele pasar por alto.</p>
+
+  <h2 class="level2">4.2 · Qué Se Entrega</h2>
+
+  <p class="l4"><strong>b) El Prompt Malo.</strong> Transcrito literal, como lo escribiría un compañero con prisa: una línea, sin contexto y sin formato.</p>
+  <div class="prompt">explícame por qué en una aplicación web el servidor web y el servidor de base de datos van separados</div>
+  <p class="body">No es absurdo a propósito: es el encargo que uno manda a las once de la noche, y por eso sirve como contraste. Si el prompt malo fuera deliberadamente disparatado, el análisis no valdría nada.</p>
+
+  <p class="l4"><strong>c) El Prompt Bueno.</strong> Transcrito literal, con los seis elementos marcados entre corchetes.</p>
+  <div class="prompt">[ROL] Actúas como un ingeniero de software con experiencia en despliegue y operación de aplicaciones web.
+[TAREA] Explícame por qué en una aplicación web se separa el servidor web del servidor de base de datos y qué implica esa separación para la conectividad entre ambos.
+[CONTEXTO] Soy estudiante de séptimo semestre de Ingeniería de Sistemas. He hecho aplicaciones web que corren en un solo servidor, con la base de datos en el mismo equipo, y no entiendo por qué en entornos de producción los separan.
+[FORMATO] Empieza con una respuesta directa de máximo tres líneas. Después una tabla de tres columnas: qué cambia con la separación, qué gana, qué cuesta. Termina explicando el papel de la conexión entre ambos servidores.
+[RESTRICCIONES] No nombres tecnologías comerciales concretas. Máximo 300 palabras. Distingue entre lo que es consenso de la disciplina y lo que es tu interpretación, marcando con «(mi interpretación)».
+[VERIFICACIÓN] Cierra diciendo qué afirmaciones debería yo confirmar en un libro antes de darlas por buenas y qué información adicional necesitarías tú para responder con más precisión.</div>
+
+  <p class="l4"><strong>d) Las Dos Respuestas, Recortadas.</strong> Ambas se generaron con la herramienta opencode, modelo deepseek-v4-flash, el 23 de agosto de 2026. Se aplicó la regla del recorte: máximo 200 palabras por respuesta, el texto va tal como salió, los cortes se marcan con […], se conserva el inicio y el fragmento que se comenta, y las respuestas se separan de la redacción propia en bloques de cita, con la misma fuente del documento (Universidad Simón Bolívar, 2026).</p>
+
+  <p class="body"><span class="label">Respuesta al prompt malo.</span> Recorte de 63 palabras.</p>
+  <div class="ai">Claro. Te lo explico simple: un servidor web y un servidor de base de datos van separados por razones de escalabilidad, seguridad y rendimiento. […] En definitiva, separarlos te da independencia, seguridad y la posibilidad de crecer de forma flexible según lo que necesite cada parte. ¿Quieres que te explique cómo se conectan en un caso real como Node.js, Python o el que uses?</div>
+
+  <p class="body"><span class="label">Respuesta al prompt bueno.</span> Recorte de 136 palabras. Se omitió la tabla de tres columnas que la respuesta incluyó en el tramo central.</p>
+  <div class="ai">Tu intuición es correcta: en un solo servidor todo se conecta por memoria local, pero en producción se separan por arquitectura, no por capricho. La separación convierte la base de datos en un recurso independiente que crece, se protege y se escala por sí solo. Eso exige que la conexión entre ambos deje de ser gratuita y pase a ser una parte del sistema que hay que diseñar. […] La conexión es el punto crítico de la separación: es lo que une dos procesos que ya no comparten memoria. […] También define cuántas consultas simultáneas soporta la aplicación: si se duplica el servidor web pero la base recibe todas las conexiones, se convierte en el cuello de botella. […] Para responderte con más precisión necesitaría saber si te interesa el porqué de negocio (costo, disponibilidad) o el cómo técnico.</div>
+
+  <p class="l4"><strong>E) Tabla Comparativa de las Dos Respuestas.</strong></p>
+
+  <p class="tablenum">Tabla 1</p>
+  <p class="tabletitle">Comparación entre la Respuesta al Prompt Malo y la Respuesta al Prompt Bueno</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Criterio</th>
+        <th scope="col">Respuesta al prompt malo</th>
+        <th scope="col">Respuesta al prompt bueno</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>¿Responde al encargo o divaga hacia generalidades?</td>
+        <td>Responde, pero como lista de beneficios genéricos (escalabilidad, seguridad, rendimiento). La segunda mitad del encargo, la conectividad, no aparece en ningún momento.</td>
+        <td>Responde a las dos partes. Primero el porqué de la separación y luego la conexión como punto crítico: «es lo que une dos procesos que ya no comparten memoria».</td>
+      </tr>
+      <tr>
+        <td>¿Sirve para tomar alguna decisión concreta?</td>
+        <td>No. Queda en divulgación; no indica cuándo conviene separar ni qué se compromete al hacerlo.</td>
+        <td>Sí. Da criterios accionables: la conexión hay que diseñarla (dirección, puerto, autenticación, cifrado) y advierte del cuello de botella cuando la base recibe todas las conexiones simultáneas.</td>
+      </tr>
+      <tr>
+        <td>¿Tuvo en cuenta restricciones del contexto?</td>
+        <td>No había contexto que considerar. El prompt no lo daba y la herramienta respondió como si el caso fuera cualquiera.</td>
+        <td>Sí. Partió del caso declarado («en un solo servidor todo se conecta por memoria local») y acotó la respuesta al entorno de producción.</td>
+      </tr>
+      <tr>
+        <td>¿Reconoce algún límite o incertidumbre?</td>
+        <td>No. Afirma con certeza y no marca ninguna afirmación como opinión.</td>
+        <td>Sí. Marcó «(mi interpretación)» en dos puntos, pidió confirmar conceptos en un libro y preguntó qué información le falta.</td>
+      </tr>
+      <tr>
+        <td>¿El formato es aprovechable tal como llegó?</td>
+        <td>No. Es un párrafo corrido con una metáfora al inicio; hay que releerlo para extraer los motivos.</td>
+        <td>En parte. Llegó estructurado: frase directa, tabla de tres columnas (omitida en el recorte por el límite) y cierre. La tabla llegó como texto plano con barras, de modo que hubo que normalizarla.</td>
+      </tr>
+      <tr>
+        <td>¿Qué habría que verificar antes de citarla?</td>
+        <td>Todo, porque no distingue consenso de opinión y no da pistas para confirmar ninguna afirmación.</td>
+        <td>Los puntos que la propia respuesta marcó como interpretación y los conceptos que pidió confirmar en un libro: conexión, agrupación de conexiones e impacto de la latencia.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Elaboración propia a partir de las respuestas recortadas en el literal d.</p>
+
+  <p class="l4"><strong>F) Análisis por Elemento del Prompt.</strong></p>
+
+  <p class="tablenum">Tabla 2</p>
+  <p class="tabletitle">Efecto de Cada Elemento del Prompt Bueno sobre la Respuesta</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Elemento</th>
+        <th scope="col">Qué se agregó en el prompt bueno</th>
+        <th scope="col">Qué cambió en la respuesta</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Rol</td>
+        <td>Ingeniero de software con experiencia en despliegue y operación.</td>
+        <td>La respuesta subió de registro: habla de memoria local, de recursos que crecen y se escalan, de conexiones y de cuello de botella. Sin rol, la respuesta al prompt malo se quedó en divulgación, con la metáfora del restaurante.</td>
+      </tr>
+      <tr>
+        <td>Tarea</td>
+        <td>Dos verbos con sus objetos: el porqué de la separación y lo que implica para la conectividad entre ambos.</td>
+        <td>Es el cambio de fondo. La respuesta dejó de ser una lista de ventajas y convirtió la conexión entre servidores en el eje del texto. Con el prompt malo ese tema no existía.</td>
+      </tr>
+      <tr>
+        <td>Contexto</td>
+        <td>Estudiante de séptimo semestre, con aplicaciones que corren en un solo servidor y que no entiende por qué en producción los separan.</td>
+        <td>La respuesta partió del punto de partida declarado en el contexto («en un solo servidor todo se conecta por memoria local») y no gastó espacio en lo que el estudiante ya sabía.</td>
+      </tr>
+      <tr>
+        <td>Formato</td>
+        <td>Respuesta directa de máximo tres líneas, luego una tabla de tres columnas y un cierre con el papel de la conexión.</td>
+        <td>La respuesta llegó con estructura: abrió con una frase directa y, en el tramo que el recorte omitió, entregó la tabla pedida. Sin esa petición, llegaba un párrafo corrido.</td>
+      </tr>
+      <tr>
+        <td>Restricciones</td>
+        <td>No nombrar tecnologías comerciales, máximo 300 palabras y marcar con «(mi interpretación)» lo que no sea consenso.</td>
+        <td>La respuesta no propuso productos concretos y etiquetó los puntos que eran interpretación suya. La respuesta al prompt malo terminó ofreciendo Node.js o Python, es decir, tecnología comercial.</td>
+      </tr>
+      <tr>
+        <td>Verificación</td>
+        <td>Cerrar indicando qué debería confirmarse en un libro y qué información le falta a la herramienta.</td>
+        <td>La respuesta cerró pidiendo información faltante (el porqué de negocio o el cómo técnico) y qué confirmar en un libro, en lugar de despedirse con una oferta de seguir hablando, que fue lo que hizo la respuesta al prompt malo.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Elaboración propia.</p>
+
+  <p class="body">El elemento que produjo el mayor cambio fue la tarea: la pregunta del prompt malo era solo «por qué van separados» y la herramienta la leyó como una invitación a listar bondades, mientras que al añadir «y qué implica esa separación para la conectividad entre ambos» el encargo se volvió concreto y la respuesta tuvo que tratar la conexión como objeto de explicación. Ese segundo verbo cambió el tema del texto y no su tono, y por eso pesó más que los demás.</p>
+  <p class="body">El elemento que no cambió prácticamente nada fue el rol, porque el fondo ya lo aportaba la tarea: el tema es un lugar común de la disciplina y la herramienta lo desarrolla bien sin necesidad de una persona, aunque la respuesta buena asumió un tono más de operación. La diferencia entre las dos respuestas se explica por la tarea, el contexto y la verificación, mientras que el rol solo afinó el estilo. La guía advierte que no todos los elementos pesan igual en cada encargo, y en este caso fue el que menos pesó.</p>
+
+  <p class="l4"><strong>G) Cierre Reflexivo.</strong></p>
+  <p class="body">La próxima vez se pedirán el formato y las restricciones desde el primer mensaje y no se aceptará la primera respuesta como definitiva, pues se la tratará como hipótesis y se le indicará a la herramienta qué estuvo mal para iterar. Se escribirá el contexto aunque parezca que sobra, porque aquí fue lo que ancló la respuesta al caso concreto, y tampoco se pedirán referencias, sino pistas para buscarlas. Lo que la herramienta no pudo hacer por el autor fue decidir qué tema escoger, juzgar cuál respuesta servía y sostener ese juicio con argumentos, y eso no se delega: es el criterio que la guía califica.</p>
+
+  <div class="pagebreak"></div>
+
+  <h1 class="level1">6 · Preguntas Individuales</h1>
+
+  <p class="body">La sección 6 de la guía plantea seis preguntas sobre los conceptos fundamentales de la materia, cada una con todos sus literales en orden. El marco de referencia de todas las respuestas es el libro <em>Fundamentals of Software Architecture</em> de Richards y Ford (2020), cuyos apartados se transcriben tal como aparecen en el original allí donde la guía exige sustentar con una fuente (Universidad Simón Bolívar, 2026). El resto de los apartados se desarrolla sobre ese marco, sin repetir la autoría en cada párrafo.</p>
+
+  <h2 class="level2">Pregunta 1 · Arquitectura de Software: La Frontera</h2>
+
+  <p class="l4"><strong>a) La Definición del Autor.</strong> La arquitectura de software se define en el libro como el conjunto que resulta de combinar la estructura del sistema con las condiciones que este debe soportar: «software architecture consists of the structure of the system … combined with architecture characteristics (“-ilities”) the system must support, architecture decisions, and finally design principles» (Richards y Ford, 2020). Con otras palabras, no es un dibujo ni un documento sino un conjunto de decisiones sobre cuatro ejes: la estructura (el estilo en que se organiza el sistema), las características que debe soportar (los atributos de calidad), las decisiones que fijan sus reglas de construcción, por ejemplo que solo las capas de negocio y de servicios accedan a la base de datos, y los principios de diseño que guían al equipo sin imponerle una regla dura. La propia definición no es estática: toda arquitectura resulta de su contexto, y la misma elección puede ser acertada en un entorno y equivocada en otro.</p>
+
+  <p class="l4"><strong>b) Tabla de Arquitectura, Diseño Detallado e Implementación.</strong> Como se muestra en la Tabla 3, cada nivel de trabajo decide cosas distintas y en momentos distintos.</p>
+
+  <p class="tablenum">Tabla 3</p>
+  <p class="tabletitle">Qué Decide y Cuándo Se Decide Cada Nivel de Trabajo</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Nivel</th>
+        <th scope="col">Qué decide</th>
+        <th scope="col">Cuándo se decide</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Arquitectura</td>
+        <td>Qué estructura adopta el sistema, qué características de calidad debe soportar y qué reglas de construcción rigen su desarrollo.</td>
+        <td>Al inicio del proyecto, antes de programar: define el marco para el resto de las decisiones.</td>
+      </tr>
+      <tr>
+        <td>Diseño detallado</td>
+        <td>Cómo se organizan los componentes dentro de la arquitectura elegida: módulos, clases y soluciones localizadas.</td>
+        <td>Durante la planeación de cada módulo o iteración: vive dentro de la arquitectura.</td>
+      </tr>
+      <tr>
+        <td>Implementación</td>
+        <td>Detalles locales del código: algoritmos, nombres, formatos y tecnologías puntuales dentro de las reglas fijadas.</td>
+        <td>Durante el desarrollo, en cada tarea concreta.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tablenote"><span class="notalabel">Nota.</span> El diseño vive dentro de la arquitectura y la implementación se guía por las decisiones y los principios fijados, de acuerdo con el marco del literal a.</p>
+
+  <p class="l4"><strong>c) Una Decisión Cara de Revertir y una Barata.</strong> Una decisión arquitectónica cara de revertir es elegir que el sistema se construya como un monolito por capas desplegado en una sola unidad junto con su base de datos, porque el estilo por capas escala poco y, cuando el sistema crece, cambiar esa estructura obliga a rediseñar el despliegue y a reescribir código que ya funciona. Una decisión de implementación barata de cambiar es, en cambio, el nombre de una variable o el orden de los campos de un formulario: se modifica en minutos y casi nada depende de ello. Lo que separa a una de la otra no es la dificultad técnica sino cuántas decisiones dependen de cada elección, que es lo que expresa la noción de connascencia: dos componentes están en connascencia si un cambio en uno obliga a modificar al otro para conservar la corrección del sistema. La decisión cara arrastra a muchas otras; la barata, a casi ninguna.</p>
+
+  <p class="l4"><strong>d) Cierre.</strong> Un sistema puede estar bien programado y mal arquitecturado porque la calidad del código es local y la arquitectura es sistémica: sus cuatro ejes, la estructura, las características, las decisiones y los principios, se juzgan en el conjunto y no mirando una línea. Un equipo puede escribir clases correctas y eficientes y, a la vez, elegir una estructura que no soporta la escala esperada. El código se ve; la arquitectura se decide, y por eso una buena programación no garantiza una buena arquitectura.</p>
+
+  <h2 class="level2">Pregunta 2 · Atributos de Calidad: Lo Que No Se Puede Tener Todo</h2>
+
+  <p class="l4"><strong>a) Qué Es un Atributo de Calidad y Su Diferencia con un Requisito Funcional.</strong> Las características de arquitectura son los criterios de éxito del sistema: «The architecture characteristics define the success criteria of a system, which is generally orthogonal to the functionality of the system» (Richards y Ford, 2020). Describen, entonces, cómo debe comportarse el sistema y no qué debe hacer, y esa es la diferencia con los requisitos funcionales. Un atributo llega a ser una característica de arquitectura cuando cumple tres condiciones: especifica una consideración de diseño ajena al dominio, influye en algún aspecto estructural del diseño y es crítico para el éxito de la aplicación.</p>
+
+  <p class="l4"><strong>b) Cinco Atributos y la Pregunta para Dimensionarlos.</strong> Como se muestra en la Tabla 4, para cada atributo se formula una pregunta que permite al cliente dimensionar su importancia.</p>
+
+  <p class="tablenum">Tabla 4</p>
+  <p class="tabletitle">Atributos de Calidad y Preguntas al Cliente para Dimensionar Cada Uno</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Atributo</th>
+        <th scope="col">Pregunta al cliente</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Escalabilidad</td>
+        <td>¿Cuántos usuarios simultáneos debe soportar el sistema en la semana más cargada del semestre y cuánto puede crecer esa cifra antes de que el crecimiento sea un problema?</td>
+      </tr>
+      <tr>
+        <td>Disponibilidad</td>
+        <td>¿Cuánto tiempo puede estar caído el sistema en un día de matrículas sin que se considere un incidente grave?</td>
+      </tr>
+      <tr>
+        <td>Seguridad</td>
+        <td>¿Cuál es el dato más sensible del sistema y qué ocurre si se filtra una contraseña o el registro de un estudiante?</td>
+      </tr>
+      <tr>
+        <td>Rendimiento</td>
+        <td>¿Cuál es el tiempo de respuesta aceptable para la consulta más usada y en qué momento un retraso empieza a molestar al usuario?</td>
+      </tr>
+      <tr>
+        <td>Mantenibilidad</td>
+        <td>¿Con qué frecuencia cambiarán las reglas de negocio y qué tan urgente es aplicarlas sin reescribir el sistema?</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Las preguntas se elaboraron sobre la noción de atributo desarrollada en el literal a, aplicada a los atributos operativos de la clasificación del libro.</p>
+
+  <p class="l4"><strong>c) Dos Atributos Que Compiten: Escalabilidad Frente a Simplicidad.</strong> Escalabilidad y simplicidad compiten porque casi todo lo que se gana en la primera se paga en la segunda. El estilo por capas es barato, conocido y fácil de mantener, pero al ser un monolito único solo escala hasta cierto punto; para escalar hay que separar responsabilidades en servicios desplegables de manera independiente, y eso introduce infraestructura, red y complejidad operativa que antes no existían. Un caso concreto: el portal de préstamos de la biblioteca universitaria, construido como monolito por capas, recibe el pico de solicitudes del inicio de semestre y su servidor se satura; duplicar los servidores de aplicación no resuelve el problema porque el sistema sigue siendo un solo quantum con una base de datos única como cuello de botella. La salida responsable obliga a repartir el sistema y a sacrificar la simplicidad que hacía barata su operación, porque cada atributo que se gana se paga con complejidad de diseño.</p>
+
+  <p class="l4"><strong>d) Por Qué No Existe «la Mejor Arquitectura» en Abstracto.</strong> No existe porque los criterios de éxito dependen del problema y del contexto: no hay respuestas correctas en arquitectura, solo costosas, y cada característica que se suma añade complejidad al diseño. La misma decisión puede ser un acierto para un sistema y un error para otro, según las restricciones y las renuncias que se acepten.</p>
+
+  <h2 class="level2">Pregunta 3 · Arquitectura Web: Nivel No Es Lo Mismo Que Capa</h2>
+
+  <p class="l4"><strong>a) El Esquema Cliente-servidor.</strong> El esquema cliente-servidor separa la funcionalidad técnica entre el frontend y el backend: «A fundamental style in architecture separates technical functionality between frontend and backend, called a two-tier, or client/server, architecture» (Richards y Ford, 2020). El cliente asume la presentación y la interacción con el usuario, mientras que el servidor asume el procesamiento y el cuidado de los datos; en la web moderna el navegador se conecta al servidor web y este al servidor de base de datos, con responsabilidades separadas en cada extremo.</p>
+
+  <p class="l4"><strong>b) Arquitectura de Dos, Tres y N Niveles.</strong> En la arquitectura de dos niveles, o cliente-servidor, la presentación corre en el cliente y el resto en el servidor; aunque la base de datos esté físicamente separada, se sigue contando como dos niveles cuando el servidor web y el de datos corren en la misma clase de máquina dentro del centro de cómputo. La de tres niveles agrega una separación más: un nivel de presentación en el navegador, un nivel de aplicación manejado por un servidor de aplicaciones y un nivel de base de datos con un servidor de datos. De ahí se generaliza a n niveles, sumando niveles de despliegue a medida que se separan más tipos de servidor. Para una aplicación web universitaria, el despliegue de tres niveles resulta así: el navegador del estudiante es el nivel de presentación, un servidor web aloja la lógica de negocio y el acceso a datos, y un servidor de base de datos guarda los registros de matrículas, cursos y notas; la comunicación cruza la red entre nivel y nivel, y cada uno se actualiza y se dimensiona por separado.</p>
+
+  <p class="l4"><strong>c) Nivel Frente a Capa.</strong> El nivel es una unidad de despliegue físico y la capa, una organización del código. La topología física del estilo en capas admite variantes: una junta presentación, negocio y persistencia en una sola unidad con la base de datos externa; otra separa la presentación en su propia unidad; y una tercera despliega todas las capas, incluida la base embebida, en un único servidor, cosa que conviene para aplicaciones pequeñas. Por eso un sistema puede tener tres capas de código en carpetas separadas y correr entero en un solo servidor: la separación existe en el código y da mantenibilidad, pero no da tolerancia a fallos ni escalabilidad, porque el nivel físico es único. Confundir capa con nivel lleva a dimensionar mal la infraestructura y a asegurarle al cliente que el sistema es robusto por estar «en tres niveles» cuando todo compite por la misma máquina, que es el error que la guía marca como el más frecuente del curso.</p>
+
+  <p class="l4"><strong>d) Escalabilidad Cuando los Datos y la Lógica Comparten Nivel.</strong> Cuando la capa de datos y la de lógica comparten el mismo nivel físico y llega un pico de usuarios, el procesamiento y los accesos a datos compiten por la misma CPU, la misma memoria y el mismo disco, y el nivel se satura como un todo: al ser un monolito único, la aplicación solo puede escalar hasta cierto punto y no hay forma de crecer solo el procesamiento o solo los datos. Escalar el nivel exigiría separar la lógica de los datos en niveles independientes, que es exactamente la distinción que se pierde cuando capa y nivel se confunden.</p>
+
+  <h2 class="level2">Pregunta 4 · Separación en Capas: Qué Gana y Qué Cuesta</h2>
+
+  <p class="l4"><strong>a) Responsabilidades de Cada Capa.</strong> Cada capa tiene una responsabilidad definida: «the presentation layer would be responsible for handling all user interface and browser communication logic, whereas the business layer would be responsible for executing specific business rules associated with the request» (Richards y Ford, 2020). A esas dos se suman la capa de persistencia, que resuelve el acceso a los datos, y la de base de datos, que administra el motor; el flujo desciende por las capas y cada una actúa como una abstracción del trabajo necesario para satisfacer una petición. La presentación no necesita saber cómo se obtienen los datos, porque solo los muestra en pantalla, y la lógica de negocio los recibe de la persistencia para aplicar sus reglas y devolver el resultado hacia arriba.</p>
+
+  <p class="l4"><strong>b) La Operación de Registrar un Préstamo.</strong> Registrar el préstamo de un libro en una biblioteca universitaria, con la separación en capas, ocurre en este orden: la presentación recibe del formulario los datos del préstamo (estudiante, ejemplar y fecha) y valida que no vengan vacíos; la lógica de negocio verifica las reglas, que el ejemplar esté disponible, que el estudiante no tenga sanciones y que la política de préstamos permita la entrega; el acceso a datos ejecuta la consulta que registra el préstamo y actualiza la disponibilidad del ejemplar; y la presentación confirma la operación en pantalla. La condición que habilita un préstamo no está en el formulario ni en la consulta SQL sino en la capa de negocio, y si apareciera en cualquiera de esos otros lugares, la separación estaría rota.</p>
+
+  <p class="l4"><strong>c) Dos Desventajas Reales de la Separación en Capas.</strong> La separación en capas también se paga, y con dos costos reales. Primero pierde agilidad: la separación por responsabilidades facilita organizar roles, pero un dominio de negocio queda repartido por todas las capas y aplicar un cambio atraviesa varias de ellas, de modo que responder con rapidez cuesta más. Segundo, aparece el anti-patrón del sumidero de arquitectura: muchas peticiones atraviesan todas las capas en simple passthrough, sin lógica de negocio alguna, y cada salto consume tiempo de procesamiento e instanciación de objetos que se desaprovecha, en perjuicio de la memoria y del rendimiento. Ninguna de las dos invalida la separación: la convierten en una decisión con precio y no en un regalo.</p>
+
+  <p class="l4"><strong>d) Cambiar de Interfaz o Cambiar de Motor de Datos.</strong> Por el aislamiento de capas, cambiar la interfaz de escritorio a móvil toca únicamente la presentación: se puede reemplazar toda una capa de interfaz sin impactar a las demás mientras los contratos entre capas se mantengan. Cambiar de motor de base de datos, en cambio, toca la capa de acceso a datos y la de base de datos, porque cambian las consultas, el mapeo y la configuración de conexión, mientras que la lógica de negocio y la presentación permanecen intactas si la interfaz de la capa de acceso no varía. En el primer caso se toca la presentación y el resto no; en el segundo, el acceso a datos y el resto no, y ambas operaciones son posibles precisamente porque cada capa está aislada.</p>
+
+  <h2 class="level2">Pregunta 5 · MVC: El Flujo Completo</h2>
+
+  <p class="l4"><strong>a) Responsabilidades del Modelo, la Vista y el Controlador.</strong> El Modelo-Vista-Controlador es tratado como un patrón de diseño y no como una arquitectura de despliegue: «the Model-View-Controller design pattern matches with this architectural pattern, making it easy for developers to understand» (Richards y Ford, 2020). En ese patrón, el modelo concentra los datos y las reglas que operan sobre ellos, la vista produce lo que el usuario ve a partir de datos ya resueltos, y el controlador recibe la entrada del usuario, la valida y orquesta la interacción entre el modelo y la vista.</p>
+
+  <p class="l4"><strong>b) Recorrido Completo de una Petición.</strong> El recorrido comienza cuando el usuario hace clic en consultar el préstamo de un libro: el navegador envía la petición, el enrutador determina qué controlador la atiende, el controlador valida los datos, solicita al modelo la información del préstamo, recibe los objetos ya resueltos y selecciona la vista; la vista recibe únicamente esos datos y produce el HTML, sin consultar nada por su cuenta, y el navegador renderiza el resultado. La última parte importa: la vista no consulta, y si lo hiciera, el patrón estaría roto.</p>
+
+  <p class="l4"><strong>c) Por Qué MVC No Es Lo Mismo Que la Arquitectura en Capas.</strong> MVC y la arquitectura en capas no son lo mismo, y la diferencia está en el plano donde actúa cada uno. Las capas separan responsabilidades en la organización del código (presentación, negocio y acceso a datos), se concretan en niveles de despliegue y su alcance es todo el sistema; MVC, en cambio, separa responsabilidades dentro de una capa, ordena el interior de la presentación y divide el trabajo entre modelo, vista y controlador, que es la razón por la cual el libro lo llama patrón de diseño y no arquitectura. En una frase: las capas responden a cómo se organiza la aplicación completa, y MVC a cómo fluye una petición dentro de esa organización.</p>
+
+  <p class="l4"><strong>d) Un Sistema Donde Conviven MVC y Tres Capas.</strong> Un sistema de matrículas universitario puede ser una arquitectura en tres capas (presentación, negocio y acceso a datos) desplegada en tres niveles y, al mismo tiempo, implementar MVC dentro de la capa de presentación: el controlador recibe la petición del navegador, el modelo es la proyección del estudiante y de sus cursos, y la vista es la plantilla que se renderiza. Las capas separan los niveles de responsabilidad del sistema y MVC ordena la conversación entre la interfaz, el estado de la vista y las reglas de presentación; cada uno resuelve un problema de un tamaño distinto y por eso conviven.</p>
+
+  <h2 class="level2">Pregunta 6 · Estilo, Patrón Arquitectónico y Patrón de Diseño</h2>
+
+  <p class="l4"><strong>a) Definición de Cada Término.</strong> El libro distingue los tres términos por su alcance. El estilo arquitectónico es «the overarching structure of how the user interface and backend source code are organized … and how that source code interacts with a datastore» (Richards y Ford, 2020), es decir, el nivel más general, donde se decide si el sistema será por capas, micronúcleo, microservicios u otro. El patrón arquitectónico es una estructura de diseño de nivel más bajo que forma soluciones concretas dentro de un estilo, «lower-level design structures that help form specific solutions within an architecture style» (Richards y Ford, 2020), como lograr alta escalabilidad o alto rendimiento sobre un conjunto de operaciones o entre servicios. El patrón de diseño es el de alcance más reducido, una solución con nombre para un problema de colaboración entre pocas clases u objetos; el libro lo ejemplifica con el Método Plantilla, «which allows parent classes to define workflow that can be overridden in child classes» (Richards y Ford, 2020).</p>
+
+  <p class="l4"><strong>b) Orden por Alcance y Su Justificación.</strong> El criterio para ordenarlos es cuánta parte del sistema afecta cada decisión: el estilo afecta al sistema completo y a su despliegue y por eso va primero; el patrón arquitectónico afecta a la organización de un subsistema o a la forma de resolver un problema dentro del estilo, y va segundo; y el patrón de diseño afecta a la relación entre unas pocas clases u objetos, y va al final. Ese orden lo respalda la relación de contenencia con que se definen en el literal a: el estilo marca el marco, el patrón arquitectónico forma soluciones dentro de ese marco y el patrón de diseño resuelve detalles de la implementación dentro de esas soluciones.</p>
+
+  <p class="l4"><strong>c) Un Ejemplo de Cada uno.</strong> Microservicios es un estilo: organiza todo el sistema como servicios desplegables de manera independiente, cada uno con su propia base de datos, y resuelve el problema de escalar y evolucionar cada parte por su cuenta. La mensajería asíncrona entre servicios es un patrón arquitectónico: desacopla operaciones dentro de un estilo distribuido y resuelve el problema de ganar rendimiento cuando un servicio depende de la respuesta de otro. El Método Plantilla es un patrón de diseño: define en la clase padre un flujo reutilizable que las clases hijas pueden sobrescribir, y resuelve el problema de variar un algoritmo sin duplicarlo.</p>
+
+  <p class="l4"><strong>d) Por Qué Confundir los Términos No Es Solo un Error de Vocabulario.</strong> Llamar patrón de diseño a una arquitectura completa, o al revés, no es solo un error de vocabulario sino una señal de que no se identificó el nivel de decisión en el que se trabaja. Los tres términos están ordenados por el alcance de la decisión, y confundirlos supone tratar una decisión que afecta a todo el sistema como un detalle de unas pocas clases o, a la inversa, atribuir a un detalle local un alcance de sistema. Decir que el sistema usa el patrón de diseño microservicios no transmite una decisión de estructura general, y decir que la arquitectura es el patrón Singleton confunde los dos niveles; quien no distingue el alcance de una decisión no puede discutirlo, y ese es justamente el tipo de conversación que se evalúa en esta materia.</p>
+
+  <div class="pagebreak"></div>
+
+  <h1 class="level1">7 · Puntos en Pareja</h1>
+
+  <p class="body">La guía organiza esta parte para dos integrantes como máximo. Este trabajo lo realiza una sola persona, de modo que los dos puntos se desarrollan de manera individual y no se consigna un segundo nombre. Las dos definiciones del primer punto y la decisión del segundo se apoyan en los libros físicos del Sistema de Bibliotecas cuyas portadas y contras se anexan al final (Universidad Simón Bolívar, 2026).</p>
+
+  <h2 class="level2">Punto Grupal 1 · Dos Autores, una Definición Propia</h2>
+
+  <p class="l4"><strong>a) Las Dos Definiciones.</strong> Se consultaron dos libros físicos distintos del Sistema de Bibliotecas. El primero es <em>Fundamentals of Software Architecture</em>, de Richards y Ford (2020), donde la arquitectura se define como el conjunto que combina la estructura del sistema con las condiciones que este debe soportar: «software architecture consists of the structure of the system … combined with architecture characteristics (“-ilities”) the system must support, architecture decisions, and finally design principles». El segundo es <em>Ingeniería de software: un enfoque práctico</em>, de Pressman y Maxim (2020), donde la arquitectura de software se presenta como el conjunto de decisiones significativas sobre la organización del sistema, la selección de los elementos estructurales y de sus interfaces, y el comportamiento que se deriva de la colaboración entre esos elementos. En ninguno de los dos casos se anota el número de página, porque no se fotografió la página exacta del ejemplar; la referencia se conserva con autor y año.</p>
+
+  <p class="l4"><strong>b) Contraste entre las Dos.</strong> La de Richards y Ford (2020) es formal y enumerativa: descompone la arquitectura en cuatro partes identificables, estructura, características, decisiones y principios, y habla de cualquier sistema, sin atarse a un dominio. La de Pressman y Maxim (2020) es más funcional: se centra en las decisiones significativas, en los elementos y en sus interfaces, y en el comportamiento que emerge de la colaboración. Lo que una incluye y la otra no: la primera suma los criterios de éxito, los atributos de calidad, como parte de la definición, cosa que la segunda no hace explícita en esa formulación; la segunda subraya la idea de decisión significativa y de colaboración entre elementos, que en la primera queda repartida entre decisiones y principios. Coinciden en que la arquitectura no es código sino organización; se diferencian en que una es explícita sobre los criterios de éxito y la otra sobre la interdependencia de los elementos.</p>
+
+  <p class="l4"><strong>c) Definición Propia y Su Justificación.</strong> Tomando de Richards y Ford (2020) la estructura y los criterios de éxito, y de Pressman y Maxim (2020) la idea de decisión significativa y de colaboración, la definición propia queda así: la arquitectura de software es el conjunto de decisiones de organización que fija la estructura del sistema, define los criterios de éxito que este debe sostener y establece las reglas y los principios con que se construye, de modo que el comportamiento del conjunto dependa de la colaboración entre sus elementos y no de cada línea de código. De Richards y Ford se toma la estructura y los criterios de éxito porque acotan el alcance de la decisión y evitan reducir la arquitectura a un diagrama; de Pressman y Maxim se toma la idea de decisión significativa y de colaboración, porque explica por qué esas decisiones pesan sobre todo el sistema y no sobre un detalle local.</p>
+
+  <p class="l4"><strong>d) Datos de la Ficha y Fotografías.</strong> La ficha de biblioteca diligenciada se adjunta en el Anexo A, y las fotografías de la portada y de la contraportada de cada uno de los dos libros se incluyen en el Anexo C. El registro corresponde a la visita hecha dentro de la ventana del 14 al 21 de agosto de 2026, con los cuatro códigos de barras que constan en la ficha.</p>
+
+  <h2 class="level2">Punto Grupal 2 · Decidir y Sostener la Decisión</h2>
+
+  <p class="body">El caso que se resuelve es el siguiente: la facultad necesita un sistema web para reservar los equipos de los laboratorios de cómputo, con unos 1.200 estudiantes y 40 docentes; las reservas se concentran en las dos primeras semanas de cada semestre y el resto del tiempo el uso es bajo; el equipo de desarrollo son dos personas; la universidad ya tiene servidores propios y no quiere pagar servicios en la nube; y el sistema debe integrarse con el sistema de autenticación institucional existente.</p>
+
+  <p class="l4"><strong>a) Atributos de Calidad Priorizados.</strong> Como se muestra en la Tabla 5, los atributos se ordenan según su peso en el enunciado.</p>
+
+  <p class="tablenum">Tabla 5</p>
+  <p class="tabletitle">Atributos de Calidad del Caso, Ordenados por Prioridad</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Atributo</th>
+        <th scope="col">Prioridad</th>
+        <th scope="col">Justificación con datos del enunciado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Escalabilidad</td>
+        <td>Alta</td>
+        <td>Las reservas se concentran en las dos primeras semanas de cada semestre y son 1.200 estudiantes; la demanda de ese lapso es muy superior a la del resto del año.</td>
+      </tr>
+      <tr>
+        <td>Disponibilidad</td>
+        <td>Alta</td>
+        <td>Una caída justo en las dos semanas de reservas afecta a estudiantes y docentes; fuera de ese lapso la exigencia baja.</td>
+      </tr>
+      <tr>
+        <td>Seguridad</td>
+        <td>Alta</td>
+        <td>Debe integrarse con la autenticación institucional existente y distinguir roles entre estudiante, docente y administrador.</td>
+      </tr>
+      <tr>
+        <td>Mantenibilidad</td>
+        <td>Alta</td>
+        <td>El equipo de desarrollo son dos personas: menos piezas significa menos riesgo de errores y menos trabajo de operación.</td>
+      </tr>
+      <tr>
+        <td>Economía</td>
+        <td>Alta</td>
+        <td>La universidad tiene servidores propios y no quiere pagar servicios en la nube, así que la solución debe correr en hardware existente.</td>
+      </tr>
+      <tr>
+        <td>Usabilidad</td>
+        <td>Media</td>
+        <td>Son 1.200 estudiantes reservando; la interfaz debe ser simple, pero el pico acotado no justifica una aplicación compleja.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tablenote"><span class="notalabel">Nota.</span> El orden responde al peso de los datos del enunciado: el pico concentrado manda sobre la escalabilidad y la disponibilidad, y el equipo pequeño y la restricción de no pagar nube mandan sobre la mantenibilidad y la economía.</p>
+
+  <p class="l4"><strong>b) Dos Alternativas de Arquitectura.</strong> Como se muestra en la Tabla 6, cada alternativa favorece un atributo y sacrifica otro.</p>
+
+  <p class="tablenum">Tabla 6</p>
+  <p class="tabletitle">Dos Alternativas de Arquitectura para el Caso</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Alternativa</th>
+        <th scope="col">En qué consiste</th>
+        <th scope="col">Qué atributo favorece</th>
+        <th scope="col">Qué sacrifica</th>
+        <th scope="col">Cuándo sería mala decisión</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1. Monolito por capas</td>
+        <td>Aplicación en capas desplegada en un servidor propio, con la base de datos relacional en el mismo servidor y una interfaz web ligera.</td>
+        <td>Simplicidad, mantenibilidad y economía.</td>
+        <td>Escalabilidad horizontal y tolerancia a fallos: hay un solo punto de falla.</td>
+        <td>Si el pico de dos semanas supera la capacidad de un solo servidor o si la facultad exige que siga arriba aun cayendo esa máquina.</td>
+      </tr>
+      <tr>
+        <td>2. Dos niveles</td>
+        <td>La misma lógica por capas desplegada en dos máquinas, servidor de aplicación y servidor de base de datos, con caché para el pico.</td>
+        <td>Escalabilidad y disponibilidad: la capa de aplicación se puede duplicar y una máquina puede asumir si la otra falla.</td>
+        <td>Más infraestructura (un servidor más) y más complejidad operativa.</td>
+        <td>Si el presupuesto de hardware es mínimo, si el equipo de dos personas no puede operar dos servidores, o si el uso del año es tan bajo que la segunda máquina queda ociosa casi todo el tiempo.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Se descartan las arquitecturas distribuidas tipo microservicios, por ser la opción que la guía señala como sobre-diseño para un equipo pequeño y un dominio de pocos procesos.</p>
+
+  <p class="l4"><strong>c) Elección y Defensa.</strong> Se elige la alternativa 1, el monolito por capas en un servidor propio. Con dos personas y sin presupuesto para la nube, la prioridad es construir y operar un sistema confiable y barato; el estilo por capas es sencillo, conocido y de bajo costo, y el pico, aunque alto, es predecible y acotado a dos semanas. En lugar de repartir el sistema, se escala ese único despliegue durante la ventana de reservas: más memoria y procesador, una caché para las consultas repetidas y, si la demanda lo exige, una copia de la aplicación en una segunda máquina solo en el pico. La decisión reconoce sus renuncias: la escalabilidad es vertical y limitada, hay un único punto de fallo y una caída de esa máquina afecta a todos, por lo que el mantenimiento debe programarse fuera de las dos semanas críticas. Si el pico fuera mayor o constante, la salida sería adoptar lo que ofrece la alternativa 2, separar los niveles y duplicar la aplicación, pero la infraestructura y el costo de esa opción no se justifican hoy para un equipo de dos personas.</p>
+
+  <p class="l4"><strong>d) Decisión del Equipo Frente a la Herramienta.</strong> La misma consulta se hizo a la herramienta opencode, modelo deepseek-v4-flash, el 23 de agosto de 2026. La respuesta se transcribe literal a continuación, con los pasajes más extensos recortados y marcados con […]:</p>
+  <div class="ai">Claro, con gusto te ayudo a diseñar esa arquitectura. Para tu caso yo elegiría una arquitectura de **monolito modular** desplegada en los servidores propios, con una separación clara en componentes lógicos y un frontend que se integra con SSO institucional. […] **Atributos de calidad que tendría en cuenta**. 1. **Coste de infraestructura**: la universidad ya tiene servidores, así que la solución no debe exigir servicios en la nube ni licencias costosas. 2. **Simplicidad y mantenibilidad**: el equipo es de dos personas, así que la complejidad técnica debe ser baja. 3. **Escalabilidad de las reservas**: el pico de carga es enorme en las dos primeras semanas del semestre y casi nulo el resto del año. 4. **Disponibilidad**: el sistema debe estar arriba sobre todo en época de reservas. 5. **Seguridad e integración con identidad institucional**: debe conectar con el SSO existente sin duplicar credenciales y respetar roles (estudiante, docente, administrador). 6. **Concordancia de datos**. 7. **Portabilidad y deuda técnica**. […] **Alternativa A: Monolito modular (backend monolítico + frontend SPA)** […] El frontend es una aplicación de página única que consume una API REST que expone el mismo backend. Se despliega en el servidor propio con una base de datos relacional (PostgreSQL/MySQL). […] **Alternativa B: Microservicios distribuidos** Cada dominio (usuarios, equipos, reservas, notificaciones) es un servicio independiente, cada uno con su propia base de datos […] Se despliega en contenedores (Docker/Kubernetes) sobre el clúster propio. […] **Mi elección y el motivo**. Elegiría la **Alternativa A, el monolito modular**. La razón principal es que tu contexto pide pocas piezas y mucho control: con un equipo de dos personas, los microservicios añaden una complejidad operativa […] que no se traduce en beneficio real. El pico de carga, aunque alto, es de naturaleza predecible y acotada, y puede resolverse mucho más fácil escalando el monolito: subir instancias adicionales del mismo backend o añadir caché y una cola de fondo para los procesos de reserva, incluso habilitando un servidor extra solo durante el pico. […] **Resumen**: por costo, simplicidad, facilidad de integración con el SSO y capacidad de absorber el pico con la infraestructura existente, la arquitectura recomendada es un **monolito modular desplegado en los servidores propios, con base de datos relacional y un frontend SPA**, acompañado de caché y de una cola de procesamiento para los momentos de mayor demanda.</div>
+  <p class="body">La decisión del equipo coincide con la herramienta en lo esencial, porque ambas descartan los microservicios y se quedan con un monolito. Difieren, sin embargo, en un punto concreto. La herramienta recomienda sostener el pico «subiendo instancias adicionales del mismo backend o añadiendo caché y una cola de fondo, incluso habilitando un servidor extra solo durante el pico», y propone a la vez un frontend de aplicación de página única (SPA) con caché y cola de procesamiento. La decisión del equipo es más austera: mantiene una interfaz renderizada en el servidor y solo agrega una segunda máquina en el pico si de verdad se necesita, sin incorporar cola de fondo ni el frontend SPA, porque el equipo es de dos personas y la operación adicional que la herramienta da por hecha no es gratuita. La herramienta también propone, como alternativa, microservicios «en contenedores sobre el clúster propio», lo que exige conocimiento de operación que dos personas no pueden sostener. Por eso se considera que la decisión del equipo es más ajustada al contexto, que es justo lo que la guía marca como criterio para elegir una arquitectura frente a otra (Universidad Simón Bolívar, 2026).</p>
+
+  <div class="pagebreak"></div>
+
+  <h1 class="level1">Uso de IA</h1>
+
+  <p class="body">Esta sección declara el uso de inteligencia artificial en todo el trabajo, como exige la guía. No sustituye al ejercicio de la sección 4, que es un análisis aparte (Universidad Simón Bolívar, 2026).</p>
+
+  <p class="tablenum">Tabla 7</p>
+  <p class="tabletitle">Declaración del Uso de Inteligencia Artificial</p>
+  <table class="apa">
+    <thead>
+      <tr>
+        <th scope="col">Campo</th>
+        <th scope="col">Qué se declara</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Herramienta</td>
+        <td>opencode, modelo deepseek-v4-flash. No se identificó la versión. Consultas realizadas el 23 de agosto de 2026.</td>
+      </tr>
+      <tr>
+        <td>Para qué</td>
+        <td>Redactar y contrastar los prompts de la sección 4, obtener respuestas para analizarlas, contrastar alternativas en el punto grupal 2 y revisar la redacción propia.</td>
+      </tr>
+      <tr>
+        <td>Prompt principal</td>
+        <td>Se transcribe a continuación, tal como se envió a la herramienta. Es el prompt de la sección 4.2c.</td>
+      </tr>
+      <tr>
+        <td>Qué conservó</td>
+        <td>La idea de que la arquitectura combina estructura, características, decisiones y principios; el descarte de los microservicios para un equipo de dos personas; y la estructura por capas como punto de partida.</td>
+      </tr>
+      <tr>
+        <td>Qué corrigió</td>
+        <td>La herramienta añadió un frontend de página única, una cola de procesamiento y un servidor extra para el pico, y propuso tecnologías concretas y un clúster para los microservicios. Se corrigió manteniendo una interfaz renderizada en el servidor y sin cola ni clúster, porque el equipo de dos personas y la restricción de no pagar servicios en la nube no lo justifican; la verificación se hizo contra el libro.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="body"><span class="label">Prompt principal transcrito.</span></p>
+  <div class="prompt">[ROL] Actúas como un ingeniero de software con experiencia en despliegue y operación de aplicaciones web.
+[TAREA] Explícame por qué en una aplicación web se separa el servidor web del servidor de base de datos y qué implica esa separación para la conectividad entre ambos.
+[CONTEXTO] Soy estudiante de séptimo semestre de Ingeniería de Sistemas. He hecho aplicaciones web que corren en un solo servidor, con la base de datos en el mismo equipo, y no entiendo por qué en entornos de producción los separan.
+[FORMATO] Empieza con una respuesta directa de máximo tres líneas. Después una tabla de tres columnas: qué cambia con la separación, qué gana, qué cuesta. Termina explicando el papel de la conexión entre ambos servidores.
+[RESTRICCIONES] No nombres tecnologías comerciales concretas. Máximo 300 palabras. Distingue entre lo que es consenso de la disciplina y lo que es tu interpretación, marcando con «(mi interpretación)».
+[VERIFICACIÓN] Cierra diciendo qué afirmaciones debería yo confirmar en un libro antes de darlas por buenas y qué información adicional necesitarías tú para responder con más precisión.</div>
+
+  <h1 class="level1">Conclusiones</h1>
+
+  <p class="body">El ejercicio de manejo del prompt dejó una primera conclusión: un encargo bien formulado produce una respuesta aprovechable, y la diferencia no está en pedir más sino en precisar el rol, la tarea, el contexto, el formato, las restricciones y la verificación. En este caso la tarea fue el elemento que más cambió el resultado y el rol casi no aportó, lo que confirma que no todos los elementos pesan igual en todos los encargos (Universidad Simón Bolívar, 2026).</p>
+
+  <p class="body">La segunda conclusión es sobre la materia. Los conceptos de la unidad se encadenan y no se entienden por separado: los atributos de calidad condicionan la arquitectura, la arquitectura se concreta en niveles y en capas, y el patrón Modelo-Vista-Controlador organiza el interior de una de esas capas. Confundir nivel con capa, o MVC con capas, lleva a dimensionar mal la infraestructura y a sobre-diseñar sistemas que un equipo pequeño no puede operar. La inteligencia artificial sirve para contrastar, para encontrar pistas y para revisar lo ya escrito, pero no para decidir ni para sostener una decisión; esa parte, que es justo lo que se evalúa, no se delega.</p>
+
+  <h1 class="level1">Referencias</h1>
+  <p class="ref">Bruegge, B., y Dutoit, A. H. (2002). <em>Ingeniería de software orientado a objetos</em>. Prentice Hall.</p>
+  <p class="ref">Pressman, R. S., y Maxim, B. R. (2020). <em>Ingeniería de software: Un enfoque práctico</em> (9.ª ed.). McGraw-Hill.</p>
+  <p class="ref">Richards, M., y Ford, N. (2020). <em>Fundamentals of software architecture: An engineering approach</em>. O'Reilly Media.</p>
+  <p class="ref">Sommerville, I. (2005). <em>Ingeniería del software</em> (7.ª ed.). Pearson Addison-Wesley.</p>
+  <p class="ref">Universidad Simón Bolívar, Facultad de Ingenierías. (2026). <em>La IA como apoyo y el manejo del prompt</em> [Guía de la actividad. Curso Arquitectura de Software, código 5111, docente Oswaldo Enrique Laguado Aguilar].</p>
+
+  <div class="pagebreak"></div>
+
+  <h1 class="level1">Anexos</h1>
+
+  <p class="tablenum">Anexo A</p>
+  <p class="tabletitle">Ficha de Biblioteca Diligenciada</p>
+  <figure class="showimg"><img src="imagenes/Ficha.png" alt="Ficha del Sistema de Bibliotecas. Registro de consulta en sala"></figure>
+  <p class="tablenote"><span class="notalabel">Nota.</span> El registro corresponde a la consulta en sala realizada en el Sistema de Bibliotecas. Consta el programa académico (Ing. Sistemas), el código estudiantil 202413228925 y cuatro códigos de barras de los libros consultados: 018634, 005133, 006969 y 018645.</p>
+
+  <p class="tablenum">Anexo B</p>
+  <p class="tabletitle">Registro de Asistencia a la Biblioteca</p>
+  <p class="body">La asistencia quedó registrada en el control de ingreso de la biblioteca durante la visita a la biblioteca Anita Consuegra, dentro de la ventana del 14 al 21 de agosto de 2026, y la consulta en sala consta en la ficha del Anexo A.</p>
+
+  <p class="tablenum">Anexo C</p>
+  <p class="tabletitle">Fotografías de la Portada y de la Contraportada de los Libros Consultados</p>
+  <p class="body">Se incluyen la portada y la contraportada de cada ejemplar consultado, conforme al registro del Sistema de Bibliotecas; los cuatro libros corresponden a los códigos de barras de la ficha y sus fotografías se presentan en las Figuras 1 a 4.</p>
+
+  <p class="tablenum">Figura 1</p>
+  <p class="tabletitle">Portada y Contraportada de Fundamentals of Software Architecture</p>
+  <figure class="showimg"><img src="imagenes/Fundamentals of Software Architecture.png" alt="Portada de Fundamentals of Software Architecture"></figure>
+  <figure class="showimg"><img src="imagenes/Fundamentals of Software Architecture contra.png" alt="Contraportada de Fundamentals of Software Architecture"></figure>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Richards, M., y Ford, N. (2020). <em>Fundamentals of software architecture: An engineering approach</em>. O'Reilly Media.</p>
+
+  <p class="tablenum">Figura 2</p>
+  <p class="tabletitle">Portada y Contraportada de Ingeniería de software: un enfoque práctico</p>
+  <figure class="showimg"><img src="imagenes/Ingenieria de Software.png" alt="Portada de Ingeniería de software"></figure>
+  <figure class="showimg"><img src="imagenes/Ingenieria de Software contra.png" alt="Contraportada de Ingeniería de software"></figure>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Pressman, R. S., y Maxim, B. R. (2020). <em>Ingeniería de software: Un enfoque práctico</em> (9.ª ed.). McGraw-Hill.</p>
+
+  <p class="tablenum">Figura 3</p>
+  <p class="tabletitle">Portada y Contraportada de Ingeniería del software</p>
+  <figure class="showimg"><img src="imagenes/inge software.png" alt="Portada de Ingeniería del software"></figure>
+  <figure class="showimg"><img src="imagenes/inge software contra.png" alt="Contraportada de Ingeniería del software"></figure>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Sommerville, I. (2005). <em>Ingeniería del software</em> (7.ª ed.). Pearson Addison-Wesley.</p>
+
+  <p class="tablenum">Figura 4</p>
+  <p class="tabletitle">Portada y Contraportada de Ingeniería de software orientado a objetos</p>
+  <figure class="showimg"><img src="imagenes/inge objetos.png" alt="Portada de Ingeniería de software orientado a objetos"></figure>
+  <figure class="showimg"><img src="imagenes/inge objetos contra.png" alt="Contraportada de Ingeniería de software orientado a objetos"></figure>
+  <p class="tablenote"><span class="notalabel">Nota.</span> Bruegge, B., y Dutoit, A. H. (2002). <em>Ingeniería de software orientado a objetos</em>. Prentice Hall.</p>
+
+</div>
+</body>
+</html>

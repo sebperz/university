@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documento de Especificación Técnica de Requisitos de Software</title>
+<style>
+  @page { margin: 2cm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    background: #fff;
+    margin: 0 auto;
+    max-width: 21cm;
+    padding: 0 0.25cm;
+  }
+  code, pre { font-family: "Roboto Mono", Consolas, "Courier New", monospace; }
+  pre {
+    font-size: 10pt;
+    line-height: 1.45;
+    background: #f5f5f5;
+    border: 1px solid #bbb;
+    padding: 0.6cm 0.7cm;
+    white-space: pre-wrap;
+    word-break: normal;
+    page-break-inside: avoid;
+  }
+  pre code { background: none; font-size: inherit; }
+  .titulo {
+    font-size: 15pt;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 0 0.2cm;
+  }
+  .codigo-actividad {
+    text-align: center;
+    font-size: 12pt;
+    margin: 0 0 0.4cm;
+  }
+  .nombre {
+    font-weight: bold;
+    font-style: italic;
+    text-align: right;
+    margin: 0;
+  }
+  h2 {
+    font-size: 12pt;
+    font-weight: bold;
+    margin: 0.9cm 0 0.2cm;
+    text-transform: uppercase;
+  }
+  h3 {
+    font-size: 12pt;
+    font-weight: bold;
+    font-style: italic;
+    margin: 0.6cm 0 0.15cm;
+  }
+  p { margin: 0.2cm 0 0.35cm; text-align: justify; }
+  ul { margin: 0.15cm 0 0.35cm; padding-left: 0.8cm; }
+  li { margin: 0.05cm 0; }
+  .integrantes p { margin: 0; }
+  .margen-superior { margin-top: 1cm; }
+
+  /* Tabla en normas APA: solo líneas horizontales */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0.4cm 0 0.2cm;
+    font-size: 10pt;
+    line-height: 1.3;
+  }
+  table, th, td { border: none; }
+  th { border-top: 1.5px solid #000; border-bottom: 1px solid #000; text-align: center; padding: 0.18cm 0.25cm; font-weight: bold; }
+  td { padding: 0.18cm 0.25cm; vertical-align: top; text-align: left; }
+  tbody tr:last-child td { border-bottom: 1.5px solid #000; }
+  td.rotulo { font-weight: bold; }
+  .tabla-nota { font-size: 10pt; margin: 0.15cm 0 0.5cm; }
+  .ref { margin: 0 0 0.25cm; text-align: left; padding-left: 2.54cm; text-indent: -2.54cm; }
+  @media print {
+    html, body { width: auto; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<p class="titulo">DOCUMENTO DE ESPECIFICACIÓN TÉCNICA DE REQUISITOS DE SOFTWARE</p>
+<p class="codigo-actividad">Actividad evaluativa AP-REQ-AV-2026</p>
+<p class="nombre">Islender Arturo Alfonso Contreras</p>
+<p class="nombre">Juan Sebastian Perez Galvis</p>
+
+<h2 class="margen-superior">Contexto seleccionado</h2>
+<p><strong><em>Caso C: Sistema de logística de última milla georreferenciado.</em></strong> El sistema es un motor de emparejamiento geoespacial masivo y de alta concurrencia. Procesa en tiempo real la ubicación de 40.000 repartidores activos y la asigna a órdenes de compra entrantes. El diseño debe administrar condiciones de carrera en la asignación de repartidores, soportar picos extremos de tráfico y operar sobre una infraestructura distribuida. El presente documento especifica los requisitos no funcionales, los escenarios de comportamiento ejecutables, la decisión arquitectónica asociada y la trazabilidad de verificación en el pipeline de integración y despliegue continuos.</p>
+
+<h2>Módulo 1: Matriz de escenarios de atributos de calidad (SEI)</h2>
+<p>Los escenarios técnicos se modelaron con la anatomía de seis elementos del SEI: fuente, estímulo, entorno, artefacto, respuesta y medida de respuesta (Bass, Clements y Kazman, citados en Goyal, 2023). Cada requisito no funcional se asoció a la característica y subcaracterística correspondiente del modelo de calidad de producto ISO/IEC 25010:2023 (ISO/IEC 25010). La matriz se presenta transpuesta: cada columna corresponde a un requisito no funcional (NFR-01 a NFR-04) y cada fila a un elemento de la anatomía. La Tabla 1 sintetiza los cuatro requisitos.</p>
+
+<p>Tabla 1</p>
+<p style="font-style: italic; margin-top:-0.35cm;">Matriz transpuesta de escenarios de atributos de calidad para el motor de emparejamiento geoespacial</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elemento del escenario</th>
+      <th>NFR-01: Rendimiento</th>
+      <th>NFR-02: Fiabilidad</th>
+      <th>NFR-03: Seguridad</th>
+      <th>NFR-04: Escalabilidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="rotulo">Atributo (ISO/IEC 25010:2023)</td>
+      <td>Eficiencia de rendimiento: comportamiento en el tiempo, capacidad</td>
+      <td>Fiabilidad: disponibilidad, tolerancia a fallos, recuperabilidad</td>
+      <td>Seguridad: autenticidad, integridad, resistencia</td>
+      <td>Flexibilidad: escalabilidad</td>
+    </tr>
+    <tr>
+      <td class="rotulo">Fuente</td>
+      <td>Marketplace externo que emite órdenes de compra</td>
+      <td>Nodo interno del clúster de índice geoespacial</td>
+      <td>Atacante externo no autenticado</td>
+      <td>Operador logístico en evento comercial masivo</td>
+    </tr>
+    <tr>
+      <td class="rotulo">Estímulo</td>
+      <td>Ráfaga de 2.000 órdenes por minuto para emparejar</td>
+      <td>Caída abrupta del nodo maestro del índice</td>
+      <td>Inyección de mensajes de posición falsificados (suplantación o replay)</td>
+      <td>Crecimiento por tres del tráfico de posiciones y de órdenes</td>
+    </tr>
+    <tr>
+      <td class="rotulo">Entorno</td>
+      <td>Operación normal en hora punta, 40.000 repartidores activos</td>
+      <td>Hora punta con dos de tres nodos operativos</td>
+      <td>Operación normal sostenida bajo ataque</td>
+      <td>Hora punta superada por pico excepcional, autoescalado aún no activo</td>
+    </tr>
+    <tr>
+      <td class="rotulo">Artefacto</td>
+      <td>Motor de emparejamiento geoespacial (API de asignación)</td>
+      <td>Clúster Redis con índice geoespacial y cola Kafka de ingesta</td>
+      <td>API Gateway y servicio de ingesta de posiciones</td>
+      <td>Motor de emparejamiento y particiones de la cola Kafka</td>
+    </tr>
+    <tr>
+      <td class="rotulo">Respuesta</td>
+      <td>Asigna al repartidor libre más cercano y retorna HTTP 201 con cuerpo JSON</td>
+      <td>Failover automático a nodo réplica y reprocesamiento idempotente de los eventos en tránsito</td>
+      <td>Rechaza el mensaje con HTTP 401 o 403, descarta el intento, emite alerta y registra auditoría</td>
+      <td>Escala horizontalmente de dos a seis réplicas, rebalancea particiones y absorbe el pico sin rechazar órdenes</td>
+    </tr>
+    <tr>
+      <td class="rotulo">Medida (métrica)</td>
+      <td>Latencia p99 menor o igual a 200 ms; rendimiento mayor o igual a 2.000 asignaciones por minuto; tasa de rechazo de 0 %</td>
+      <td>Disponibilidad mensual mayor o igual a 99,95 %; RTO menor o igual a 30 s; RPO igual a 0 (cero órdenes perdidas)</td>
+      <td>Rechazo de más de 99,9 % de mensajes falsificados; alerta en menos de 60 s; auditoría del 100 % de los eventos</td>
+      <td>Escalado completado en menos de 60 s; p99 se mantiene menor o igual a 200 ms; pérdida de órdenes igual a 0</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="tabla-nota"><em>Nota.</em> La medida de respuesta de cada fila es el criterio de aceptación del requisito y se retoma en los módulos 2, 3 y 4. RTO es el objetivo de tiempo de recuperación (<em>recovery time objective</em>); RPO es el objetivo de punto de recuperación (<em>recovery point objective</em>); p99 es el percentil 99 de la latencia.</p>
+
+<p>Las medidas se redactaron con umbrales numéricos y sin adjetivos abstractos. Cada métrica puede verificarse con una prueba automática: una prueba de carga para NFR-01, una prueba de caos para NFR-02, una prueba de seguridad para NFR-03 y una prueba de pico para NFR-04. La definición de estos escenarios es la entrada directa del registro de decisión arquitectónica del Módulo 3.</p>
+
+<h2>Módulo 2: Especificación de comportamiento (BDD)</h2>
+<p>Los escenarios se escribieron en Gherkin con la sintaxis formal de Cucumber y localización al español. Se cubren los tres comportamientos complejos exigidos: condición de carrera, fallo crítico de infraestructura y degradación controlada de un servicio externo (Fowler, 2013; Cucumber, 2025). El motor de pruebas interpreta cada paso como una aserción sobre la respuesta observable del sistema.</p>
+
+<h3>Escenario 1: Condición de carrera por doble asignación de un repartidor</h3>
+<pre><code>Característica: Integridad del emparejamiento bajo concurrencia
+  Escenario: Dos órdenes compiten por el mismo repartidor libre
+    Dado que el repartidor "R-77" está libre en la zona centro
+    Y su posición fue actualizada hace menos de 10 segundos
+    Y que dos instancias del motor reciben las órdenes "O-1001" y "O-1002" de forma simultánea
+    Cuando ambas instancias intentan asignar su orden al repartidor "R-77"
+    Entonces exactamente una asignación se confirma con el código HTTP 201
+    Y la orden perdedora obtiene el código HTTP 409 y reempareja con otro repartidor
+    Y ninguna orden queda registrada con dos repartidores</code></pre>
+<p>El escenario verifica la integridad de la asignación ante escrituras concurrentes. El código 409 (<em>conflict</em>) es la respuesta observable del bloqueo distribuido descrito en el Módulo 3; el resultado confirma la tolerancia de la arquitectura a las condiciones de carrera sin duplicar órdenes.</p>
+
+<h3>Escenario 2: Fallo crítico de infraestructura, caída del nodo maestro del índice</h3>
+<pre><code>Característica: Tolerancia a fallos del índice geoespacial
+  Escenario: Caída abrupta del nodo maestro durante hora punta
+    Dado que el clúster de índice geoespacial opera con 3 nodos en estado sano
+    Y que hay 40.000 repartidores publicando posición
+    Cuando el nodo maestro del clúster falla de forma abrupta
+    Entonces un nodo réplica asume el rol de maestro en menos de 30 segundos
+    Y el punto de control de salud del clúster retorna HTTP 200
+    Y las posiciones en tránsito se reprocesan sin duplicados
+    Y ninguna asignación confirmada se pierde</code></pre>
+<p>El escenario es la versión ejecutable del NFR-02. El tiempo de conmutación de 30 segundos corresponde al RTO y la ausencia de pérdida de asignaciones corresponde al RPO igual a 0. La verificación se ejecuta en el pipeline con una prueba de caos que termina deliberadamente un nodo.</p>
+
+<h3>Escenario 3: Degradación controlada del proveedor externo de rutas</h3>
+<pre><code>Característica: Degradación controlada de servicios externos
+  Escenario: El proveedor de rutas responde fuera de su tiempo límite
+    Dado que el proveedor externo de rutas excede su timeout de 200 ms
+    Y que existe una ruta cacheada con antigüedad menor a 15 minutos
+    Cuando llega la solicitud de ruta para la orden "O-2003"
+    Entonces el sistema entrega la ruta cacheada en menos de 300 ms
+    Y la respuesta HTTP incluye la bandera "ruta-cacheada"
+    Y el circuito hacia el proveedor permanece abierto durante 60 segundos</code></pre>
+<p>El escenario garantiza el plan B del sistema cuando un servicio externo degrada su tiempo de respuesta. La entrega de la ruta cacheada mantiene la latencia dentro del umbral del NFR-01 y la apertura del circuito (<em>circuit breaker</em>) protege al proveedor de más carga mientras se recupera.</p>
+
+<h2>Módulo 3: Registro de decisión arquitectónica (ADR)</h2>
+<h3>ADR-001: Consistencia eventual con índice geoespacial en memoria para el emparejamiento en caliente</h3>
+<p><strong><em>Estado.</em></strong> Aceptado.</p>
+<p><strong><em>Contexto.</em></strong> El motor de emparejamiento debe decidir, en menos de 200 ms (p99), qué repartidor atiende cada orden entrante sobre un universo de 40.000 posiciones que se actualizan de forma continua. El teorema CAP obliga a elegir entre consistencia fuerte y disponibilidad cuando ocurre una partición de red, y esa partición no es evitable en un sistema distribuido. La coordinación entre nodos en cada escritura (modelo CP) incrementa la latencia y limita el escalado horizontal, lo que contradice el NFR-01 y el NFR-04. Al mismo tiempo, dos instancias pueden asignar la misma orden al mismo repartidor si no existe un mecanismo de exclusión mutua, y una caída de nodo no puede perder asignaciones confirmadas (NFR-02).</p>
+<p><strong><em>Decisión.</em></strong> Adoptar un modelo de consistencia eventual para el emparejamiento en caliente, con un índice geoespacial en memoria (Redis) que replica por zona. Las órdenes entran por una cola Kafka que amortigua los picos y desacopla la ingesta del emparejamiento. La exclusión mutua sobre cada repartidor se implementa con un bloqueo distribuido atómico (SET NX EX con tiempo de vida acotado) sobre la clave del repartidor. PostgreSQL permanece como fuente de verdad transaccional de las asignaciones confirmadas.</p>
+<p><strong><em>Justificación técnica.</em></strong> La consulta y escritura sobre un índice en memoria eliminan la coordinación por consenso en la ruta caliente, lo que permite cumplir la latencia p99 de 200 ms con 2.000 órdenes por minuto. El bloqueo distribuido con tiempo de vida acotado resuelve la condición de carrera del Módulo 2 sin duplicar asignaciones: solo una instancia crea la clave del repartidor y el tiempo de vida evita un bloqueo eterno si la instancia ganadora falla. La cola Kafka aporta durabilidad y permite reprocesar eventos de forma idempotente tras una caída. Como mitigación de riesgos se adoptan tres mecanismos: firma de los mensajes con HMAC para validar la autenticidad de las posiciones (NFR-03), un proceso de reconciliación que converge las réplicas divergentes y una métrica de desfase que alerta cuando la divergencia excede el umbral.</p>
+<p><strong><em>Consecuencias del sistema.</em></strong> Durante una partición de red las zonas pueden mostrar posiciones divergentes por un intervalo acotado de hasta 500 ms, aceptado por la operación. La consistencia eventual implica que cualquier consulta consolidada posterior a la asignación puede reflejar el estado con un pequeño retardo. El sistema mantiene dos motores de datos (Redis y PostgreSQL), por lo que la reconciliación y su monitoreo son responsabilidad operativa permanente. La división de la decisión en un ADR separado por cada tecnología evita acoplar decisiones independientes.</p>
+
+<h2>Módulo 4: Trazabilidad y verificación en pipeline</h2>
+<p>El mapa lógico conecta cada requisito de negocio con el escenario BDD, los componentes de arquitectura y las herramientas de automatización del pipeline CI/CD. La regla aplicada es la de cadena completa: un requisito sin prueba automática es solo una intención, y un componente sin requisito es sobre-ingeniería.</p>
+
+<p><strong><em>Cadena de trazabilidad NFR-01 (rendimiento).</em></strong> Requisito de negocio REQ-LOG-01, asignación de órdenes a repartidores en tiempo real. Escenario BDD vinculado: Escenario 3, degradación controlada del proveedor de rutas. Componentes afectados: motor de emparejamiento, API Gateway y cola Kafka. Estrategia de despliegue: réplicas del motor con autoescalado por métricas de cola y CPU. Herramientas del pipeline: prueba de carga con k6 que fija como umbral el p99 menor o igual a 200 ms y un rendimiento de 2.000 órdenes por minuto, ejecutada en cada integración dentro de GitHub Actions.</p>
+
+<p><strong><em>Cadena de trazabilidad NFR-02 (fiabilidad).</em></strong> Requisito de negocio REQ-LOG-02, continuidad operativa del índice de posiciones. Escenario BDD vinculado: Escenario 2, caída del nodo maestro. Componentes afectados: clúster Redis con réplicas y cola Kafka como búfer durable. Estrategia de despliegue: nodos distribuidos en varias zonas de disponibilidad con presupuesto de interrupción de pods. Herramientas del pipeline: prueba de caos que termina el nodo maestro y valida la conmutación en menos de 30 segundos, junto con el escenario Gherkin etiquetado como @fallo-critico.</p>
+
+<p><strong><em>Cadena de trazabilidad NFR-03 (seguridad).</em></strong> Requisito de negocio REQ-LOG-03, integridad y autenticidad de la telemetría de repartidores. Escenario BDD vinculado: Escenario 1, condición de carrera, en su aserción de asignación única. Componentes afectados: API Gateway con validación de tokens y firmas HMAC, servicio de ingesta de posiciones y registro de auditoría. Estrategia de despliegue: cortafuegos de aplicación en el borde y rotación gestionada de claves. Herramientas del pipeline: pruebas de seguridad con tokens falsos y mensajes repetidos, que verifican el rechazo de más del 99,9 % de los intentos, junto con alertas en menos de 60 segundos sobre Prometheus y Grafana.</p>
+
+<p><strong><em>Cadena de trazabilidad NFR-04 (escalabilidad).</em></strong> Requisito de negocio REQ-LOG-04, absorción de picos extremos de demanda. Escenario BDD vinculado: Escenario 1, doble asignación, como verificación de la exclusión mutua bajo carga. Componentes afectados: motor de emparejamiento y particiones de Kafka. Estrategia de despliegue: autoescalado horizontal de dos a seis réplicas mediante el controlador de pods de Kubernetes. Herramientas del pipeline: prueba de pico con k6 que multiplica la carga por tres y valida el escalado en menos de 60 segundos con un p99 estable.</p>
+
+<p>La ejecución del pipeline sigue el flujo continuo: compilación y pruebas unitarias, ejecución de los escenarios Gherkin con Cucumber, pruebas de carga y de pico con k6, prueba de caos y despliegue automatizado. El monitoreo de tasas de error con Prometheus y Grafana cierra el ciclo al emitir alertas cuando alguna métrica se aleja de la medida definida en la Tabla 1.</p>
+
+<h2>Referencias</h2>
+<p class="ref">Amazon Web Services. (2025, 20 de marzo). <em>Master architecture decision records (ADRs): Best practices for effective decision-making</em> [Entrada de blog]. AWS Architecture Blog. https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/</p>
+<p class="ref">Amazon Web Services. (s. f.). <em>Architectural decision records process</em>. AWS Prescriptive Guidance. https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/adr-process.html</p>
+<p class="ref">Cucumber. (s. f.). <em>Gherkin reference</em>. https://cucumber.io/docs/gherkin/reference/</p>
+<p class="ref">Fowler, M. (2013, 21 de agosto). <em>GivenWhenThen</em>. martinfowler.com. https://martinfowler.com/bliki/GivenWhenThen.html</p>
+<p class="ref">Goyal, A. (2023, 13 de febrero). <em>Quality attribute scenario: A way to define software quality requirements</em>. Medium. https://medium.com/@anil.goyal0057/quality-attribute-scenario-a-way-to-define-software-quality-requirements-71dd82f4be1b</p>
+<p class="ref">International Organization for Standardization. (2023). <em>Systems and software engineering. Systems and software Quality Requirements and Evaluation (SQuaRE). Product quality model</em> (ISO/IEC 25010:2023). https://www.iso.org/obp/ui/#iso:std:isoiec:25010:en</p>
+<p class="ref">iso25000.com. (s. f.). <em>ISO/IEC 25010</em>. Portal ISO/IEC 25000. https://iso25000.com/index.php/es/normas-iso-25000/iso-25010</p>
+
+</body>
+</html>

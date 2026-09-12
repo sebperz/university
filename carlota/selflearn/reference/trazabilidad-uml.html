@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trazabilidad y diagrama de secuencia UML — Módulo 4</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Documento de referencia · Módulo 4</p>
+<h1>Trazabilidad y diagrama de secuencia UML</h1>
+<p class="lede">Cómo conectar el requisito de negocio con el componente, el despliegue y las pruebas del pipeline CI/CD — sin huecos en la cadena.</p>
+</header>
+
+<h2>1. El diagrama de secuencia UML: sus 6 piezas</h2>
+<table>
+<tr><th>Elemento</th><th>Notación</th><th>Significa</th></tr>
+<tr><td><strong>Línea de vida</strong></td><td>caja + línea vertical punteada</td><td>un participante (app, API Gateway, servicio, BD) a lo largo del tiempo</td></tr>
+<tr><td><strong>Activación</strong></td><td>rectángulo fino sobre la línea</td><td>el participante está procesando algo</td></tr>
+<tr><td><strong>Mensaje síncrono</strong></td><td>flecha continua ●▶</td><td>el emisor espera la respuesta</td></tr>
+<tr><td><strong>Mensaje asíncrono</strong></td><td>flecha abierta ▶</td><td>dispara y sigue (fire-and-forget: eventos, colas)</td></tr>
+<tr><td><strong>Mensaje de retorno</strong></td><td>flecha discontinua ⤳</td><td>respuesta que vuelve</td></tr>
+<tr><td><strong>Fragmentos alt / par / opt</strong></td><td>marco con etiqueta</td><td><code>alt</code>: alternativas (éxito/fallo) · <code>par</code>: pasos en paralelo · <code>opt</code>: opcional</td></tr>
+</table>
+<p class="cite">UML 2.5 (Object Management Group). Para dibujar: <a href="https://mermaid.js.org/syntax/sequenceDiagram.html">Mermaid sequenceDiagram</a> o <a href="https://plantuml.org/es/">PlantUML</a>, ambos aceptados en entregas académicas.</p>
+
+<h2>2. La secuencia de asignación del Caso C (plantilla)</h2>
+<div class="figure">
+<svg viewBox="0 0 860 430" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama de secuencia de asignación">
+  <defs>
+    <marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#1b1f23"/></marker>
+    <marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5c6670"/></marker>
+  </defs>
+  <!-- lifelines -->
+  <g font-family="sans-serif" font-size="12">
+    <rect x="20"  y="10" width="120" height="34" rx="6" fill="#e8f0f7" stroke="#0f4c81"/><text x="80"  y="31" text-anchor="middle" fill="#0f4c81" font-weight="bold">App repartidor</text>
+    <rect x="190" y="10" width="110" height="34" rx="6" fill="#e8f0f7" stroke="#0f4c81"/><text x="245" y="31" text-anchor="middle" fill="#0f4c81" font-weight="bold">API Gateway</text>
+    <rect x="350" y="10" width="130" height="34" rx="6" fill="#e8f0f7" stroke="#0f4c81"/><text x="415" y="31" text-anchor="middle" fill="#0f4c81" font-weight="bold">Motor de matching</text>
+    <rect x="530" y="10" width="110" height="34" rx="6" fill="#fdf3e3" stroke="#8a4b08"/><text x="585" y="31" text-anchor="middle" fill="#8a4b08" font-weight="bold">Redis Geo</text>
+    <rect x="690" y="10" width="130" height="34" rx="6" fill="#fdf3e3" stroke="#8a4b08"/><text x="755" y="31" text-anchor="middle" fill="#8a4b08" font-weight="bold">PostgreSQL</text>
+
+    <line x1="80"  y1="44" x2="80"  y2="410" stroke="#1b1f23" stroke-dasharray="4 3"/>
+    <line x1="245" y1="44" x2="245" y2="410" stroke="#1b1f23" stroke-dasharray="4 3"/>
+    <line x1="415" y1="44" x2="415" y2="410" stroke="#1b1f23" stroke-dasharray="4 3"/>
+    <line x1="585" y1="44" x2="585" y2="410" stroke="#1b1f23" stroke-dasharray="4 3"/>
+    <line x1="755" y1="44" x2="755" y2="410" stroke="#1b1f23" stroke-dasharray="4 3"/>
+
+    <!-- messages -->
+    <text x="162" y="78" text-anchor="middle" font-size="11" fill="#1b1f23">1. PATCH /posicion (JWT)</text>
+    <line x1="80" y1="85" x2="243" y2="85" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+
+    <text x="330" y="115" text-anchor="middle" font-size="11" fill="#1b1f23">2. verifica token + rate limit</text>
+    <line x1="245" y1="122" x2="413" y2="122" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+
+    <text x="500" y="152" text-anchor="middle" font-size="11" fill="#1b1f23">3. GEOADD posición</text>
+    <line x1="415" y1="159" x2="583" y2="159" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+    <line x1="583" y1="172" x2="417" y2="172" stroke="#5c6670" stroke-dasharray="5 4" marker-end="url(#a2)"/>
+    <text x="500" y="190" text-anchor="middle" font-size="10" fill="#5c6670">ACK &lt; 10 ms</text>
+
+    <text x="66" y="215" text-anchor="middle" font-size="11" fill="#1b1f23" transform="rotate(0)">4. POST /ordenes</text>
+    <line x1="245" y1="222" x2="413" y2="222" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+    <text x="330" y="212" text-anchor="middle" font-size="10" fill="#5c6670">(cliente marketplace)</text>
+
+    <!-- alt fragment -->
+    <rect x="30" y="240" width="800" height="150" fill="none" stroke="#8c2f2f" stroke-dasharray="6 3"/>
+    <rect x="30" y="240" width="60" height="22" fill="#8c2f2f"/><text x="60" y="256" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">alt</text>
+    <text x="300" y="283" text-anchor="middle" font-size="11" fill="#1e6b3a">[lock SETNX R-77 OK — nadie lo reclamó]</text>
+    <line x1="415" y1="292" x2="583" y2="292" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+    <text x="500" y="285" text-anchor="middle" font-size="11" fill="#1b1f23">5. lock atómico con TTL</text>
+    <line x1="415" y1="315" x2="753" y2="315" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+    <text x="585" y="308" text-anchor="middle" font-size="11" fill="#1b1f23">6. INSERT asignación (tx)</text>
+    <line x1="753" y1="340" x2="417" y2="340" stroke="#5c6670" stroke-dasharray="5 4" marker-end="url(#a2)"/>
+    <text x="585" y="333" text-anchor="middle" font-size="10" fill="#5c6670">commit</text>
+    <line x1="415" y1="368" x2="247" y2="368" stroke="#1b1f23" stroke-width="1.5" marker-end="url(#a1)"/>
+    <text x="330" y="361" text-anchor="middle" font-size="11" fill="#1b1f23">7. 201 Asignada (p99 ≤ 200 ms)</text>
+
+    <text x="450" y="402" text-anchor="middle" font-size="10" fill="#8c2f2f">[lock falla → 409; la orden reempareja a otro repartidor — sin duplicados]</text>
+  </g>
+</svg>
+<figcaption>Secuencia completa: ingesta de posición (1-3), llegada de orden (4) y fragmento <code>alt</code> que resuelve la condición de carrera (5-7). El lock atómico en Redis garantiza un único ganador.</figcaption>
+</div>
+
+<h2>3. Matriz de trazabilidad: la cadena de 4 eslabones</h2>
+<p>La actividad exige conectar <strong>requerimiento de negocio → componente → estrategia de despliegue → pruebas del pipeline</strong>. Cada requisito del Módulo 1 (RQ-nn) debe tener sus 4 eslabones:</p>
+<table>
+<tr><th>Requerimiento (Mód. 1)</th><th>Componente que lo implementa</th><th>Estrategia de despliegue</th><th>Suite de pruebas CI/CD</th></tr>
+<tr><td><code>RQ-01</code> p99 ≤ 200 ms con 2.000 órdenes/min</td><td>Motor de matching + índice <strong>Redis Geo</strong> en memoria</td><td>Replicas en Kubernetes con HPA por CPU/cola</td><td>Prueba de carga <strong>k6</strong> (umbral p99) + escenarios Gherkin de matching</td></tr>
+<tr><td><code>RQ-02</code> disponibilidad ≥ 99,95%, RTO ≤ 30 s</td><td>Clúster Redis con replicación + <strong>Kafka</strong> como buffer duradero</td><td>Despliegue multi-zona; PodDisruptionBudget; rollouts sin downtime</td><td>Prueba de <strong>caos</strong> (matar nodo) + Gherkin <code>@fallo-critico</code></td></tr>
+<tr><td><code>RQ-03</code> ≥ 99,9% mensajes falsificados rechazados</td><td><strong>API Gateway</strong> (JWT mTLS + rate limiting) + firma HMAC en mensajes</td><td>WAF en el borde; rotación de claves gestionada</td><td>Pruebas de seguridad (tokens falsos, replay) en pipeline + Gherkin <code>@seguridad</code></td></tr>
+<tr><td><code>RQ-04</code> capacidad ×3 en ≤ 60 s</td><td>Cola Kafka particionada por zona + consumidores sin estado</td><td>Auto-escalado horizontal (réplicas), lectura local por región</td><td>Prueba de escalado (spike test k6) + verificación de HPA</td></tr>
+</table>
+
+<div class="callout tip"><span class="tag">Regla de trazabilidad completa</span>Si un eslabón está vacío, la cadena se rompe: un requisito sin prueba automática es una opinión; un componente sin requisito es sobre-ingeniería. Cada fila citada arriba usa los componentes que tú mismo elegiste en tu ADR (Módulo 3) — la matriz debe reflejar TUS decisiones, no otras.</div>
+
+<div class="quiz" data-quiz data-title="Autoevaluación: trazabilidad">
+<script type="application/json">
+[
+  {
+    "q": "En un diagrama de secuencia, la flecha discontinua representa…",
+    "options": ["mensaje de retorno", "mensaje asíncrono", "fragmento alt"],
+    "correct": 0,
+    "explain": "La flecha punteada es la respuesta que vuelve al emisor; la asíncrona es continua con punta abierta."
+  },
+  {
+    "q": "Para mostrar dos ramas (lock concedido / lock fallido) se usa el fragmento…",
+    "options": ["par", "alt", "opt"],
+    "correct": 1,
+    "explain": "alt modela alternativas mutuamente excluyentes con guardas [condición]."
+  },
+  {
+    "q": "El eslabón que convierte un requisito en algo verificable automáticamente es…",
+    "options": ["el componente software", "la suite de pruebas CI/CD", "la estrategia de despliegue"],
+    "correct": 1,
+    "explain": "Sin pruebas en el pipeline, el requisito no se verifica: es solo una intención."
+  }
+]
+</script>
+</div>
+
+<nav class="lesson-nav">
+<a href="glosario.html">Glosario</a>
+<a href="plantilla-adr.html">Plantilla ADR</a>
+<a href="../lessons/0005-trazabilidad-uml.html">Lección 5: dibujar la trazabilidad</a>
+</nav>
+
+<div class="ask">💬 <strong>¿Dudas?</strong> Pregunta a tu agente: «¿cómo conecto mi RQ-03 con un test concreto del pipeline?». Te lo desglosamos eslabón por eslabón.</div>
+
+<footer class="doc-footer">Curso AP-REQ-AV-2026 · Caso C · notación UML 2.5 (OMG) · componentes: Redis, Kafka, k6, API Gateway.</footer>
+</main>
+</body>
+</html>

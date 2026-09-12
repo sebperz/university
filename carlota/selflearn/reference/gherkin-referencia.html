@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gherkin en español — Módulo 2</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Documento de referencia · Módulo 2</p>
+<h1>Gherkin en español: sintaxis ejecutable</h1>
+<p class="lede">Todo lo que necesitas para escribir escenarios Dado-Cuando-Entonces que un motor de BDD pueda ejecutar.</p>
+</header>
+
+<h2>Esqueleto de un archivo .feature en español</h2>
+<pre><code><span class="cmt"># language: es   ← SIEMPRE en la primera línea para keywords en español</span>
+<span class="kw">Característica:</span> Emparejamiento geoespacial de órdenes
+  El motor asigna cada orden al repartidor más cercano sin condiciones de carrera.
+
+  <span class="kw">Antecedentes:</span>            <span class="cmt">(Background: pasos comunes a todos los escenarios)</span>
+    <span class="kw">Dado</span> que el servicio de matching está operativo
+
+  <span class="kw">Escenario:</span> Asignación sin competencia
+    <span class="kw">Dado</span> que el repartidor <span class="str">"R-77"</span> está libre en la zona centro
+    <span class="kw">Cuando</span> llega la orden <span class="str">"O-1001"</span> para recogida en la plaza mayor
+    <span class="kw">Entonces</span> la orden queda asignada a <span class="str">"R-77"</span> en ≤ <span class="num">200</span> ms
+      <span class="kw">Y</span> el repartidor recibe la notificación de asignación</code></pre>
+
+<h2>Equivalencia de keywords (ES ↔ EN)</h2>
+<table>
+<tr><th>Español</th><th>Inglés</th><th>Rol</th></tr>
+<tr><td><code>Característica:</code></td><td><code>Feature:</code></td><td>agrupa escenarios de una misma capacidad (1 por archivo)</td></tr>
+<tr><td><code>Regla:</code></td><td><code>Rule:</code></td><td>regla de negocio que agrupa escenarios (Gherkin 6+)</td></tr>
+<tr><td><code>Escenario:</code> / <code>Ejemplo:</code></td><td><code>Scenario:</code> / <code>Example:</code></td><td>un ejemplo concreto ejecutable</td></tr>
+<tr><td><code>Dado</code></td><td><code>Given</code></td><td>precondición: pone el sistema en un estado conocido</td></tr>
+<tr><td><code>Cuando</code></td><td><code>When</code></td><td>el evento/acción que se especifica</td></tr>
+<tr><td><code>Entonces</code></td><td><code>Then</code></td><td>resultado esperado observable (assert)</td></tr>
+<tr><td><code>Y</code> / <code>Pero</code></td><td><code>And</code> / <code>But</code></td><td>encadenan pasos del mismo tipo</td></tr>
+<tr><td><code>Antecedentes:</code></td><td><code>Background:</code></td><td>Given comunes a todos los escenarios (máx. ~4 líneas)</td></tr>
+<tr><td><code>Esquema del escenario:</code></td><td><code>Scenario Outline:</code></td><td>plantilla con parámetros <code>&lt;así&gt;</code></td></tr>
+<tr><td><code>Ejemplos:</code></td><td><code>Examples:</code></td><td>tabla de valores que instancia la plantilla</td></tr>
+</table>
+<p class="cite">Fuente oficial: <a href="https://cucumber.io/docs/gherkin/reference/">Cucumber — Gherkin Reference</a> y <a href="https://cucumber.io/docs/gherkin/languages/">Gherkin localizado (es)</a>. Método: <a href="https://martinfowler.com/bliki/GivenWhenThen.html">Fowler — GivenWhenThen</a>.</p>
+
+<h2>Las 3 reglas de oro</h2>
+<div class="callout tip"><span class="tag">Regla 1 · Dado = estado, no acción</span>«Dado que el repartidor R-77 está libre» ✓ · «Dado que el usuario hace clic en asignar» ✗ (eso es un Cuando).</div>
+<div class="callout tip"><span class="tag">Regla 2 · Un solo Cuando</span>El Cuando es EL evento que estudias. Si necesitas dos eventos, son dos escenarios (o el segundo es un Dado/Y previo).</div>
+<div class="callout penalty"><span class="tag">Regla 3 · Entonces = observable</span>Fowler y Cucumber coinciden: el Entonces verifica una salida del sistema (respuesta HTTP, notificación, mensaje en cola, métrica), no una fila escondida en la base de datos.</div>
+
+<h2>Herramientas avanzadas</h2>
+<h3>Data Table (estado complejo en un paso)</h3>
+<pre><code><span class="kw">Dado</span> estos repartidores activos:
+  | id   | latitud  | longitud | estado    |
+  | R-77 | 40.4168  | -3.7038  | libre     |
+  | R-42 | 40.4200  | -3.7050  | en_ruta   |</code></pre>
+
+<h3>Esquema del escenario (mismo flujo, muchos valores)</h3>
+<pre><code><span class="kw">Esquema del escenario:</span> Degradación del proveedor de mapas
+  <span class="kw">Dado</span> que el proveedor de rutas responde en &lt;latencia_proveedor&gt; ms
+  <span class="kw">Cuando</span> llega una solicitud de ruta para la orden <span class="str">"&lt;id_orden&gt;"</span>
+  <span class="kw">Entonces</span> el sistema &lt;comportamiento&gt; en ≤ <span class="num">300</span> ms
+
+  <span class="kw">Ejemplos:</span>
+    | latencia_proveedor | id_orden | comportamiento                  |
+    | 50                 | O-2001   | calcula la ruta óptima          |
+    | 400                | O-2002   | activa rutas cacheadas          |
+    | timeout            | O-2003   | usa la última ruta conocida     |</code></pre>
+
+<h3>Tags (@ para filtrar la suite)</h3>
+<pre><code><span class="cmt">@critico @condicion-de-carrera</span>
+<span class="kw">Escenario:</span> Doble asignación de un repartidor</code></pre>
+
+<h2>Plantilla para los 3 escenarios del Módulo 2 (Caso C)</h2>
+<p>La actividad pide: <strong>(a) fallo crítico de infraestructura</strong>, <strong>(b) degradación controlada de un servicio externo</strong>, <strong>(c) condición de carrera</strong>. Conecta cada escenario con el requisito del Módulo 1 que verifica.</p>
+<table>
+<tr><th>Escenario</th><th>Estímulo (Cuando)</th><th>Respuesta observable (Entonces)</th><th>Verifica</th></tr>
+<tr><td>Fallo crítico</td><td>Se cae un nodo / el clúster Redis principal</td><td>Failover ≤ 30 s, cero órdenes perdidas, sin duplicados</td><td>RQ-02 Fiabilidad</td></tr>
+<tr><td>Degradación externa</td><td>El proveedor de rutas/geocoding excede su timeout</td><td>Rutas cacheadas o última conocida; p99 ≤ 300 ms</td><td>RQ-01 Rendimiento</td></tr>
+<tr><td>Condición de carrera</td><td>2 órdenes compiten por el mismo repartidor libre</td><td>Una sola asignación gana (lock); la otra reempareja; ninguna se duplica</td><td>RQ-02 + integridad</td></tr>
+</table>
+
+<div class="quiz" data-quiz data-title="Autoevaluación: Gherkin">
+<script type="application/json">
+[
+  {
+    "q": "¿Qué línea debes poner en la primera línea para escribir en español?",
+    "options": ["# idioma: español", "# language: es", "# gherkin: spanish"],
+    "correct": 1,
+    "explain": "La directiva oficial de Cucumber es # language: es (código ISO 639-1)."
+  },
+  {
+    "q": "«Dado que el operador confirma la asignación» viola la regla de que…",
+    "options": ["Dado describe estado inicial", "Entonces debe ser observable", "Y encadena pasos"],
+    "correct": 0,
+    "explain": "Confirmar es una interacción (evento), no un estado: pertenece al Cuando."
+  },
+  {
+    "q": "Para repetir un escenario con 3 combinaciones de valores se usa…",
+    "options": ["Data Table con tags", "Esquema del escenario", "Antecedentes repetido"],
+    "correct": 1,
+    "explain": "Esquema del escenario (Scenario Outline) + tabla Ejemplos ejecuta una vez por fila."
+  }
+]
+</script>
+</div>
+
+<nav class="lesson-nav">
+<a href="glosario.html">Glosario</a>
+<a href="anatomia-sei.html">Anatomía SEI</a>
+<a href="../lessons/0003-gherkin-bdd.html">Lección 3: BDD y condiciones de carrera</a>
+</nav>
+
+<div class="ask">💬 <strong>¿Dudas?</strong> Pregunta a tu agente: «¿mi Entonces de este escenario es observable o está mirando la BD?». Es el error más común y se corrige rápido.</div>
+
+<footer class="doc-footer">Curso AP-REQ-AV-2026 · Caso C · Cucumber Gherkin Reference · Fowler (2013).</footer>
+</main>
+</body>
+</html>

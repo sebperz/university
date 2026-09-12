@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa de fases · Compiladores</title>
+<link rel="stylesheet" href="../assets/styles.css">
+<style>
+  .pipeline {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0.4rem;
+    margin: 1.6rem 0;
+  }
+  .etapa {
+    flex: 1 1 8rem;
+    border: 1px solid var(--linea);
+    border-radius: 6px;
+    padding: 0.7rem 0.8rem;
+    background: #fff;
+    min-width: 8rem;
+  }
+  .etapa .num {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    color: var(--tenue);
+  }
+  .etapa .nombre { font-weight: 600; display: block; margin: 0.15rem 0 0.25rem; }
+  .etapa .io { font-family: var(--mono); font-size: 0.7rem; color: var(--tinta-suave); }
+  .etapa.front { border-top: 3px solid var(--azul); }
+  .etapa.mid { border-top: 3px solid var(--acento); }
+  .etapa.back { border-top: 3px solid var(--exito); }
+  .flecha { align-self: center; color: var(--tenue); font-size: 1.1rem; }
+  .leyenda { font-family: var(--mono); font-size: 0.72rem; color: var(--tenue); margin-top: -0.6rem; }
+  .leyenda span { margin-right: 1rem; }
+  .punto { display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%; vertical-align: middle; margin-right: 0.2rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Referencia · Compiladores</span>
+    <span>Chuleta imprimible</span>
+  </div>
+
+  <h1>Mapa de fases</h1>
+  <p class="subtitulo">Todo lo que el examen pregunta sobre el recorrido del compilador, comprimido en una página.</p>
+
+  <h2>El recorrido</h2>
+  <div class="pipeline">
+    <div class="etapa front">
+      <span class="num">FASE 1</span>
+      <span class="nombre">Análisis léxico</span>
+      <span class="io">caracteres → tokens</span>
+    </div>
+    <span class="flecha">→</span>
+    <div class="etapa front">
+      <span class="num">FASE 2</span>
+      <span class="nombre">Análisis sintáctico</span>
+      <span class="io">tokens → AST</span>
+    </div>
+    <span class="flecha">→</span>
+    <div class="etapa front">
+      <span class="num">FASE 3</span>
+      <span class="nombre">Análisis semántico</span>
+      <span class="io">AST → AST anotado</span>
+    </div>
+    <span class="flecha">→</span>
+    <div class="etapa mid">
+      <span class="num">FASE 4</span>
+      <span class="nombre">Código intermedio</span>
+      <span class="io">AST → IR</span>
+    </div>
+    <span class="flecha">→</span>
+    <div class="etapa mid">
+      <span class="num">FASE 5</span>
+      <span class="nombre">Optimización</span>
+      <span class="io">IR → IR mejorado</span>
+    </div>
+    <span class="flecha">→</span>
+    <div class="etapa back">
+      <span class="num">FASE 6</span>
+      <span class="nombre">Generación de código</span>
+      <span class="io">IR → máquina</span>
+    </div>
+  </div>
+  <p class="leyenda">
+    <span><span class="punto" style="background:var(--azul)"></span>front-end (depende del lenguaje)</span>
+    <span><span class="punto" style="background:var(--acento)"></span>medio (neutro)</span>
+    <span><span class="punto" style="background:var(--exito)"></span>back-end (depende de la máquina)</span>
+  </p>
+
+  <div class="caja idea">
+    <span class="etiqueta">La imagen mental</span>
+    <p style="margin-bottom:0">Subes la montaña desde el texto crudo hasta el <em>significado</em> (análisis); la bajas desde el significado hasta el <em>código</em> (síntesis). El análisis no ejecuta nada: solo entiende y comprueba.</p>
+  </div>
+
+  <h2>Qué detecta cada fase</h2>
+  <table>
+    <thead>
+      <tr><th>Fase</th><th>Entrada → Salida</th><th>Detecta</th><th>NO detecta</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Léxico</strong></td>
+        <td>caracteres → tokens</td>
+        <td>símbolos mal formados</td>
+        <td>gramática, tipos</td>
+      </tr>
+      <tr>
+        <td><strong>Sintáctico</strong></td>
+        <td>tokens → árbol</td>
+        <td>estructura inválida, paréntesis faltante</td>
+        <td>tipos, nombres no declarados</td>
+      </tr>
+      <tr>
+        <td><strong>Semántico</strong></td>
+        <td>árbol → árbol anotado</td>
+        <td>tipos incompatibles, variable no declarada</td>
+        <td>eficiencia</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Errores: ¿de quién es la culpa?</h2>
+  <table>
+    <thead><tr><th>Error en el código</th><th>Fase que lo detecta</th></tr></thead>
+    <tbody>
+      <tr><td><code>int 3x = 5;</code> (identificador mal formado)</td><td>Léxico</td></tr>
+      <tr><td><code>if (x &gt; 0 { ... }</code> (falta un paréntesis)</td><td>Sintáctico</td></tr>
+      <tr><td><code>resultado = "hola" + 2;</code> (tipos incompatibles)</td><td>Semántico</td></tr>
+      <tr><td>Usar <code>y</code> sin declararla</td><td>Semántico</td></tr>
+      <tr><td><code>return 0</code> sin <code>;</code> donde es obligatorio</td><td>Sintáctico</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Las cuatro trampas que más fallan</h2>
+  <ol>
+    <li><strong>"El léxico verifica la gramática" → FALSO.</strong> Eso es el sintáctico.</li>
+    <li><strong>"El semántico construye el árbol" → FALSO.</strong> Lo construye el sintáctico; el semántico lo <em>anota</em> (tipos, ámbitos).</li>
+    <li><strong>"La tabla de símbolos es solo del léxico" → FALSO.</strong> La usan léxico, sintáctico, semántico y también optimización/generación.</li>
+    <li><strong>"El front-end incluye la optimización" → FALSO.</strong> La optimización va después del análisis.</li>
+  </ol>
+
+  <h2>La tabla de símbolos</h2>
+  <p>Guarda, por cada identificador: <strong>nombre</strong>, <strong>tipo</strong>, <strong>dirección de memoria</strong> y <strong>ámbito</strong>. Permite verificar el uso correcto de los identificadores. Interactúa con casi todas las fases.</p>
+
+  <div class="nav no-imprimir">
+    <a href="../lessons/0001-mapa-del-compilador.html">← Lección 01</a>
+    <a href="0001-glosario.html">Glosario →</a>
+  </div>
+
+  <div class="pie">
+    <p>Referencia · Compiladores · Fuentes: <a href="https://es.wikipedia.org/wiki/Compilador">Wikipedia ES</a>, <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">Crafting Interpreters</a>.</p>
+  </div>
+
+</div>
+</body>
+</html>

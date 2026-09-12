@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plantilla ADR formato AWS — Módulo 3</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Documento de referencia · Módulo 3</p>
+<h1>Plantilla de ADR con formato AWS</h1>
+<p class="lede">La estructura exacta que exige la actividad, tomada del apéndice de AWS Prescriptive Guidance.</p>
+</header>
+
+<h2>Secciones obligatorias (y qué va en cada una)</h2>
+<table>
+<tr><th>Sección</th><th>Qué escribe ahí</th><th>Error típico</th></tr>
+<tr><td><strong>Título</strong></td><td>Una frase: «ADR-001: Consistencia eventual con índice geoespacial en memoria para el emparejamiento».</td><td>Título vago («sobre la base de datos»).</td></tr>
+<tr><td><strong>Estado</strong></td><td><code>Proposed</code> / <code>Accepted</code> / <code>Rejected</code> / <code>Superseded</code>. Para la entrega: <code>Accepted</code>.</td><td>Inventar estados propios.</td></tr>
+<tr><td><strong>Fecha</strong></td><td>ISO-8601: <code>2026-09-07</code>.</td><td>Formatos locales ambiguos.</td></tr>
+<tr><td><strong>Contexto</strong></td><td>El problema y las fuerzas en juego: los requisitos (Módulo 1), las restricciones (CAP, coste, SLA). Factores, no opiniones.</td><td>Vender ya la solución dentro del contexto.</td></tr>
+<tr><td><strong>Decisión</strong></td><td>Qué se adopta, en voz activa: «Usamos X…». Con la alternativa elegida explícita.</td><td>Decidir dos cosas en un solo ADR (regla AWS: 1 ADR = 1 decisión).</td></tr>
+<tr><td><strong>Consecuencias</strong></td><td>Lista <em>Positivas</em> y lista <em>Negativas</em> (siempre ambas; asumir el precio del trade-off).</td><td>Escribir solo ventajas: señal de ADR sesgado.</td></tr>
+<tr><td><strong>Cumplimiento</strong></td><td>Cómo se audita que el equipo respeta la decisión (reglas verificables, pruebas, métricas).</td><td>Olvidarlo: el ADR queda sin teeth.</td></tr>
+<tr><td><strong>Notas</strong></td><td>Autor, versión, changelog.</td><td>Sin autor: no hay dueño de la decisión.</td></tr>
+</table>
+<p class="cite">Fuente: <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/appendix.md">AWS Prescriptive Guidance — ejemplo de ADR (apéndice)</a> · proceso y estados: <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/architectural-decision-records/adr-process.html">ADR process</a> · prácticas: <a href="https://aws.amazon.com/blogs/architecture/master-architecture-decision-records-adrs-best-practices-for-effective-decision-making/">AWS Blog — Master ADRs</a>.</p>
+
+<h2>Esqueleto listo para copiar</h2>
+<pre><code># ADR-00N: &lt;decisión en una frase&gt;
+
+## Estado
+Accepted
+
+## Fecha
+2026-09-07
+
+## Contexto
+&lt;El motor de matching del Caso C debe asignar órdenes en ≤ 200 ms p99 (RQ-01)
+con 40.000 repartidores (RQ-04) y tolerar fallos de nodo (RQ-02). Ante una
+partición de red, el teorema CAP obliga a elegir entre consistencia y
+disponibilidad. Las alternativas consideradas fueron: …&gt;
+
+## Decisión
+Usamos &lt;consistencia eventual con índice geoespacial en Redis + cola de
+eventos idempotentes&gt; para &lt;el emparejamiento de órdenes&gt;. Los asignadores
+compiten por un repartidor mediante &lt;lock atómico con TTL&gt; para eliminar
+condiciones de carrera; la fuente de verdad transaccional queda en &lt;PostgreSQL&gt;.
+
+## Consecuencias
+Positivas:
++ &lt;Cumple p99 ≤ 200 ms porque no hay coordinación por escritura&gt;
++ &lt;Escala horizontalmente añadiendo réplicas del índice (RQ-04)&gt;
+Negativas:
+- &lt;Durante partición, dos zonas pueden mostrar posiciones divergentes ≤ 500 ms&gt;
+- &lt;Requiere reconciliación (job) y monitorización del desfase&gt;
+
+## Cumplimiento
++ &lt;Prueba de condición de carrera (Gherkin @carrera) en el pipeline CI/CD&gt;
++ &lt;Prueba de carga k6: 2.000 órdenes/min, p99 ≤ 200 ms, en cada despliegue&gt;
++ &lt;Revisión de código exige al menos una aprobación y cita del ADR-00N&gt;
+
+## Notas
++ Autor: &lt;nombre&gt;
++ Versión: 1.0
++ Changelog:
+  + 1.0: Versión inicial aceptada</code></pre>
+
+<h2>Cómo elegir la decisión (mini-rúbrica CAP para el Caso C)</h2>
+<table>
+<tr><th>Opción</th><th>Comportamiento ante partición</th><th>Encaja con el Caso C…</th></tr>
+<tr><td><strong>CP</strong> (consistencia fuerte: PostgreSQL como único escritor coordinado)</td><td>Rechaza operaciones en la zona aislada</td><td>✗ Rompe RQ-01/RQ-04: la latencia de consenso explota en picos</td></tr>
+<tr><td><strong>AP</strong> (consistencia eventual: índice en memoria + reconciliación)</td><td>Sigue sirviendo asignaciones por zona</td><td>✓ Cumple latencia y escalado; el lock atómico evita doble asignación</td></tr>
+<tr><td><strong>CA</strong></td><td>No existe en un sistema distribuido (P es obligatorio)</td><td>— Trampa conceptual típica</td></tr>
+</table>
+
+<div class="callout tip"><span class="tag">Práctica AWS que cita la actividad</span>Una sola decisión por ADR; separa el diseño (documento aparte) de la decisión; si cambia el criterio, nuevo ADR y el viejo pasa a <code>Superseded</code> — nunca se edita un ADR aceptado.</div>
+
+<div class="quiz" data-quiz data-title="Autoevaluación: ADR">
+<script type="application/json">
+[
+  {
+    "q": "¿Cuántas decisiones arquitectónicas cabe en un ADR según AWS?",
+    "options": ["Una por documento", "Todas las del sprint", "Una por alternativo"],
+    "correct": 0,
+    "explain": "AWS: «focus on a single decision — don't hesitate to split up decisions if necessary»."
+  },
+  {
+    "q": "Un ADR aceptado necesita revisarse porque cambió el criterio: se…",
+    "options": ["edita el existente", "borra y se reescribe", "crea uno nuevo que lo suplanta"],
+    "correct": 2,
+    "explain": "El ADR aceptado es inmutable; el nuevo lo marca Superseded y se enlazan mutuamente."
+  },
+  {
+    "q": "En la sección Consecuencias, AWS exige documentar…",
+    "options": ["solo los beneficios", "positivas y negativas", "solo los riesgos"],
+    "correct": 1,
+    "explain": "El apéndice de AWS lista Positive: y Negative: — el trade-off asumido es parte de la decisión."
+  }
+]
+</script>
+</div>
+
+<nav class="lesson-nav">
+<a href="glosario.html">Glosario</a>
+<a href="anatomia-sei.html">Anatomía SEI</a>
+<a href="../lessons/0004-adr-aws.html">Lección 4: redactar el ADR</a>
+</nav>
+
+<div class="ask">💬 <strong>¿Dudas?</strong> Trae a la conversación tu borrador: «revisa mi Contexto — ¿estoy metiendo la solución antes de decidir?». Es la confusión más frecuente.</div>
+
+<footer class="doc-footer">Curso AP-REQ-AV-2026 · Caso C · AWS Prescriptive Guidance & AWS Architecture Blog (2025).</footer>
+</main>
+</body>
+</html>

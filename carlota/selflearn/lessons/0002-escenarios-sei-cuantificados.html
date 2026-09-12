@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lección 2 · Escenarios SEI cuantificados</title>
+<link rel="stylesheet" href="../assets/course.css">
+<script defer src="../assets/quiz.js"></script>
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Lección 2 de 5 · Módulo 1 (segunda mitad)</p>
+<h1>La anatomía SEI: convertir adjetivos en números</h1>
+<p class="lede">Objetivo de hoy: entender los 6 elementos del patrón SEI que convierten «el sistema debe ser rápido» en una frase verificable — y el vocabulario de las métricas (p99, throughput, RTO, RPO, disponibilidad).</p>
+</header>
+
+<div class="meta-card">
+<p><strong>Tu victoria de hoy:</strong> podrás auditar cualquier requisito de calidad — el tuyo o el de un tercero — y señalar qué elemento del patrón falta o qué métrica es ambigua.</p>
+</div>
+
+<h2>1. El problema que resuelve</h2>
+<p>«El sistema debe ser <em>rápido</em>» no se puede probar: ¿rápido para quién, medido cómo, bajo qué carga? El patrón SEI — creado por el <em>Software Engineering Institute</em> (Instituto de Ingeniería de Software de Carnegie Mellon, EE. UU.) y publicado en el libro <em>Software Architecture in Practice</em> (Bass, Clements y Kazman) — descompone cada requisito de calidad en <strong>6 partes obligatorias</strong>. La sexta es una métrica numérica: si falta, el requisito es una opinión.</p>
+
+<table>
+<tr><th>#</th><th>Elemento</th><th>Pregunta</th><th>Ejemplo (Caso C)</th></tr>
+<tr><td>1</td><td><strong>Fuente del estímulo</strong></td><td>¿Quién origina el evento?</td><td>el marketplace externo (servicio de la tienda que crea las órdenes)</td></tr>
+<tr><td>2</td><td><strong>Estímulo</strong></td><td>¿Qué evento concreto llega?</td><td>una ráfaga de 2.000 órdenes por minuto</td></tr>
+<tr><td>3</td><td><strong>Artefacto</strong></td><td>¿Qué componente recibe el golpe?</td><td>el motor de emparejamiento geoespacial</td></tr>
+<tr><td>4</td><td><strong>Entorno</strong></td><td>¿Bajo qué condiciones?</td><td>hora punta: 40.000 repartidores conectados</td></tr>
+<tr><td>5</td><td><strong>Respuesta</strong></td><td>¿Qué debe hacer el sistema?</td><td>asignar cada orden a un repartidor cercano libre y confirmar</td></tr>
+<tr><td>6</td><td><strong>Medida de respuesta</strong></td><td>¿Con qué números se aprueba?</td><td>p99 ≤ 200 ms · ≥ 2.000 asignaciones/min · 0 órdenes rechazadas</td></tr>
+</table>
+<p class="cite">Fuente primaria: <a href="https://medium.com/@anil.goyal0057/quality-attribute-scenario-a-way-to-define-software-quality-requirements-71dd82f4be1b">Anil Goyal — Quality Attribute Scenario (lectura obligatoria de la actividad)</a> · institucional: <a href="https://www.sei.cmu.edu/our-work/software-architecture/">SEI, Carnegie Mellon</a>. Diagrama del patrón y ejemplo de las 4 filas: <a href="../reference/anatomia-sei.html">cheat sheet de anatomía SEI</a>.</p>
+
+<h2>2. El vocabulario de las medidas, definido</h2>
+<p>Estas siglas aparecen en cualquier requisito de calidad serio. Apréndelas ahora — las reusarás en los Módulos 2 y 4:</p>
+<table>
+<tr><th>Sigla / término</th><th>Significa…</th><th>Qué mide (con el ejemplo del Caso C)</th></tr>
+<tr><td><strong>Latencia</strong></td><td>tiempo entre petición y respuesta</td><td>«tardo 180 ms en asignar una orden»</td></tr>
+<tr><td><strong>Throughput</strong></td><td>rendimiento: cantidad de trabajo por unidad de tiempo</td><td>«proceso 2.000 órdenes por minuto»</td></tr>
+<tr><td><strong>RPS</strong></td><td><em>requests per second</em> (peticiones por segundo); unidad habitual de throughput en servicios web</td><td>«33 RPS equivale a 2.000 órdenes/min»</td></tr>
+<tr><td><strong>Percentil (p50, p95, p99)</strong></td><td>forma de resumir muchas latencias: ordena todas las mediciones y toma la que deja al <em>N%</em> por debajo</td><td><strong>p99 ≤ 200 ms</strong> = el 99% de las asignaciones tarda 200 ms o menos; solo 1 de cada 100 puede excederlo</td></tr>
+<tr><td><strong>Disponibilidad</strong></td><td>porcentaje del tiempo en que el sistema está operativo («los nueves»: 99,9% = tres nueves)</td><td>99,95% mensual ⇒ como máximo ~21 min de parada al mes (el 0,05% de 30 días)</td></tr>
+<tr><td><strong>RTO</strong></td><td><em>Recovery Time Objective</em> — objetivo de tiempo de recuperación: cuánto tarda el servicio en volver a funcionar tras un fallo</td><td>«tras la caída del nodo maestro, el matching vuelve en RTO ≤ 30 s»</td></tr>
+<tr><td><strong>RPO</strong></td><td><em>Recovery Point Objective</em> — objetivo de punto de recuperación: cuántos datos (medidos en tiempo hacia atrás) se permiten perder</td><td>RPO = 0 ⇒ no se pierde ninguna orden aceptada; RPO = 5 min ⇒ se tolera perder los últimos 5 min de escrituras</td></tr>
+<tr><td><strong>Failover</strong></td><td>conmutación por error: el salto automático a un nodo de respaldo cuando el principal falla</td><td>un nodo réplica asume el rol de maestro del índice geoespacial</td></tr>
+<tr><td><strong>Auto-escalado</strong></td><td>añadir o quitar instancias automáticamente según la carga (sin personas en medio)</td><td>de 2 a 6 réplicas del motor en ≤ 60 s ante un pico ×3</td></tr>
+<tr><td><strong>Ráfaga (spike)</strong></td><td>subida breve e intensa de carga, típicamente de origen externo</td><td>un evento comercial multiplica las órdenes por 3 durante 10 minutos</td></tr>
+</table>
+
+<div class="callout tip"><span class="tag">RTO vs RPO — nunca los confundas</span><strong>RTO</strong> mira hacia el futuro del servicio: <em>¿cuánto tarda en volver?</em> (tiempo de parada máximo tolerado). <strong>RPO</strong> mira al pasado de los datos: <em>¿cuánto se pierde?</em> (ventana de pérdida de datos máxima tolerada). Un sistema puede tener RTO = 30 s y RPO = 0: vuelve rápido Y sin perder nada. Mnemotecnia: <strong>T</strong> = <em>time</em> (el reloj del servicio), <strong>P</strong> = <em>point</em> (el punto en el tiempo hasta donde llegan tus datos).</div>
+
+<div class="callout warn"><span class="tag">Por qué percentil y no media</span>La media esconde a los afectados. Si 99 usuarios esperan 50 ms y 1 espera 10 s, la media (150 ms) parece buena — pero ese 1 usuario tiene una experiencia horrible. El p99 se compromete con el peor 1%: por eso los requisitos serios se escriben en p95/p99, nunca en media.</div>
+
+<h2>3. Cómo cuantificar cada atributo</h2>
+<table>
+<tr><th>Si tu atributo es…</th><th>Medidas típicas (elige 2-3)</th></tr>
+<tr><td>Rendimiento</td><td>latencia p95/p99 (ms) · throughput (ops/min, RPS) · tasa de rechazo (%)</td></tr>
+<tr><td>Fiabilidad</td><td>disponibilidad mensual (99,95%) · RTO (s) · RPO (pérdida de datos) · órdenes perdidas = 0</td></tr>
+<tr><td>Seguridad</td><td>% de mensajes falsificados rechazados · tiempo de alerta (s) · cobertura de auditoría (100%)</td></tr>
+<tr><td>Escalabilidad</td><td>multiplicador de carga absorbido (×3) · tiempo de auto-escalado (≤ 60 s) · p99 invariante</td></tr>
+</table>
+<p>Fíjate en el patrón de toda medida seria: <strong>umbral numérico + percentil o proporción + condición de carga</strong>. «p99 ≤ 200 ms con 2.000 órdenes/min». Sin los tres ingredientes, el requisito vuelve a ser abstracto.</p>
+
+<h2>4. Comprueba tu comprensión</h2>
+<div class="quiz" data-quiz data-title="Auditoría de escenarios SEI">
+<script type="application/json">
+[
+  {
+    "q": "«Bajo hora punta, el motor asigna órdenes en 200 ms». ¿Qué elemento falta?",
+    "options": ["la fuente del estímulo", "la medida de respuesta", "el artefacto"],
+    "correct": 0,
+    "explain": "¿Quién origina la carga? Sin fuente, el escenario no es reproducible en un test."
+  },
+  {
+    "q": "«El atacante envía posiciones falsas; el sistema responde en 100 ms». ¿Qué falta?",
+    "options": ["el artefacto", "el estímulo", "la respuesta esperada"],
+    "correct": 2,
+    "explain": "«Responde» no dice QUÉ hace: rechazar el mensaje, invalidar el token, alertar. La respuesta debe ser una acción verificable."
+  },
+  {
+    "q": "«Con un nodo caído el clúster sigue operativo, con RTO ≤ 30 s». ¿Qué elemento es «RTO ≤ 30 s»?",
+    "options": ["la medida de respuesta", "el entorno", "el estímulo"],
+    "correct": 0,
+    "explain": "Es el número que verifica la recuperación: medida de respuesta."
+  },
+  {
+    "q": "RPO = 0 en el motor de asignación significa que…",
+    "options": ["no se pierde ninguna orden", "vuelve en cero segundos", "no admite escrituras"],
+    "correct": 0,
+    "explain": "RPO mide pérdida de datos, no tiempo de arranque (eso es el RTO): ninguna orden aceptada se pierde."
+  },
+  {
+    "q": "Un p99 de 300 ms es mejor requisito que «latencia media de 150 ms» porque…",
+    "options": ["compromete al peor 1%", "usa unidades en inglés", "es un número menor"],
+    "correct": 0,
+    "explain": "El percentil acota la experiencia de la cola (usuarios más lentos); la media puede esconderla."
+  }
+]
+</script>
+</div>
+
+<h2>5. Lectura primaria recomendada (10 min)</h2>
+<p><strong><a href="https://medium.com/@anil.goyal0057/quality-attribute-scenario-a-way-to-define-software-quality-requirements-71dd82f4be1b">Quality Attribute Scenario — Anil Goyal (Medium)</a></strong>: la lectura obligatoria de la actividad; 3 minutos con la misma tabla de 6 partes que acabas de practicar. Complemento institucional: <a href="https://www.sei.cmu.edu/our-work/software-architecture/">SEI — Software Architecture</a>.</p>
+
+<nav class="lesson-nav">
+<a href="0001-iso-25010-caso-c.html">← Lección 1: ISO 25010</a>
+<a href="../reference/anatomia-sei.html">Cheat sheet SEI</a>
+<a href="0003-gherkin-bdd.html">Lección 3: Gherkin →</a>
+</nav>
+
+<div class="ask">💬 <strong>Recuerda:</strong> pregúntame lo que duela: «mi entorno y mi artefacto se parecen mucho, ¿está bien?». Revisamos tu escenario elemento por elemento.</div>
+
+<footer class="doc-footer">Lección 2/5 · patrón SEI (Bass, Clements, Kazman) vía Goyal (2023) · SEI CMU.</footer>
+</main>
+</body>
+</html>

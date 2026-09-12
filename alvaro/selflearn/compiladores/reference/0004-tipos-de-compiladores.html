@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tipos de compiladores y traductores · Compiladores</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Referencia · Compiladores</span>
+    <span>Chuleta imprimible</span>
+  </div>
+
+  <h1>Traductores y tipos de compiladores</h1>
+  <p class="subtitulo">Decide cualquier pregunta con dos ejes: <strong>qué produce</strong> y <strong>cuándo / para dónde compila</strong>.</p>
+
+  <h2>Eje 1 · Qué produce</h2>
+  <table>
+    <thead>
+      <tr><th>Traductor</th><th>Salida</th><th>¿Tú ejecutas algo después?</th><th>Ejemplo</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Compilador</strong></td><td>código máquina / objeto</td><td>Sí</td><td>GCC, Clang, javac (bytecode)</td></tr>
+      <tr><td><strong>Intérprete</strong></td><td>nada; ejecuta el programa</td><td>No</td><td>CPython, un intérprete de Lisp</td></tr>
+      <tr><td><strong>Transpilador</strong></td><td>código fuente de alto nivel</td><td>Sí (compilas el resultado)</td><td>TypeScript→JS, Babel, Sass</td></tr>
+      <tr><td><strong>Descompilador</strong></td><td>código de más alto nivel</td><td>Sí (revisas/editas)</td><td>JAD, Ghidra</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja clave">
+    <span class="etiqueta">La trampa central</span>
+    <p style="margin-bottom:0"><strong>Transpilador ≠ compilador a máquina.</strong> Sale código fuente de alto nivel. Si el enunciado dice «genera código máquina», es falso para un transpilador.</p>
+  </div>
+
+  <h2>Eje 2 · Cuándo y para dónde compila</h2>
+  <table>
+    <thead>
+      <tr><th>Tipo</th><th>Regla de una frase</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Cruzado</strong></td><td>Corre aquí, genera código para <em>otra</em> plataforma.</td></tr>
+      <tr><td><strong>Nativo</strong></td><td>Corre aquí, genera código para <em>esta</em> plataforma.</td></tr>
+      <tr><td><strong>JIT</strong></td><td>Compila <em>durante</em> la ejecución, por fragmentos. Parte de un intérprete/runtime.</td></tr>
+      <tr><td><strong>AOT</strong></td><td>Compila <em>todo</em> antes de ejecutar. (Opuesto al JIT.)</td></tr>
+      <tr><td><strong>Incremental</strong></td><td>Recompila <em>solo lo que cambió</em>.</td></tr>
+      <tr><td><strong>Una pasada</strong></td><td>Lee el fuente <em>una sola vez</em>.</td></tr>
+      <tr><td><strong>Varias pasadas</strong></td><td>Relee el fuente varias veces antes de generar.</td></tr>
+      <tr><td><strong>Optimizador</strong></td><td>Mejora eficiencia <em>sin cambiar</em> el significado.</td></tr>
+      <tr><td><strong>De arranque</strong></td><td>Sirve para construir una versión mejor del compilador.</td></tr>
+      <tr><td><strong>Compilador-compilador</strong></td><td>Herramienta que <em>genera</em> compiladores (lex/yacc, ANTLR).</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>La taxonomía no es excluyente:</strong> un compilador puede ser cruzado, optimizador y de varias pasadas al mismo tiempo.</p>
+
+  <h2>Árbol de decisión</h2>
+  <ol>
+    <li><strong>¿Qué sale?</strong> ¿Máquina? → compilador. ¿Fuente de alto nivel? → transpilador. ¿Nada, ejecuta? → intérprete.</li>
+    <li>Es compilador. <strong>¿Para qué plataforma genera?</strong> ¿Otra? → cruzado. ¿La misma? → nativo.</li>
+    <li><strong>¿Cuándo compila?</strong> ¿Durante la ejecución? → JIT. ¿Antes, todo? → AOT.</li>
+    <li><strong>¿Cuánto trabajo repite?</strong> ¿Solo lo cambiado? → incremental. ¿Todo? → recompilación completa.</li>
+  </ol>
+
+  <h2>Trampas que fallan en el examen</h2>
+  <ul>
+    <li>«JIT compila todo antes de ejecutar» → <strong>F</strong>. Eso es AOT.</li>
+    <li>«Un intérprete nunca compila» → <strong>F</strong>. CPython compila a bytecode.</li>
+    <li>«Un transpilador genera código máquina» → <strong>F</strong>. Genera código fuente.</li>
+    <li>«Compilador cruzado significa que cruza módulos» → <strong>F</strong>. Es otra plataforma.</li>
+    <li>«El optimizador puede cambiar lo que hace el programa» → <strong>F</strong>. Conserva el significado.</li>
+    <li>«Compilador e intérprete son mutuamente excluyentes» → <strong>F</strong>. Go es ambos; CPython interpreta y compila.</li>
+  </ul>
+
+  <h2>Conexiones con el resto del temario</h2>
+  <ul>
+    <li>El <strong>bytecode</strong> es código intermedio que ejecuta una <strong>máquina virtual</strong> (junto con un JIT en JVM/V8/CLR).</li>
+    <li>El <strong>compilador cruzado</strong> es posible gracias a que el <strong>back-end</strong> está separado y depende de la máquina.</li>
+    <li>El <strong>código intermedio</strong> es lo que permite reutilizar front-ends y back-ends entre plataformas.</li>
+  </ul>
+
+  <div class="nav no-imprimir">
+    <a href="../lessons/0003-traductores-y-tipos.html">← Lección 03</a>
+    <a href="0001-glosario.html">Glosario →</a>
+  </div>
+
+  <div class="pie">
+    <p>Referencia · Compiladores · Fuentes: <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">Crafting Interpreters, cap. 2</a>, <a href="https://es.wikipedia.org/wiki/Compilador">Wikipedia ES: Compilador</a>, <a href="https://en.wikipedia.org/wiki/Just-in-time_compilation">JIT compilation</a>, <a href="https://en.wikipedia.org/wiki/Source-to-source_compiler">Source-to-source compiler</a>.</p>
+  </div>
+
+</div>
+</body>
+</html>

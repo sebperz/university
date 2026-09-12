@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anatomía SEI de 6 elementos — Módulo 1</title>
+<link rel="stylesheet" href="../assets/course.css">
+</head>
+<body>
+<main>
+<header class="lesson">
+<p class="kicker">Documento de referencia · Módulo 1</p>
+<h1>Anatomía SEI: los 6 elementos de un escenario de atributo de calidad</h1>
+<p class="lede">El patrón que convierte «el sistema debe ser rápido» en una frase verificable. Rígidamente requerido por la actividad.</p>
+</header>
+
+<h2>El patrón</h2>
+<p>Un requisito de calidad mal escrito tiene adjetivos y no se puede probar. El patrón SEI (<em>Software Architecture in Practice</em>, Bass, Clements y Kazman) lo descompone en <strong>6 partes obligatorias</strong>:</p>
+
+<div class="figure">
+<svg viewBox="0 0 720 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagrama del patrón SEI">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#0f4c81"/>
+    </marker>
+  </defs>
+  <rect x="15" y="30" width="150" height="46" rx="8" fill="#e8f0f7" stroke="#0f4c81"/>
+  <text x="90" y="50" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f4c81">FUENTE</text>
+  <text x="90" y="66" text-anchor="middle" font-size="10" fill="#5c6670">¿de dónde viene?</text>
+
+  <line x1="165" y1="53" x2="255" y2="53" stroke="#0f4c81" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="260" y="30" width="150" height="46" rx="8" fill="#e8f0f7" stroke="#0f4c81"/>
+  <text x="335" y="50" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f4c81">ESTÍMULO</text>
+  <text x="335" y="66" text-anchor="middle" font-size="10" fill="#5c6670">¿qué evento llega?</text>
+
+  <line x1="410" y1="53" x2="500" y2="53" stroke="#0f4c81" stroke-width="2" marker-end="url(#arr)"/>
+
+  <rect x="505" y="30" width="150" height="46" rx="8" fill="#e8f0f7" stroke="#0f4c81"/>
+  <text x="580" y="50" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f4c81">ARTEFACTO</text>
+  <text x="580" y="66" text-anchor="middle" font-size="10" fill="#5c6670">¿qué parte se afecta?</text>
+
+  <rect x="260" y="140" width="200" height="46" rx="8" fill="#fdf3e3" stroke="#8a4b08"/>
+  <text x="360" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#8a4b08">ENTORNO</text>
+  <text x="360" y="176" text-anchor="middle" font-size="10" fill="#5c6670">¿bajo qué condiciones?</text>
+
+  <rect x="15" y="140" width="200" height="46" rx="8" fill="#e9f5ee" stroke="#1e6b3a"/>
+  <text x="115" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e6b3a">RESPUESTA</text>
+  <text x="115" y="176" text-anchor="middle" font-size="10" fill="#5c6670">¿qué debe hacer el sistema?</text>
+
+  <rect x="505" y="140" width="150" height="46" rx="8" fill="#e9f5ee" stroke="#1e6b3a"/>
+  <text x="580" y="160" text-anchor="middle" font-size="13" font-weight="bold" fill="#1e6b3a">MEDIDA</text>
+  <text x="580" y="176" text-anchor="middle" font-size="10" fill="#5c6670">¿con qué números se verifica?</text>
+
+  <line x1="360" y1="76" x2="360" y2="138" stroke="#0f4c81" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="260" y1="163" x2="218" y2="163" stroke="#1e6b3a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="460" y1="163" x2="503" y2="163" stroke="#1e6b3a" stroke-width="2" marker-end="url(#arr)"/>
+</svg>
+<figcaption>Los 6 elementos: el estímulo viaja desde la fuente hasta el artefacto, dentro de un entorno; la respuesta se verifica con la medida.</figcaption>
+</div>
+
+<table>
+<tr><th>#</th><th>Elemento</th><th>Pregunta</th><th>Ejemplo (Caso C)</th></tr>
+<tr><td>1</td><td><strong>Fuente del estímulo</strong></td><td>¿Quién o qué origina el evento?</td><td>La app del repartidor <code>R-77</code> (interna, confiable)</td></tr>
+<tr><td>2</td><td><strong>Estímulo</strong></td><td>¿Qué evento concreto llega?</td><td>Actualización de posición cada 5 s</td></tr>
+<tr><td>3</td><td><strong>Artefacto</strong></td><td>¿Qué componente recibe el golpe?</td><td>Servicio de ingesta de posiciones + índice geoespacial</td></tr>
+<tr><td>4</td><td><strong>Entorno</strong></td><td>¿En qué estado está el sistema?</td><td>Hora punta: 40.000 repartidores conectados</td></tr>
+<tr><td>5</td><td><strong>Respuesta</strong></td><td>¿Qué debe hacer el sistema?</td><td>Actualizar el índice y quedar disponible para matching</td></tr>
+<tr><td>6</td><td><strong>Medida de respuesta</strong></td><td>¿Con qué métricas se aprueba o rechaza?</td><td>Latencia de ingesta p99 ≤ 150 ms; pérdida de actualizaciones ≤ 0,1%</td></tr>
+</table>
+
+<p class="cite">Fuente primaria: <a href="https://medium.com/@anil.goyal0057/quality-attribute-scenario-a-way-to-define-software-quality-requirements-71dd82f4be1b">Anil Goyal — Quality Attribute Scenario (lectura obligatoria de la actividad)</a>, resumen del patrón del SEI; respaldo institucional: <a href="https://www.sei.cmu.edu/our-work/software-architecture/">SEI — Software Architecture</a>.</p>
+
+<h2>Cómo se escribe en la matriz (una fila por requisito)</h2>
+<p>La actividad exige 4 filas: <strong>Rendimiento, Fiabilidad, Seguridad, Escalabilidad</strong>. Estructura recomendada:</p>
+
+<pre><code>RQ-01 · RENDIMIENTO (ISO 25010: Eficiencia de rendimiento)
+  Fuente:    órdenes de compra entrantes del marketplace (externo, alta frecuencia)
+  Estímulo:  pico de 2.000 órdenes/minuto para emparejar
+  Artefacto: motor de emparejamiento geoespacial
+  Entorno:   operación normal en hora punta (40.000 repartidores activos)
+  Respuesta: asigna cada orden a un repartidor cercano y confirma al usuario
+  Medida:    latencia de asignación p99 ≤ 200 ms; throughput sostenido ≥ 2.000 asignaciones/min
+
+RQ-02 · FIABILIDAD (ISO 25010: Fiabilidad → disponibilidad, tolerancia a fallos, recuperabilidad)
+  Fuente:    fallo de hardware interno
+  Estímulo:  caída de 1 de 3 nodos del motor de matching
+  Artefacto: clúster del motor de matching
+  Entorno:   operación normal, sin intervención humana
+  Respuesta: reasigna el trabajo al nodo sobreviviente y no pierde órdenes aceptadas
+  Medida:    disponibilidad mensual ≥ 99,95%; recuperación (RTO) ≤ 30 s; órdenes perdidas = 0
+
+RQ-03 · SEGURIDAD (ISO 25010: Seguridad → autenticidad, integridad, resistencia)
+  Fuente:   atacante externo no autenticado
+  Estímulo: mensajes de posición falsificados que suplantan a un repartidor
+  Artefacto: API Gateway + servicio de ingesta de posiciones
+  Entorno:  operación normal, bajo ataque
+  Respuesta: rechaza el mensaje, invalida el token y alerta al equipo de seguridad
+  Medida:   ≥ 99,9% de mensajes falsificados rechazados; alerta generada ≤ 60 s; auditoría 100%
+
+RQ-04 · ESCALABILIDAD (ISO 25010: Flexibilidad → escalabilidad)
+  Fuente:   evento comercial masivo (externo)
+  Estímulo: crecimiento ×3 del tráfico de posiciones y órdenes
+  Artefacto: motor de matching y su cola de ingesta
+  Entorno:  hora punta normal superada por un pico excepcional
+  Respuesta: escala horizontalmente añadiendo réplicas y absorbe el pico sin rechazar órdenes
+  Medida:   capacidad 2× en ≤ 60 s (auto-escalado); p99 se mantiene ≤ 200 ms; pérdida de órdenes = 0</code></pre>
+
+<div class="callout penalty"><span class="tag">Penalización de la actividad</span>«Rápido», «robusto», «escalable», «alta disponibilidad», «seguro»: prohibidos si no van acompañados de números en <em>Medida de respuesta</em>. Cada fila debe poder convertirse en un test automático (k6 para RQ-01/RQ-04, caos para RQ-02, prueba de seguridad para RQ-03).</div>
+
+<div class="callout tip"><span class="tag">Truco de redacción</span>Si te bloqueas, escribe las 6 partes <em>en preguntas</em> y respóndelas para el Caso C. La medida SIEMPRE es la última: si no puedes ponerle número, es que el requisito todavía es abstracto.</div>
+
+<div class="quiz" data-quiz data-title="Autoevaluación: anatomía SEI">
+<script type="application/json">
+[
+  {
+    "q": "¿Qué elemento del patrón SEI convierte el requisito en verificable?",
+    "options": ["La respuesta", "La medida de respuesta", "El entorno"],
+    "correct": 1,
+    "explain": "La medida de respuesta aporta los números (ms, %, RPS) que permiten un test automático."
+  },
+  {
+    "q": "«Hora punta con 40.000 repartidores activos» corresponde a…",
+    "options": ["el artefacto", "la fuente del estímulo", "el entorno"],
+    "correct": 2,
+    "explain": "El entorno describe el estado/condiciones en las que ocurre el estímulo."
+  },
+  {
+    "q": "En «la app del repartidor envía una posición falsificada», la fuente es…",
+    "options": ["un atacante externo", "el motor de matching", "la cola de ingesta"],
+    "correct": 0,
+    "explain": "La fuente origina el estímulo; aquí es el actor malicioso, no el componente interno."
+  }
+]
+</script>
+</div>
+
+<nav class="lesson-nav">
+<a href="glosario.html">Glosario</a>
+<a href="../lessons/0002-escenarios-sei-cuantificados.html">Lección 2: escenarios SEI</a>
+</nav>
+
+<div class="ask">💬 <strong>¿Dudas?</strong> Vuelve a la conversación con tu agente y pregúntale: «no me cuadra la diferencia entre artefacto y entorno en mi escenario X». Corregirlo juntos es parte de la práctica.</div>
+
+<footer class="doc-footer">Curso AP-REQ-AV-2026 · Caso C · patrón SEI (Bass, Clements, Kazman) vía Goyal (2023).</footer>
+</main>
+</body>
+</html>

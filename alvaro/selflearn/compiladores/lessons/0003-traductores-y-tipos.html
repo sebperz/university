@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 · Traductores y tipos de compiladores</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="leccion-meta">
+    <span>Lección 03 · Compiladores</span>
+    <span>Refuerzo tras el simulacro</span>
+  </div>
+
+  <h1>Traductores y tipos de compiladores</h1>
+  <p class="subtitulo">Tus errores del simulacro venían de aquí. La clave es no memorizar listas, sino aprender a preguntar <em>«¿qué produce?»</em> y <em>«¿cuándo y para dónde compila?»</em>.</p>
+
+  <div class="caja idea">
+    <span class="etiqueta">La única pregunta que lo resuelve todo</span>
+    <p style="margin-bottom:0">Ante cualquier traductor, pregúntate: <strong>¿qué sale por la salida?</strong> Si sale código máquina → compilador. Si sale código fuente de otro lenguaje de alto nivel → transpilador. Si no sale nada y el programa simplemente corre → intérprete.</p>
+  </div>
+
+  <h2>Compilador, intérprete, transpilador</h2>
+  <table>
+    <thead>
+      <tr><th>Traductor</th><th>Entrada</th><th>Salida</th><th>¿Ejecuta?</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Compilador</strong></td><td>lenguaje de alto nivel</td><td>código máquina / objeto</td><td>No</td></tr>
+      <tr><td><strong>Intérprete</strong></td><td>lenguaje de alto nivel</td><td>nada (ejecuta)</td><td>Sí</td></tr>
+      <tr><td><strong>Transpilador</strong></td><td>lenguaje de alto nivel</td><td>otro lenguaje de alto nivel</td><td>No</td></tr>
+    </tbody>
+  </table>
+
+  <p>El transpilador también se llama <strong>compilador fuente a fuente</strong> (<em>source-to-source compiler</em>, <em>transcompiler</em>). Ejemplos: <strong>TypeScript → JavaScript</strong>, Babel (JavaScript moderno → antiguo), CoffeeScript, Sass → CSS. La salida <em>no</em> es código máquina: es código fuente que después pasa por el compilador del lenguaje destino. <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">(Nystrom, cap. 2, §2.2.3)</a></p>
+
+  <div class="caja clave">
+    <span class="etiqueta">Trampa</span>
+    <p style="margin-bottom:0">«Un transpilador produce código máquina» → <strong>FALSO</strong>. Produce código fuente de alto nivel. La palabra "compilar" en inglés se usa para ambos, pero en el examen la distinción importa.</p>
+  </div>
+
+  <h3>Que un intérprete compile no es contradicción</h3>
+  <p>Compilador e intérprete no son categorías cerradas. <strong>CPython</strong> es un intérprete… y por dentro <em>compila</em> tu programa a bytecode antes de ejecutarlo. <strong>Go</strong> es compilador (<code>go build</code>) e intérprete (<code>go run</code>). Por eso la frase «un intérprete nunca compila nada» es <strong>falsa</strong>. Lo que distingue al intérprete, desde el punto de vista del usuario, es que <em>ejecuta el programa sin que tú tengas que ejecutar un artefacto aparte</em>. <a href="https://craftinginterpreters.com/a-map-of-the-territory.html">(§2.3)</a></p>
+
+  <h2>Tipos de compiladores</h2>
+  <p>Esta taxonomía <strong>no es excluyente</strong>: un mismo compilador puede ser cruzado <em>y</em> optimizador <em>y</em> de varias pasadas a la vez. <a href="https://es.wikipedia.org/wiki/Compilador">(Wikipedia ES: Compilador)</a></p>
+
+  <table>
+    <thead>
+      <tr><th>Tipo</th><th>Pregunta que responde</th><th>Definición</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Cruzado</strong></td><td>¿dónde se ejecuta vs. dónde genera?</td><td>Corre en una plataforma y genera código para otra distinta.</td></tr>
+      <tr><td><strong>Nativo</strong></td><td>¿y si coincide?</td><td>Genera código para la misma arquitectura donde corre.</td></tr>
+      <tr><td><strong>JIT</strong></td><td>¿cuándo compila?</td><td>Traduce fragmentos <em>durante</em> la ejecución, según se necesitan. Vive dentro de un intérprete o runtime.</td></tr>
+      <tr><td><strong>AOT</strong></td><td>¿y si compila antes?</td><td><em>Ahead-of-time</em>: compila todo antes de ejecutar (el caso opuesto al JIT).</td></tr>
+      <tr><td><strong>Incremental</strong></td><td>¿cuánto recompila?</td><td>Solo las partes que cambiaron, reutilizando el trabajo previo.</td></tr>
+      <tr><td><strong>Una / varias pasadas</strong></td><td>¿cuántas veces lee el fuente?</td><td>Una pasada: una sola lectura. Varias: relee antes de generar.</td></tr>
+      <tr><td><strong>Optimizador</strong></td><td>¿cambia el comportamiento?</td><td>Mejora la eficiencia <em>conservando</em> el significado del programa.</td></tr>
+      <tr><td><strong>De arranque</strong></td><td>¿para qué se usa?</td><td><em>Bootstrap</em>: compila una versión más definitiva del compilador de un lenguaje.</td></tr>
+      <tr><td><strong>Compilador-compilador</strong></td><td>¿qué produce?</td><td>Una herramienta que genera compiladores (p. ej. lex/yacc).</td></tr>
+    </tbody>
+  </table>
+
+  <div class="caja pista">
+    <span class="etiqueta">Truco de examen</span>
+    <p style="margin-bottom:0">Cruzado y nativo se oponen por <em>plataforma</em>. JIT y AOT se oponen por <em>momento</em> (durante vs. antes). Si un enunciado dice «compila <strong>todo</strong> el programa <strong>antes</strong> de ejecutarlo», está describiendo AOT/nativo y por tanto es <strong>falso</strong> para un JIT.</p>
+  </div>
+
+  <h2>Practica: 15 preguntas</h2>
+  <div class="quiz" data-quiz></div>
+  <script type="application/json" class="quiz-data">
+  [
+    { "tipo": "vf",
+      "pregunta": "Un intérprete ejecuta el programa directamente desde el código fuente.",
+      "resp": true,
+      "explica": "El usuario corre el programa desde el fuente; no produce un ejecutable separado que deba lanzar después." },
+
+    { "tipo": "vf",
+      "pregunta": "Un transpilador produce código máquina como salida.",
+      "resp": false,
+      "explica": "Produce código fuente en otro lenguaje de alto nivel. La traducción a máquina la hace luego el compilador del lenguaje destino." },
+
+    { "tipo": "vf",
+      "pregunta": "La distinción entre compilador e intérprete es estricta: una implementación no puede ser ambas cosas.",
+      "resp": false,
+      "explica": "No es excluyente. CPython interpreta y compila a bytecode; Go compila con `go build` y ejecuta con `go run`." },
+
+    { "tipo": "vf",
+      "pregunta": "Un compilador JIT compila todo el programa antes de ejecutarlo.",
+      "resp": false,
+      "explica": "El JIT traduce fragmentos durante la ejecución. Compilar todo por adelantado es AOT, lo opuesto." },
+
+    { "tipo": "vf",
+      "pregunta": "Un compilador optimizador puede cambiar la funcionalidad del programa con tal de ganar velocidad.",
+      "resp": false,
+      "explica": "Optimizar es mejorar la eficiencia conservando el significado: mismo comportamiento, mejor rendimiento." },
+
+    { "tipo": "vf",
+      "pregunta": "Un compilador de arranque se usa para compilar una versión más definitiva del compilador de un lenguaje.",
+      "resp": true,
+      "explica": "Es el bootstrap compiler: una versión temporal que sirve para construir la definitiva o mejor optimizada." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué traductor produce como salida código fuente de otro lenguaje de alto nivel?",
+      "opciones": ["El transpilador", "El intérprete", "El enlazador", "El descompilador"],
+      "resp": 0,
+      "explica": "Esa es exactamente la definición de transpilador o compilador fuente a fuente." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador se usa cuando el programa se compila en una plataforma pero se ejecuta en otra arquitectura?",
+      "opciones": ["Compilador cruzado", "Compilador JIT", "Compilador incremental", "Compilador nativo"],
+      "resp": 0,
+      "explica": "El cruzado (cross-compiler) genera código para una plataforma distinta de la que lo ejecuta." },
+
+    { "tipo": "unica",
+      "pregunta": "TypeScript se traduce a JavaScript. ¿Cómo se llama ese proceso?",
+      "opciones": ["Transpilación", "Ensamblado", "Descompilación", "Enlazado"],
+      "resp": 0,
+      "explica": "Ambos lenguajes son de alto nivel; la traducción entre ellos es transpilación." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador forma parte de un runtime y traduce en caliente las zonas más usadas?",
+      "opciones": ["JIT", "Cruzado", "Incremental", "De arranque"],
+      "resp": 0,
+      "explica": "El JIT vive dentro de un intérprete o máquina virtual y optimiza sobre la marcha los puntos calientes." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué enfoque compila todo el programa de antemano, antes de ejecutarlo?",
+      "opciones": ["La compilación AOT", "La compilación JIT", "La compilación incremental", "La transpilación"],
+      "resp": 0,
+      "explica": "AOT (ahead-of-time) es justo lo contrario de JIT: todo se compila antes de la ejecución." },
+
+    { "tipo": "unica",
+      "pregunta": "¿Qué compilador recompila únicamente las partes del programa que cambiaron?",
+      "opciones": ["Compilador incremental", "Compilador nativo", "Compilador cruzado", "Compilador JIT"],
+      "resp": 0,
+      "explica": "El incremental reutiliza el trabajo anterior y solo reprocesa lo modificado." },
+
+    { "tipo": "multiple",
+      "pregunta": "¿Cuáles de los siguientes son tipos o categorías de compiladores?",
+      "opciones": ["Compilador cruzado", "Compilador JIT", "Compilador optimizador", "Compilador de excepciones"],
+      "resp": [0, 1, 2],
+      "explica": "Cruzado, JIT y optimizador son categorías reales. `Compilador de excepciones` no existe." },
+
+    { "tipo": "multiple",
+      "pregunta": "¿Qué afirmaciones son ciertas sobre un transpilador?",
+      "opciones": ["Produce código fuente en otro lenguaje", "Reutiliza el compilador del lenguaje destino", "Genera directamente código máquina", "Ejecuta el programa al traducirlo"],
+      "resp": [0, 1],
+      "explica": "Su salida es fuente de alto nivel; después el compilador destino termina el trabajo." },
+
+    { "tipo": "relacionar",
+      "pregunta": "Relaciona cada término con su definición.",
+      "izquierda": ["Compilador cruzado", "Compilador JIT", "Compilador incremental", "Transpilador"],
+      "derecha": ["Genera código para otra plataforma", "Compila fragmentos durante la ejecución", "Recompila solo lo que cambió", "Traduce entre lenguajes de alto nivel"],
+      "resp": { "0": 0, "1": 1, "2": 2, "3": 3 },
+      "explica": "Cruzado → otra plataforma; JIT → durante la ejecución; incremental → solo lo cambiado; transpilador → entre lenguajes de alto nivel." }
+  ]
+  </script>
+
+  <h2>Para profundizar</h2>
+  <div class="caja pista">
+    <span class="etiqueta">Fuente primaria recomendada</span>
+    <p style="margin-bottom:0"><a href="https://craftinginterpreters.com/a-map-of-the-territory.html">Robert Nystrom, <em>Crafting Interpreters</em>, cap. 2</a>: lee las secciones <strong>2.2.3 (Transpilers)</strong>, <strong>2.2.4 (Just-in-time compilation)</strong> y <strong>2.3 (Compilers and Interpreters)</strong>. Cubren exactamente lo que fallaste, mejor que cualquier apunte.</p>
+  </div>
+
+  <div class="nav no-imprimir">
+    <a href="0002-simulacro-1.html">← Simulacro 1</a>
+    <a href="../reference/0004-tipos-de-compiladores.html">Chuleta: tipos de compiladores →</a>
+  </div>
+
+  <div class="pie">
+    <p><strong>¿Sigues con dudas en alguno?</strong> Dime el número de pregunta del simulacro y te la explico paso a paso. También puedo generarte otro simulacro centrado solo en tipos de compiladores y transpiladores.</p>
+    <p>Lección 03 · <a href="../reference/0004-tipos-de-compiladores.html">Tipos de compiladores (referencia)</a> · <a href="../reference/0001-glosario.html">Glosario</a> · <a href="../reference/0003-banco-preguntas.html">Banco de preguntas</a></p>
+  </div>
+
+</div>
+<script src="../assets/quiz.js"></script>
+</body>
+</html>
