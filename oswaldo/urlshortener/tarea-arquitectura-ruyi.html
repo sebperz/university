@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruyi: acortador de URLs con estadísticas de uso</title>
+<style>
+  @page { margin: 2cm; }
+  @page { @top-right { content: counter(page); font-family: "Times New Roman", serif; font-size: 12pt; } }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Calibri, Arial, sans-serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000;
+    margin: 0 auto;
+    max-width: 21cm;
+  }
+  @media screen { body { padding: 2cm; } }
+  code, pre { font-family: "Roboto Mono", Consolas, monospace; }
+
+  /* Portada APA 7.ª edición, trabajo de estudiante */
+  .portada {
+    font-family: "Times New Roman", Georgia, serif;
+    font-size: 12pt;
+    line-height: 2;
+    text-align: center;
+    padding-top: 2.5cm;
+    page-break-after: always;
+    break-after: page;
+  }
+  @media screen { .portada { min-height: 25.7cm; } }
+  .portada p {
+    margin: 0;
+    line-height: 2;
+    text-align: center;
+  }
+  .portada .titulo {
+    font-weight: bold;
+    line-height: 2;
+  }
+
+  h2 { font-weight: bold; font-size: 12pt; margin: 1.2em 0 0.4em; }
+  h3 { font-weight: bold; font-style: italic; font-size: 12pt; margin: 1em 0 0.3em; }
+  p { margin: 0 0 0.8em; text-align: justify; }
+
+  figure { margin: 1.2em 0; text-align: center; }
+  figcaption { font-size: 11pt; font-style: italic; margin-top: 0.4em; text-align: center; }
+  .fig-num { font-weight: bold; font-style: normal; }
+
+  .tabla-num { margin: 1.2em 0 0 0; }
+  .tabla-titulo { font-style: italic; margin: 0 0 0.3em; text-align: left; }
+  table.apa {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 1px solid #000;
+    border-bottom: 1px solid #000;
+    font-size: 11pt;
+    line-height: 1.4;
+  }
+  table.apa th, table.apa td {
+    padding: 0.35em 0.5em;
+    text-align: left;
+    vertical-align: top;
+    border: none;
+  }
+  table.apa thead th { border-bottom: 1px solid #000; }
+  .nota { font-size: 10.5pt; line-height: 1.4; text-align: left; margin-top: 0.4em; }
+
+  a { color: #000; }
+</style>
+</head>
+<body>
+
+<!-- ===================== PORTADA ===================== -->
+<section class="portada">
+  <p class="titulo">Ruyi: Acortador de URLs con Estadísticas de Uso</p>
+  <p>&nbsp;</p>
+  <p>Adolfo José Leal Camargo y Juan Sebastián Pérez Galvis</p>
+  <p>Programa de Ingeniería de Sistemas, Universidad Simón Bolívar, sede Cúcuta</p>
+  <p>Arquitectura de Software</p>
+  <p>Oswaldo Enrique Laguado Aguilar</p>
+  <p>10 de septiembre de 2026</p>
+</section>
+
+<!-- ===================== INTRODUCCIÓN ===================== -->
+<h2>Introducción</h2>
+<p>
+  Este documento complementa la exposición en formato PechaKucha 20x20 sobre Ruyi, un
+  acortador de URLs con estadísticas de uso. El caso parte de una necesidad concreta: los
+  enlaces extensos son difíciles de compartir y no informan cuántas veces se abren. Ruyi
+  recibe una URL larga, devuelve un código corto y registra cada acceso para producir
+  métricas de tráfico.
+</p>
+<p>
+  La arquitectura de Ruyi no se limita a que el código funcione. Define cómo se comunican
+  los módulos de acortamiento, redirección y estadísticas antes de escribir la primera línea
+  de producción, del mismo modo que el plano de una casa fija la ubicación de las tuberías
+  antes de levantar los muros. Esa decisión temprana evita que el sistema se vuelva frágil
+  cuando crezca. El video de la exposición está publicado en PechaKucha.com:
+  <a href="https://www.pechakucha.com/presentations/presentation-ruyi">https://www.pechakucha.com/presentations/presentation-ruyi</a>.
+</p>
+
+<!-- ===================== DESARROLLO ===================== -->
+<h2>Desarrollo</h2>
+
+<h3>Diagrama de la arquitectura propuesta</h3>
+<p>
+  La Figura 1 muestra la arquitectura en capas de Ruyi. Cada capa tiene una responsabilidad
+  única y se comunica con la inmediatamente inferior. La capa de presentación es la página
+  web: recibe el enlace largo, muestra el enlace corto y atiende la redirección. La capa de
+  lógica de negocio concentra las reglas: valida la URL, genera el código aleatorio de seis
+  caracteres y registra el mapeo. La capa de persistencia guarda y recupera datos, y se
+  divide en dos almacenes, uno para los mapeos y otro para la analítica. La base de datos es
+  el último nivel.
+</p>
+<p>
+  La capa de lógica funciona como capa cerrada para las escrituras, de modo que toda
+  creación de enlaces pasa por sus validaciones. La redirección, que es la operación más
+  frecuente, no repite ese recorrido: consulta una caché distribuida que resuelve el código
+  en microsegundos y solo baja a la base de datos cuando la caché falla. Sobre el stack se
+  dispone una capa abierta de servicios comunes. La redirección publica un evento de click
+  en una cola y continúa sin esperar; un consumidor lo procesa en segundo plano y escribe en
+  el almacén de analítica. Este atajo, permitido por la capa abierta, separa el registro de
+  estadísticas del camino crítico.
+</p>
+
+<figure>
+  <svg viewBox="0 0 760 480" width="100%" role="img"
+       aria-label="Arquitectura en capas de Ruyi: presentación, lógica de negocio, persistencia y base de datos, con caché distribuida y capa abierta de servicios para estadísticas.">
+    <defs>
+      <marker id="flecha" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 z" fill="#1B1813"/>
+      </marker>
+      <marker id="flechaAcc" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 z" fill="#CC3333"/>
+      </marker>
+      <marker id="flechaDoble" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+        <path d="M0,0 L8,3 L0,6 z" fill="#1B1813"/>
+      </marker>
+      <marker id="flechaDobleIni" markerWidth="10" markerHeight="10" refX="1" refY="3" orient="auto">
+        <path d="M8,0 L0,3 L8,6 z" fill="#1B1813"/>
+      </marker>
+    </defs>
+
+    <!-- Capa de servicios (abierta) -->
+    <rect x="505" y="30" width="240" height="370" rx="6" fill="none"
+          stroke="#CC3333" stroke-width="1.6" stroke-dasharray="7 5"/>
+    <text x="625" y="54" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="14" font-weight="bold" fill="#CC3333">Capa de servicios (abierta)</text>
+
+    <rect x="525" y="72" width="200" height="44" rx="4" fill="#FBF2F2" stroke="#CC3333"/>
+    <text x="625" y="99" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="13" fill="#1B1813">Estadísticas y logging</text>
+
+    <rect x="525" y="150" width="200" height="44" rx="4" fill="#FBF2F2" stroke="#CC3333"/>
+    <text x="625" y="177" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="13" fill="#1B1813">Event Dispatcher</text>
+
+    <rect x="525" y="228" width="200" height="44" rx="4" fill="#FBF2F2" stroke="#CC3333"/>
+    <text x="625" y="255" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="13" fill="#1B1813">Cola de eventos</text>
+
+    <rect x="525" y="306" width="200" height="44" rx="4" fill="#FBF2F2" stroke="#CC3333"/>
+    <text x="625" y="333" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="13" fill="#1B1813">Consumidor (worker)</text>
+
+    <!-- Stack principal -->
+    <rect x="20" y="30" width="300" height="46" rx="4" fill="#FFFFFF" stroke="#1B1813"/>
+    <text x="170" y="58" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="14" font-weight="bold" fill="#1B1813">Presentación (web)</text>
+
+    <line x1="170" y1="76" x2="170" y2="106" stroke="#1B1813" stroke-width="1.4" marker-end="url(#flecha)"/>
+
+    <rect x="20" y="110" width="300" height="100" rx="4" fill="#FFFFFF" stroke="#1B1813"/>
+    <text x="170" y="140" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="14" font-weight="bold" fill="#1B1813">Lógica de Negocio (cerrada)</text>
+    <text x="170" y="163" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="12" fill="#444">valida URL · genera código</text>
+    <text x="170" y="182" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="12" fill="#444">resuelve redirección</text>
+
+    <line x1="170" y1="210" x2="170" y2="240" stroke="#1B1813" stroke-width="1.4" marker-end="url(#flecha)"/>
+
+    <rect x="20" y="244" width="300" height="76" rx="4" fill="#FFFFFF" stroke="#1B1813"/>
+    <text x="170" y="272" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="14" font-weight="bold" fill="#1B1813">Persistencia</text>
+    <text x="170" y="294" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="12" fill="#444">almacén de mapeos · almacén de analítica</text>
+
+    <line x1="170" y1="320" x2="170" y2="350" stroke="#1B1813" stroke-width="1.4" marker-end="url(#flecha)"/>
+
+    <rect x="20" y="354" width="300" height="46" rx="4" fill="#FFFFFF" stroke="#1B1813"/>
+    <text x="170" y="382" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="14" font-weight="bold" fill="#1B1813">Base de Datos</text>
+
+    <!-- Caché distribuida -->
+    <rect x="350" y="126" width="135" height="58" rx="4" fill="#F4F4F4" stroke="#1B1813" stroke-dasharray="4 3"/>
+    <text x="417" y="150" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="13" font-weight="bold" fill="#1B1813">Caché distribuida</text>
+    <text x="417" y="170" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="11.5" fill="#444">lookup en memoria</text>
+
+    <line x1="320" y1="156" x2="350" y2="156" stroke="#1B1813" stroke-width="1.4"
+          marker-start="url(#flechaDobleIni)" marker-end="url(#flechaDoble)"/>
+    <text x="335" y="146" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="11" fill="#444">lookup</text>
+
+    <!-- Evento: click registrado -->
+    <path d="M320,198 L498,198 L498,172 L525,172" fill="none" stroke="#CC3333"
+          stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#flechaAcc)"/>
+    <text x="405" y="191" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="11.5" fill="#CC3333">click registrado (sin esperar)</text>
+
+    <!-- Consumidor escribe en analítica -->
+    <path d="M525,328 L500,328 L500,290 L320,290" fill="none" stroke="#CC3333"
+          stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#flechaAcc)"/>
+    <text x="410" y="311" text-anchor="middle" font-family="Calibri, Arial, sans-serif"
+          font-size="11.5" fill="#CC3333">escribe clicks</text>
+  </svg>
+  <figcaption>
+    <span class="fig-num">Figura 1.</span> Arquitectura en capas de Ruyi, con caché
+    distribuida y capa abierta de servicios para la analítica.
+  </figcaption>
+</figure>
+
+<h3>Atributos de calidad prioritarios</h3>
+<p>
+  De los atributos de calidad del sistema, la arquitectura prioriza tres. Los tres
+  responden a la naturaleza del producto y a la forma en que se usa.
+</p>
+<p>
+  <strong><em>Rendimiento.</em></strong> La redirección debe ser casi instantánea. Un
+  usuario que hace clic en un enlace no tolera esperas, y una demora de segundos destruye el
+  valor de la herramienta: la velocidad es el producto. El código corto se resuelve en la
+  caché y no en disco, lo que reduce la latencia del lookup. La arquitectura reserva además
+  el camino caliente para la lectura, de modo que el registro de estadísticas no compite con
+  la redirección.
+</p>
+<p>
+  <strong><em>Disponibilidad.</em></strong> Ruyi debe estar accesible el 99.9% del tiempo.
+  Cada minuto de caída rompe los enlaces publicados en correos, campañas y redes, y una
+  redirección muerta se percibe como un fallo de confianza. La disponibilidad pesa sobre
+  todo en los picos, cuando un enlace corto se vuelve viral y el tráfico se multiplica. La
+  separación entre redirección y analítica permite que una falla en el registro de clicks no
+  detenga la redirección.
+</p>
+<p>
+  <strong><em>Escalabilidad.</em></strong> Un solo enlace viral puede multiplicar el tráfico
+  sin aviso. Los servidores que redirigen son ligeros y escalan en horizontal, la caché
+  distribuida absorbe el pico de lecturas y las escrituras de estadísticas entran en una
+  cola que se procesa en segundo plano. Así, el crecimiento de la carga no degrada la
+  operación que el usuario percibe.
+</p>
+
+<h3>Matriz de trade-offs</h3>
+<p>
+  Ninguna de estas decisiones es gratuita. La Tabla 1 registra qué se ganó y qué se perdió
+  en cada una, y permite justificar los balances ante cualquier interesado.
+</p>
+
+<p class="tabla-num"><strong>Tabla 1</strong></p>
+<p class="tabla-titulo">Matriz de trade-offs de la arquitectura de Ruyi</p>
+<table class="apa">
+  <thead>
+    <tr>
+      <th>Decisión</th>
+      <th>Se ganó</th>
+      <th>Se perdió</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Registro asíncrono de clicks</td>
+      <td>Redirección instantánea, sin esperar la escritura del dato.</td>
+      <td>Consistencia inmediata de las estadísticas; el contador puede tardar milisegundos en actualizarse.</td>
+    </tr>
+    <tr>
+      <td>Acortar sin registro</td>
+      <td>Adopción inmediata y fricción mínima para el usuario.</td>
+      <td>Control del abuso anónimo, compensado con validación de URLs y límites de uso por IP.</td>
+    </tr>
+    <tr>
+      <td>Caché distribuida y cola de eventos</td>
+      <td>Latencia mínima en la redirección y absorción de picos de lectura.</td>
+      <td>Simplicidad operativa: más componentes que desplegar y monitorear.</td>
+    </tr>
+    <tr>
+      <td>Capa de servicios abierta</td>
+      <td>Acceso directo a servicios comunes sin saltos innecesarios de capa.</td>
+      <td>Disciplina estricta de capas en el camino caliente.</td>
+    </tr>
+  </tbody>
+</table>
+<p class="nota">
+  <em>Nota.</em> La matriz recoge los balances discutidos en la exposición PechaKucha y
+  sirve como registro de decisiones para reevaluarlas si el contexto del negocio cambia.
+</p>
+
+<!-- ===================== RESUMEN ===================== -->
+<h2>Resumen</h2>
+<p>
+  Las decisiones anteriores no eliminan los riesgos técnicos: los trasladan a lugares donde
+  se pueden controlar. Al resolver la redirección en caché y al sacar el registro de
+  estadísticas del camino crítico, el sistema se protege de su riesgo más grave, que la
+  operación más frecuente se vuelva lenta. Al separar la analítica en una cola, una falla en
+  las métricas no tumba la redirección. Al mantener capas con responsabilidades únicas, un
+  cambio en la base de datos no obliga a tocar la interfaz.
+</p>
+<p>
+  El resultado es un sistema que sostiene la promesa del negocio: enlaces que siempre
+  responden, estadísticas que se acumulan sin frenar al usuario y una estructura que admite
+  crecimiento. La arquitectura correcta no es la más compleja, sino la que protege aquello
+  que al negocio le importa.
+</p>
+
+</body>
+</html>

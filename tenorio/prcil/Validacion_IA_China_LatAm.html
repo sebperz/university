@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Validación de Idea — Puente de IA china para devs hispanohablantes</title>
+<style>
+  :root {
+    --tinta: #14202b;
+    --tinta-suave: #4a5b6a;
+    --papel: #ffffff;
+    --fondo: #eef1f4;
+    --borde: #d6dde3;
+    --acento: #0d6b6b;
+    --acento-suave: #e4f2f1;
+    --alerta: #a4360f;
+    --alerta-suave: #fbeae2;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fondo);
+    color: var(--tinta);
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .hoja {
+    max-width: 920px;
+    margin: 32px auto;
+    background: var(--papel);
+    padding: 56px 64px 72px;
+    box-shadow: 0 2px 18px rgba(20,32,43,.08);
+  }
+  header.cabecera {
+    border-bottom: 4px solid var(--acento);
+    padding-bottom: 28px;
+    margin-bottom: 12px;
+  }
+  .materia {
+    text-transform: uppercase;
+    letter-spacing: .16em;
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--acento);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-size: 1.9rem;
+    line-height: 1.2;
+    margin: 0 0 10px;
+    letter-spacing: -.01em;
+  }
+  .subtitulo {
+    font-size: 1.02rem;
+    color: var(--tinta-suave);
+    margin: 0 0 22px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 6px 32px;
+    font-size: .86rem;
+    color: var(--tinta-suave);
+  }
+  .meta strong { color: var(--tinta); font-weight: 600; }
+
+  section { margin-top: 52px; }
+  h2 {
+    font-size: 1.28rem;
+    margin: 0 0 6px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--borde);
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  h2 .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    background: var(--acento);
+    color: #fff;
+    border-radius: 8px;
+    font-size: .95rem;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 1.02rem;
+    margin: 30px 0 10px;
+    color: var(--tinta);
+  }
+  p { margin: 10px 0; }
+  .intro-seccion { color: var(--tinta-suave); font-size: .95rem; }
+
+  .tarjeta-hipotesis {
+    background: var(--acento-suave);
+    border-left: 5px solid var(--acento);
+    border-radius: 6px;
+    padding: 24px 28px;
+    margin: 22px 0;
+  }
+  .tarjeta-hipotesis p { margin: 8px 0; font-size: 1.02rem; }
+  .placeholder {
+    color: var(--acento);
+    font-weight: 600;
+    background: rgba(13,107,107,.09);
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  .criterio {
+    background: #fff;
+    border: 1px dashed var(--acento);
+    border-radius: 6px;
+    padding: 18px 22px;
+    margin: 18px 0;
+    font-size: .96rem;
+  }
+  .criterio .etq {
+    display: block;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-size: .68rem;
+    font-weight: 700;
+    color: var(--acento);
+    margin-bottom: 6px;
+  }
+
+  .objetivos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0,1fr));
+    gap: 14px;
+    margin: 20px 0;
+  }
+  .objetivo {
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: #fafbfc;
+  }
+  .objetivo .codigo {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: #fff;
+    background: var(--tinta);
+    padding: 2px 8px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+  }
+  .objetivo p { margin: 0; font-size: .88rem; color: var(--tinta-suave); }
+  .objetivo strong { color: var(--tinta); }
+
+  .ficha {
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 18px 0;
+  }
+  .ficha .fila {
+    display: grid;
+    grid-template-columns: 210px 1fr;
+    border-bottom: 1px solid var(--borde);
+  }
+  .ficha .fila:last-child { border-bottom: none; }
+  .ficha .clave {
+    background: #f4f7f9;
+    padding: 12px 16px;
+    font-weight: 600;
+    font-size: .88rem;
+    color: var(--tinta);
+  }
+  .ficha .valor { padding: 12px 18px; font-size: .9rem; color: var(--tinta-suave); }
+
+  .bloque-entrevista {
+    margin: 26px 0 8px;
+    font-size: .78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    color: var(--acento);
+    border-bottom: 1px solid var(--borde);
+    padding-bottom: 6px;
+  }
+  .pregunta {
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 16px 18px 14px;
+    margin: 12px 0;
+    background: #fff;
+  }
+  .pregunta .cab {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+  }
+  .pregunta .n {
+    flex: none;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--tinta);
+    color: #fff;
+    font-size: .8rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pregunta .texto { font-size: .98rem; }
+  .pregunta .sondeo {
+    margin: 8px 0 0 38px;
+    font-size: .84rem;
+    color: var(--tinta-suave);
+    font-style: italic;
+  }
+  .etiquetas { margin: 10px 0 0 38px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    background: var(--acento-suave);
+    color: var(--acento);
+    border-radius: 20px;
+    padding: 3px 10px;
+  }
+  .tag.gris { background: #eef1f4; color: var(--tinta-suave); }
+
+  .nota-prohibido {
+    background: var(--alerta-suave);
+    border-left: 5px solid var(--alerta);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 22px 0;
+    font-size: .88rem;
+  }
+  .nota-prohibido strong { color: var(--alerta); }
+  .nota-prohibido ul { margin: 8px 0 0; padding-left: 20px; }
+  .nota-prohibido li { margin: 3px 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0;
+    font-size: .84rem;
+  }
+  th, td {
+    border: 1px solid var(--borde);
+    padding: 9px 11px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: #f4f7f9;
+    font-weight: 700;
+    font-size: .78rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    color: var(--tinta);
+  }
+  tbody tr:nth-child(even) td { background: #fafbfc; }
+  td.centro { text-align: center; font-weight: 600; white-space: nowrap; }
+
+  .cobertura {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+  }
+  .cobertura .chip {
+    border: 1px solid var(--borde);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: .78rem;
+    color: var(--tinta-suave);
+    background: #fafbfc;
+  }
+  .cobertura .chip b { color: var(--acento); }
+
+  .legal {
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    padding: 20px 24px;
+    background: #fafbfc;
+    font-size: .84rem;
+    color: var(--tinta-suave);
+    margin: 22px 0;
+  }
+  .legal h4 {
+    margin: 0 0 10px;
+    font-size: .9rem;
+    color: var(--tinta);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    font-size: .74rem;
+  }
+  .legal p { margin: 8px 0; }
+  .legal .destacado { color: var(--tinta); font-weight: 600; }
+  .legal a { color: var(--acento); word-break: break-all; }
+
+  ol.checklist { list-style: none; padding: 0; margin: 16px 0; }
+  ol.checklist li {
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    padding: 12px 16px 12px 46px;
+    margin: 8px 0;
+    position: relative;
+    font-size: .9rem;
+  }
+  ol.checklist li::before {
+    content: "";
+    position: absolute;
+    left: 16px;
+    top: 15px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--acento);
+    border-radius: 4px;
+  }
+  footer {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid var(--borde);
+    font-size: .76rem;
+    color: var(--tinta-suave);
+    text-align: center;
+  }
+
+  @media (max-width: 720px) {
+    .hoja { padding: 32px 22px 48px; margin: 0; }
+    .meta, .objetivos, .ficha .fila { grid-template-columns: 1fr; }
+    h1 { font-size: 1.5rem; }
+  }
+  @media print {
+    body { background: #fff; }
+    .hoja { box-shadow: none; margin: 0; max-width: none; padding: 0 18mm; }
+    section { page-break-inside: avoid; }
+    .pregunta, .objetivo, .legal { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+<div class="hoja">
+
+  <header class="cabecera">
+    <p class="materia">Innovación y Emprendimiento · INNPRENDE II — I Parcial "VALIDA"</p>
+    <h1>Validación de la idea: puente de IA china para desarrolladores hispanohablantes</h1>
+    <p class="subtitulo">Hipótesis, guion de entrevista, formulario cuantitativo y bitácora, según la Guía de Validación de Idea de Negocio de MacondoLab.</p>
+    <div class="meta">
+      <span><strong>Estudiante:</strong> ______________________</span>
+      <span><strong>Profesora:</strong> Andrea Tenorio</span>
+      <span><strong>Programa:</strong> Ingeniería de Sistemas</span>
+      <span><strong>Universidad:</strong> Simón Bolívar — Sede Cúcuta</span>
+    </div>
+  </header>
+
+  <!-- PASO 1 -->
+  <section id="paso-1">
+    <h2><span class="num">1</span> Hipótesis de innovación</h2>
+    <p class="intro-seccion">La idea convertida en una afirmación que se puede poner a prueba, con el criterio que permitirá leer los resultados sin discutirlos después.</p>
+
+    <div class="tarjeta-hipotesis">
+      <p>Creemos que <span class="placeholder">los desarrolladores hispanohablantes que construyen con APIs de LLM</span> necesitan <span class="placeholder">contenido técnico en español que les muestre alternativas chinas (DeepSeek, Qwen, Kimi) con una implementación reproducible</span> para <span class="placeholder">dejar de elegir y pagar por defecto precios de OpenAI y Anthropic sin haber comparado</span>.</p>
+    </div>
+
+    <div class="criterio">
+      <span class="etq">Criterio de éxito</span>
+      Tendremos razón si <strong>al menos el 60&nbsp;% de los entrevistados (5 de 8 o más)</strong> relata haber elegido el modelo de su último proyecto <strong>por defecto, sin comparar alternativas entre proveedores, en los últimos 12 meses</strong>, sin que se les induzca la respuesta.
+      <br><br>
+      <strong>Criterio secundario:</strong> al menos el 30&nbsp;% de los encuestados declara una acción concreta de adopción de un modelo chino (no un "quizás") para los próximos 3 meses.
+    </div>
+
+    <h3>Objetivos de validación</h3>
+    <div class="objetivos">
+      <div class="objetivo">
+        <span class="codigo">O1</span>
+        <p><strong>El problema es real y reciente.</strong> El dev elige su modelo por defecto, sin comparar alternativas, en los últimos 12 meses.</p>
+      </div>
+      <div class="objetivo">
+        <span class="codigo">O2</span>
+        <p><strong>El problema cuesta.</strong> Gasto mensual en APIs, dependencia de un solo proveedor y tiempo invertido en evaluar herramientas.</p>
+      </div>
+      <div class="objetivo">
+        <span class="codigo">O3</span>
+        <p><strong>La brecha de idioma y formato existe.</strong> Dificultad de encontrar material técnico en español y formato en que prefiere aprender.</p>
+      </div>
+      <div class="objetivo">
+        <span class="codigo">O4</span>
+        <p><strong>Hay oportunidad de consideración.</strong> Interés en probar un modelo chino y barreras percibidas: censura, confianza, pago, soporte.</p>
+      </div>
+    </div>
+
+    <h3>Descripción de la idea</h3>
+    <div class="ficha">
+      <div class="fila"><div class="clave">Identidad</div><div class="valor">Marca personal y proyecto de contenido: un ingeniero de sistemas que construye y enseña en español sobre el ecosistema de IA chino.</div></div>
+      <div class="fila"><div class="clave">Problema y necesidad</div><div class="valor">Los desarrolladores hispanohablantes desconocen que existen modelos chinos competitivos y más económicos, y eligen por defecto proveedores occidentales. El material técnico está en inglés o chino.</div></div>
+      <div class="fila"><div class="clave">Propuesta de valor</div><div class="valor">Contenido técnico en español que explica, con una implementación de referencia reproducible, cómo evaluar e integrar modelos chinos de IA.</div></div>
+      <div class="fila"><div class="clave">Segmento</div><div class="valor">Desarrolladores de habla hispana (Latinoamérica primero, España opcional) que hayan usado una API de LLM en los últimos 6 meses.</div></div>
+      <div class="fila"><div class="clave">Monetización y operación</div><div class="valor">Cursos y formación para desarrolladores latinos en el corto plazo; relaciones de developer relations o embajaduría con empresas chinas de IA en el mediano y largo plazo.</div></div>
+      <div class="fila"><div class="clave">Hipótesis puesta a prueba</div><div class="valor">La de la tarjeta de pruebas, con su criterio de éxito.</div></div>
+    </div>
+  </section>
+
+  <!-- PASO 2 -->
+  <section id="paso-2">
+    <h2><span class="num">2</span> Guion de entrevista cualitativa</h2>
+    <p class="intro-seccion">Entrevista semiestructurada de 10 preguntas, entre 30 y 40 minutos. No se menciona la solución en ningún momento: se pregunta primero por el problema. Todas las preguntas piden hechos ya ocurridos.</p>
+
+    <div class="bloque-entrevista">Apertura</div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">1</span><span class="texto">Cuénteme a qué se dedica, qué rol tiene hoy y cómo usa modelos de lenguaje (LLMs) en su trabajo.</span></div>
+      <p class="sondeo">Sondeo: ¿desde cuándo los usa, para qué tipo de tareas, en qué proyectos?</p>
+      <div class="etiquetas"><span class="tag gris">Contexto y perfil</span><span class="tag">O1</span></div>
+    </div>
+
+    <div class="bloque-entrevista">Indagación del problema</div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">2</span><span class="texto">Cuénteme la última vez que tuvo que elegir un modelo de lenguaje para un proyecto. ¿Cómo lo eligió?</span></div>
+      <p class="sondeo">Sondeo: ¿lo decidió usted o ya venía decidido? ¿buscó información antes de decidir?</p>
+      <div class="etiquetas"><span class="tag">O1</span></div>
+    </div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">3</span><span class="texto">En esa decisión, ¿comparó alternativas entre proveedores? ¿Qué opciones puso en la balanza?</span></div>
+      <p class="sondeo">Sondeo: ¿qué comparó exactamente: precio, calidad, latencia, facilidad de integración?</p>
+      <div class="etiquetas"><span class="tag">O1</span></div>
+    </div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">4</span><span class="texto">¿Qué fue lo más difícil de esa decisión?</span></div>
+      <p class="sondeo">Sondeo: ¿qué información le faltó? ¿a quién le preguntó?</p>
+      <div class="etiquetas"><span class="tag">O1</span><span class="tag">O3</span></div>
+    </div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">5</span><span class="texto">¿Qué hace cuando un modelo se le queda corto o le parece caro?</span></div>
+      <p class="sondeo">Sondeo: cuénteme un caso concreto. ¿Lo cambió, lo aguantó, buscó otra cosa?</p>
+      <div class="etiquetas"><span class="tag">O2</span></div>
+    </div>
+
+    <div class="bloque-entrevista">Alternativas actuales y costo</div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">6</span><span class="texto">¿Qué usa hoy y por qué? ¿Cuánto gasta por mes, aproximadamente, en APIs de modelos de lenguaje?</span></div>
+      <p class="sondeo">Sondeo: ¿ese gasto lo revisa? ¿sabe de dónde sale cada dólar?</p>
+      <div class="etiquetas"><span class="tag">O2</span></div>
+    </div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">7</span><span class="texto">¿Qué es lo que no le gusta de la solución que usa hoy?</span></div>
+      <p class="sondeo">Sondeo: ¿qué le haría cambiar de proveedor mañana?</p>
+      <div class="etiquetas"><span class="tag">O2</span><span class="tag">O4</span></div>
+    </div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">8</span><span class="texto">Cuando adopta una herramienta nueva, ¿dónde busca documentación o tutoriales y en qué idioma? ¿Qué encuentra en español?</span></div>
+      <p class="sondeo">Sondeo: ¿leyó algún tutorial o repositorio de ejemplo en español sobre LLMs? ¿cuál?</p>
+      <div class="etiquetas"><span class="tag">O3</span></div>
+    </div>
+
+    <div class="bloque-entrevista">Cierre</div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">9</span><span class="texto">¿Alguna vez evaluó o consideró un modelo de IA que no fuera de OpenAI, Google o Anthropic? ¿Qué lo llevó a hacerlo o qué lo frenó?</span></div>
+      <p class="sondeo">Sondeo: si menciona modelos chinos, ¿qué sabe de ellos y qué le genera dudas?</p>
+      <div class="etiquetas"><span class="tag">O1</span><span class="tag">O4</span></div>
+    </div>
+
+    <div class="pregunta">
+      <div class="cab"><span class="n">10</span><span class="texto">¿Hay algo que no le haya preguntado y que crea que debería saber?</span></div>
+      <p class="sondeo">Espacio abierto. Suele aparecer aquí lo que no estaba contemplado.</p>
+      <div class="etiquetas"><span class="tag gris">Hallazgos no previstos</span></div>
+    </div>
+
+    <div class="nota-prohibido">
+      <strong>Preguntas prohibidas (no deben aparecer en el guion).</strong> La guía las veta porque producen cortesía o especulación, no evidencia:
+      <ul>
+        <li>"¿Qué te parece mi idea?"</li>
+        <li>"¿Comprarías este producto si existiera?"</li>
+        <li>"¿Cuánto estarías dispuesto a pagar por esto?"</li>
+        <li>"¿Crees que a otras personas les gustaría?"</li>
+      </ul>
+    </div>
+
+    <h3>Registro inmediato</h3>
+    <p class="intro-seccion">Al terminar cada entrevista, transcribir o grabar las respuestas antes de pasar a la siguiente persona, con el consentimiento previo del participante.</p>
+  </section>
+
+  <!-- PASO 3 -->
+  <section id="paso-3">
+    <h2><span class="num">3</span> Formulario cuantitativo</h2>
+    <p class="intro-seccion">15 preguntas: 4 demográficas, 9 cerradas y 2 abiertas al final. Se aplica después de las entrevistas, con una muestra mínima de 100 personas. Por ahora queda diseñado para aprobación.</p>
+
+    <h3>Cobertura de los objetivos</h3>
+    <div class="cobertura">
+      <span class="chip"><b>O1</b> Preguntas 5, 6, 7</span>
+      <span class="chip"><b>O2</b> Preguntas 8, 9</span>
+      <span class="chip"><b>O3</b> Preguntas 10, 11</span>
+      <span class="chip"><b>O4</b> Preguntas 12, 13</span>
+      <span class="chip"><b>Perfil</b> Preguntas 1, 2, 3, 4</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:34px;">N.º</th>
+          <th>Pregunta</th>
+          <th style="width:110px;">Tipo</th>
+          <th>Opciones de respuesta</th>
+          <th style="width:60px;">Objetivo</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="centro">1</td>
+          <td>¿Cuál es su rol principal en desarrollo de software?</td>
+          <td>Selección única</td>
+          <td>Backend · Frontend · Full-stack · Data / ML · DevOps / SRE · Otro</td>
+          <td class="centro">Perfil</td>
+        </tr>
+        <tr>
+          <td class="centro">2</td>
+          <td>¿Cuántos años de experiencia tiene en desarrollo de software?</td>
+          <td>Selección única</td>
+          <td>Menos de 1 · 1 a 3 · 4 a 7 · 8 o más</td>
+          <td class="centro">Perfil</td>
+        </tr>
+        <tr>
+          <td class="centro">3</td>
+          <td>¿En qué país reside?</td>
+          <td>Selección única</td>
+          <td>Colombia · México · Argentina · Chile · Perú · Venezuela · Ecuador · España · Otro</td>
+          <td class="centro">Perfil</td>
+        </tr>
+        <tr>
+          <td class="centro">4</td>
+          <td>¿Usó una API de un modelo de lenguaje (OpenAI, Anthropic, Google, DeepSeek, Qwen u otra) en los últimos 6 meses?</td>
+          <td>Sí / No</td>
+          <td>Sí · No <em>(filtro de elegibilidad)</em></td>
+          <td class="centro">Perfil</td>
+        </tr>
+        <tr>
+          <td class="centro">5</td>
+          <td>En los últimos 12 meses, cuando eligió el modelo de lenguaje para un proyecto, ¿cómo lo decidió?</td>
+          <td>Selección única</td>
+          <td>Usé el que ya usaba, por defecto · Comparé 2 o 3 alternativas · Comparé 4 o más · No participé en la decisión</td>
+          <td class="centro">O1</td>
+        </tr>
+        <tr>
+          <td class="centro">6</td>
+          <td>¿Con qué frecuencia compara o revisa proveedores de modelos de lenguaje?</td>
+          <td>Escala Likert 1–5</td>
+          <td>1 Nunca — 5 Con frecuencia</td>
+          <td class="centro">O1</td>
+        </tr>
+        <tr>
+          <td class="centro">7</td>
+          <td>Antes de esta encuesta, ¿conocía los modelos DeepSeek, Qwen o Kimi?</td>
+          <td>Selección única</td>
+          <td>Ninguno · Uno · Dos · Los tres</td>
+          <td class="centro">O1</td>
+        </tr>
+        <tr>
+          <td class="centro">8</td>
+          <td>Aproximadamente, ¿cuánto gasta por mes en APIs de modelos de lenguaje?</td>
+          <td>Selección única</td>
+          <td>No uso API · Menos de US$20 · US$20 a 100 · US$100 a 500 · Más de US$500 · No lo sé</td>
+          <td class="centro">O2</td>
+        </tr>
+        <tr>
+          <td class="centro">9</td>
+          <td>¿Qué tanto depende de un solo proveedor de modelos de lenguaje?</td>
+          <td>Escala Likert 1–5</td>
+          <td>1 Nada — 5 Totalmente</td>
+          <td class="centro">O2</td>
+        </tr>
+        <tr>
+          <td class="centro">10</td>
+          <td>¿Qué tan difícil le resulta encontrar material técnico sobre modelos de lenguaje en español?</td>
+          <td>Escala Likert 1–5</td>
+          <td>1 Muy fácil — 5 Muy difícil</td>
+          <td class="centro">O3</td>
+        </tr>
+        <tr>
+          <td class="centro">11</td>
+          <td>¿En qué formato preferiría aprender a integrar un modelo de lenguaje nuevo?</td>
+          <td>Selección múltiple</td>
+          <td>Artículo o guía escrita · Video · Repositorio de ejemplo · Curso · Podcast</td>
+          <td class="centro">O3</td>
+        </tr>
+        <tr>
+          <td class="centro">12</td>
+          <td>Si un modelo de IA chino le ofreciera el mismo rendimiento a la mitad del costo, ¿qué tan probable es que lo probara?</td>
+          <td>Escala 0–10</td>
+          <td>0 Nada probable — 10 Muy probable</td>
+          <td class="centro">O4</td>
+        </tr>
+        <tr>
+          <td class="centro">13</td>
+          <td>¿Qué le frenaría de adoptar un modelo de IA chino en un proyecto real?</td>
+          <td>Selección múltiple</td>
+          <td>Desconfianza en la privacidad de mis datos · Censura o filtros de contenido · Documentación en inglés o chino · Facturación y medios de pago · Latencia o disponibilidad · Falta de soporte · Nada me frenaría</td>
+          <td class="centro">O4</td>
+        </tr>
+        <tr>
+          <td class="centro">14</td>
+          <td>¿Qué es lo que más le frustra hoy al elegir o integrar un modelo de lenguaje en sus proyectos?</td>
+          <td>Abierta</td>
+          <td>Respuesta libre</td>
+          <td class="centro">Abierta</td>
+        </tr>
+        <tr>
+          <td class="centro">15</td>
+          <td>¿Algo más que quiera agregar?</td>
+          <td>Abierta</td>
+          <td>Respuesta libre</td>
+          <td class="centro">Abierta</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Texto de tratamiento de datos</h3>
+    <div class="legal">
+      <h4>Trato de la información</h4>
+      <p>Cuando envíe este formulario, no recopilará automáticamente sus detalles, como el nombre y la dirección de correo electrónico, a menos que lo proporcione usted mismo.</p>
+      <p>MACONDOLAB – Centro de Crecimiento Empresarial e Innovación de la Universidad Simón Bolívar (Sede Cúcuta) – se compromete a proteger y respetar tu privacidad. Usaremos tu información personal exclusivamente para fines de investigación e innovación. Encuesta de Percepción y Validación de Mercado.</p>
+      <p><span class="destacado">Objetivo del Instrumento:</span> La presente encuesta se realiza con fines estrictamente académicos y de validación dentro del ecosistema de emprendimiento de la Universidad Simón Bolívar. El propósito es recolectar información relevante sobre el desconocimiento de alternativas de modelos de lenguaje (LLM) de origen chino —como DeepSeek, Qwen y Kimi— por parte de desarrolladores hispanohablantes, y sobre la falta de contenido técnico en español que explique cómo evaluarlas e integrarlas con una implementación reproducible.</p>
+      <p>Como titular de la información, declaro que he sido informado de que puedo consultar, modificar o revocar la autorización del tratamiento de mis datos personales y ejercer mis derechos a través de los canales institucionales (correo electrónico o teléfono en la campus Cúcuta). La Política de Protección de Datos completa puede ser consultada en la página web: www.unisimon.edu.co, mediante el siguiente enlace oficial: <a href="https://portal.unisimon.edu.co/web/index.php/showimagen/showpdf/centrodocumentos/20200220091418_0.pdf">https://portal.unisimon.edu.co/web/index.php/showimagen/showpdf/centrodocumentos/20200220091418_0.pdf</a></p>
+    </div>
+  </section>
+
+  <!-- PASO 4 -->
+  <section id="paso-4">
+    <h2><span class="num">4</span> Bitácora de aplicación</h2>
+    <p class="intro-seccion">Se diligencia una entrada por cada sesión de entrevista y una entrada general para el cierre del formulario. Documenta lo que efectivamente sucedió, sin corregirlo ni embellecerlo. Esta es la plantilla.</p>
+
+    <table>
+      <thead>
+        <tr><th style="width:220px;">Campo</th><th>Registro</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Fecha, hora y canal</strong></td><td>Presencial · videollamada · formulario en línea</td></tr>
+        <tr><td><strong>Instrumento aplicado</strong></td><td>Entrevista o formulario, con la versión utilizada</td></tr>
+        <tr><td><strong>Participante o grupo</strong></td><td>Perfil, sin datos que lo identifiquen si no dio autorización expresa</td></tr>
+        <tr><td><strong>Evidencias recogidas</strong></td><td>Capturas, fotografías, grabación, transcripción o testimonios textuales</td></tr>
+        <tr><td><strong>Datos cuantitativos</strong></td><td>Respuestas del formulario, conteos y porcentajes parciales (cuando aplique)</td></tr>
+        <tr><td><strong>Observaciones del entrevistador</strong></td><td>Qué coincidió con lo esperado, qué sorprendió, qué no se había contemplado</td></tr>
+        <tr><td><strong>Muestra acumulada</strong></td><td>Hasta la fecha, comparada con la muestra mínima (5–10 entrevistas, 100+ encuestas)</td></tr>
+        <tr><td><strong>Análisis de la información</strong></td><td>Contraste contra la hipótesis y decisión tomada: ajustar el producto, cambiar el segmento, rediseñar la propuesta de valor o mantener la idea</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- PASO 5 -->
+  <section id="paso-5">
+    <h2><span class="num">5</span> Checklist de aprobación previa</h2>
+    <p class="intro-seccion">Ningún instrumento se aplica en campo sin la aprobación de la profesora. La revisión verifica, como mínimo:</p>
+    <ol class="checklist">
+      <li>La hipótesis está redactada en el formato de la tarjeta de pruebas y tiene un indicador de éxito medible.</li>
+      <li>Ninguna de las cuatro preguntas prohibidas aparece en el guion de entrevista.</li>
+      <li>Las preguntas de entrevista piden hechos ya ocurridos, no opiniones sobre el futuro.</li>
+      <li>El formulario cubre todos los objetivos de validación e incluye las preguntas demográficas mínimas.</li>
+      <li>El texto de tratamiento de datos está incluido completo, con el "Objetivo del Instrumento" propio de esta idea.</li>
+      <li>El guion tiene entre 8 y 10 preguntas y el formulario entre 12 y 15, en español.</li>
+    </ol>
+  </section>
+
+  <footer>
+    Elaborado a partir de la Guía para la Validación de la Idea de Negocio — MacondoLab, Universidad Simón Bolívar, Sede Cúcuta.
+  </footer>
+
+</div>
+</body>
+</html>
