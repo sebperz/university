@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Métricas de clasificación | Estudio técnico</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="page">
+<article>
+
+<header class="lesson-header">
+<p class="kicker">Referencia · Estudio técnico</p>
+<h1>Métricas de clasificación</h1>
+<p class="lede">Exactitud, precisión, recall, FNR, FPR, F1 y ROC-AUC no son sinónimos. Cada una responde una pregunta distinta y esconde un daño distinto. Esta hoja sirve para leer el Documento A y el Documento B sin confundirlas.</p>
+<p class="byline">SaludPrioriza-AI v2.4 · Documento A y B</p>
+</header>
+
+<div class="callout">
+<span class="label">La idea en una frase</span>
+<p>Un modelo puede tener un buen promedio y, al mismo tiempo, dejar fuera a las personas que más necesitan ayuda. Las métricas globales no lo muestran; las métricas desagregadas sí.</p>
+</div>
+
+<h2 id="matriz">La matriz de confusión</h2>
+
+<p>Todo empieza aquí. Para un problema binario, cada paciente cae en una de cuatro celdas según lo que realmente ocurrió y lo que el modelo predijo.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>El modelo dice: alto riesgo</th>
+<th>El modelo dice: bajo riesgo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<th>El paciente sí tendrá una complicación</th>
+<td><strong>Verdadero positivo (TP)</strong><br>Se detecta y se actúa.</td>
+<td><strong>Falso negativo (FN)</strong><br>Se deja pasar. Es el error más grave en un tamizaje.</td>
+</tr>
+<tr>
+<th>El paciente no tendrá una complicación</th>
+<td><strong>Falso positivo (FP)</strong><br>Alerta innecesaria, recurso gastado, posible estigma.</td>
+<td><strong>Verdadero negativo (TN)</strong><br>Se descarta correctamente.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p class="small">La matriz se lee por filas: primero la realidad, después la predicción. Si el dossier no reporta esta tabla, no se pueden reconstruir todas las métricas con seguridad.</p>
+
+<h2 id="formulas">Las fórmulas</h2>
+
+<pre>Exactitud   = (TP + TN) / (TP + TN + FP + FN)
+Precisión   = TP / (TP + FP)
+Recall      = TP / (TP + FN)
+FNR         = FN / (TP + FN) = 1 - Recall
+FPR         = FP / (FP + TN) = 1 - Especificidad
+Especificidad = TN / (TN + FP)
+F1          = 2 × (Precisión × Recall) / (Precisión + Recall)</pre>
+
+<h2 id="que-pregunta">Qué pregunta responde cada métrica</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>La pregunta que responde</th>
+<th>Qué puede esconder</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Exactitud</strong> (accuracy)</td>
+<td>De todos los casos, ¿qué proporción acertó?</td>
+<td>El desbalance de clases. Un modelo que diga "sin riesgo" a todos puede tener 85% de exactitud si solo 15% tiene la condición.</td>
+</tr>
+<tr>
+<td><strong>Precisión</strong> (valor predictivo positivo)</td>
+<td>De los que marqué como positivos, ¿cuántos lo eran?</td>
+<td>Los falsos negativos. Un modelo puede ser muy preciso y dejar pasar a muchos enfermos.</td>
+</tr>
+<tr>
+<td><strong>Recall</strong> (sensibilidad)</td>
+<td>De los que realmente eran positivos, ¿cuántos detecté?</td>
+<td>Los falsos positivos. Se puede subir el recall marcando a casi todos, a costa de más alertas innecesarias.</td>
+</tr>
+<tr>
+<td><strong>FNR</strong> (tasa de falsos negativos)</td>
+<td>De los que realmente eran positivos, ¿qué proporción dejé pasar?</td>
+<td>El volumen absoluto. Un 42% suena abstracto hasta que se convierte en 420 de cada 1.000.</td>
+</tr>
+<tr>
+<td><strong>FPR</strong> (tasa de falsos positivos)</td>
+<td>De los que realmente eran negativos, ¿a qué proporción marqué como positivos?</td>
+<td>El costo de las falsas alarmas y el posible estigma.</td>
+</tr>
+<tr>
+<td><strong>F1</strong></td>
+<td>¿Cómo se combinan precisión y recall en un solo número?</td>
+<td>Cuál de las dos es baja y cuánto cuesta cada tipo de error. Es una media armónica, no una medida de equidad.</td>
+</tr>
+<tr>
+<td><strong>ROC-AUC</strong></td>
+<td>¿Qué tan bien ordena el modelo a un positivo por encima de un negativo?</td>
+<td>La calibración, el umbral elegido y el desempeño por subgrupo. Un AUC alto no garantiza que el modelo sea clínicamente útil.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="ejemplo">El ejemplo del dossier</h2>
+
+<p>El Documento B reporta estas métricas para los dos grupos:</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th class="num">Grupo A</th>
+<th class="num">Grupo B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tamaño de muestra</td>
+<td class="num">30.000</td>
+<td class="num">20.000</td>
+</tr>
+<tr>
+<td>Precisión (VPP)</td>
+<td class="num">86%</td>
+<td class="num">81%</td>
+</tr>
+<tr>
+<td>Recall (sensibilidad)</td>
+<td class="num">89%</td>
+<td class="num">58%</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td class="num">11%</td>
+<td class="num">42%</td>
+</tr>
+<tr>
+<td>FPR</td>
+<td class="num">8,5%</td>
+<td class="num">12%</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p>La lectura directa: de cada 1.000 pacientes que realmente tendrán una complicación, el modelo deja pasar a 110 del Grupo A y a 420 del Grupo B. La diferencia es de 310 pacientes por cada 1.000. No es un detalle estadístico: es la diferencia entre detectar a casi todos y detectar a poco más de la mitad.</p>
+
+<div class="callout warn">
+<span class="label">Cuidado con la exactitud</span>
+<p>Si la variable objetivo es el percentil 85 del gasto, la clase positiva es el 15% de los casos. Un clasificador trivial que diga "sin riesgo" a todos tendría 85% de exactitud. El 88,5% del modelo es solo 3,5 puntos mejor. La exactitud global no demuestra que el modelo sea clínicamente útil.</p>
+</div>
+
+<h2 id="global">Por qué el promedio global engaña</h2>
+
+<p>El Documento A reporta una sensibilidad global de 82%. El Documento B reporta 89% para el Grupo A y 58% para el Grupo B. Esas tres cifras no se pueden reconciliar sin conocer la prevalencia de cada grupo y la matriz de confusión completa. Si ambos grupos tuvieran la misma prevalencia, el promedio ponderado por tamaño sería 76,6%, no 82%.</p>
+
+<p>Eso no significa que el 82% sea falso. Significa que el reporte no da la información necesaria para verificarlo. Un auditor debe pedir la matriz de confusión, la prevalencia por grupo y los intervalos de confianza antes de aceptar un promedio global.</p>
+
+<div class="callout">
+<span class="label">Regla de auditoría</span>
+<p>Ninguna métrica global reemplaza una métrica desagregada. Si el sistema decide acceso a un servicio de salud, el desempeño por subgrupo es parte del desempeño, no un anexo.</p>
+</div>
+
+<h2 id="checklist">Checklist para leer el dossier</h2>
+
+<ol>
+<li><strong>¿Cuál es la variable objetivo?</strong> Si es un proxy, pregúntate qué mide realmente y a quién deja fuera.</li>
+<li><strong>¿Cuál es la clase positiva?</strong> En este caso, el paciente que tendrá una complicación.</li>
+<li><strong>¿Cuál es el umbral?</strong> El puntaje menor a 40 no es una propiedad del modelo; es una decisión operativa.</li>
+<li><strong>¿Hay matriz de confusión?</strong> Sin TP, FP, FN y TN no se puede reconstruir el resto.</li>
+<li><strong>¿Hay prevalencia por grupo?</strong> Sin ella, el FNR no se convierte en número absoluto de pacientes.</li>
+<li><strong>¿Hay métricas desagregadas?</strong> El promedio global puede ocultar una brecha clínicamente inaceptable.</li>
+<li><strong>¿Hay intervalos de confianza?</strong> Una diferencia entre grupos puede ser real o ruido; el reporte debe permitir juzgarlo.</li>
+<li><strong>¿Qué error importa más en este contexto?</strong> En un tamizaje de urgencias, el falso negativo es el error que más daño hace.</li>
+</ol>
+
+<h2 id="fuentes">Fuentes para verificar</h2>
+
+<ul class="small">
+<li><a href="https://scikit-learn.org/stable/modules/model_evaluation.html">scikit-learn: Metrics and scoring</a>, para definiciones y fórmulas.</li>
+<li><a href="https://fairlearn.org/">Fairlearn</a>, para métricas de equidad y evaluación por subgrupo.</li>
+<li><a href="https://xgboost.readthedocs.io/en/stable/tutorials/model.html">XGBoost: Introduction to Boosted Trees</a>, para entender el modelo que produce estas métricas.</li>
+<li><a href="https://shap.readthedocs.io/en/latest/">SHAP documentation</a>, para la diferencia entre explicación global y local.</li>
+</ul>
+
+<footer class="lesson-footer">
+<p>Referencia creada para el espacio de estudio técnico de SaludPrioriza-AI v2.4. Si una fórmula no te cierra, pide un ejemplo con los números del dossier.</p>
+<p><a href="../lessons/0001-dossier-saludprioriza.html">Volver a la lección 01: leer el dossier como un auditor</a> · <a href="mapa-dossier.html">Mapa del dossier</a> · <a href="glosario-dossier.html">Ir al glosario</a></p>
+</footer>
+
+</article>
+</div>
+</body>
+</html>

@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glosario del dossier | Estudio técnico</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="page">
+<article>
+
+<header class="lesson-header">
+<p class="kicker">Referencia · Estudio técnico</p>
+<h1>Glosario del dossier</h1>
+<p class="lede">Cada término técnico que aparece en los Documentos A, B y C, con una definición corta y una nota sobre por qué importa en esta auditoría. Los términos de contexto no aparecen literalmente en el dossier, pero son necesarios para leerlo.</p>
+<p class="byline">SaludPrioriza-AI v2.4 · Red Hospitalaria San José</p>
+</header>
+
+<div class="callout">
+<span class="label">Cómo usar este glosario</span>
+<p>No lo leas de corrido. Vuelve a él cuando encuentres una palabra que no puedas explicar con tus propias palabras. La segunda línea de cada entrada, marcada como <em>Por qué importa</em>, es el puente entre la definición y el caso de SaludPrioriza-AI.</p>
+</div>
+
+<nav class="toc" aria-label="Contenido">
+<p>Contenido</p>
+<ol>
+<li><a href="#doc-a">Documento A: el modelo y sus datos</a></li>
+<li><a href="#metricas">Documento A y B: las métricas</a></li>
+<li><a href="#doc-b">Documento B: la queja y la evidencia</a></li>
+<li><a href="#shap-explicabilidad">Documento B: SHAP y explicabilidad</a></li>
+<li><a href="#doc-c">Documento C: EU AI Act</a></li>
+<li><a href="#nist">Documento C: NIST AI RMF</a></li>
+<li><a href="#contexto">Conceptos de contexto</a></li>
+<li><a href="#fuentes">Fuentes para verificar</a></li>
+</ol>
+</nav>
+
+<h2 id="doc-a">Documento A: el modelo y sus datos</h2>
+
+<dl class="glossary">
+
+<dt id="sistema-auditado">Sistema auditado</dt>
+<dd>El sistema de IA que se examina y sobre el que se emite un juicio técnico. <span class="why"><strong>Por qué importa.</strong> La auditoría no juzga una idea abstracta: juzga una versión concreta, con datos, métricas y decisiones reales.</span></dd>
+
+<dt id="pre-produccion">Pre-producción</dt>
+<dd>Etapa anterior al uso clínico habitual, en la que el sistema se prueba antes de desplegarse. <span class="why"><strong>Por qué importa.</strong> El dossier audita la versión 2.4 en esta etapa; los hallazgos todavía pueden impedir el despliegue.</span></dd>
+
+<dt id="proposito-intencionado">Propósito intencionado</dt>
+<dd>El uso para el que el sistema fue diseñado, no cualquier uso que se le pueda dar. <span class="why"><strong>Por qué importa.</strong> El propósito declarado es clasificar el riesgo de complicación a 30 días. Si el modelo aprende otra cosa, el propósito y el entrenamiento dejan de coincidir.</span></dd>
+
+<dt id="irc-30">Índice de Riesgo de Complicación a 30 días (IRC-30)</dt>
+<dd>Puntaje que pretende estimar la probabilidad de que un paciente presente una complicación grave dentro de los 30 días siguientes al ingreso. <span class="why"><strong>Por qué importa.</strong> Es el constructo clínico que el modelo dice predecir; el dossier lo sustituye por un proxy de gasto.</span></dd>
+
+<dt id="urgencias">Urgencias</dt>
+<dd>Servicio hospitalario que atiende pacientes con necesidades médicas inmediatas. <span class="why"><strong>Por qué importa.</strong> Es el punto de contacto donde se calcula el IRC-30 y donde un falso negativo tiene consecuencias clínicas inmediatas.</span></dd>
+
+<dt id="consulta-prioritaria">Consulta prioritaria</dt>
+<dd>Consulta ambulatoria que se ordena por riesgo o necesidad, sin ser una urgencia vital. <span class="why"><strong>Por qué importa.</strong> El modelo también se usa en ese flujo, así que el daño no se limita a urgencias.</span></dd>
+
+<dt id="programa-preventivo">Programa de Manejo Preventivo Intensivo</dt>
+<dd>Programa de seguimiento y cuidado reforzado para pacientes identificados como de alto riesgo. <span class="why"><strong>Por qué importa.</strong> Es el recurso que el modelo asigna o niega; un falso negativo equivale a dejar a un paciente fuera de la prevención.</span></dd>
+
+<dt id="poblacion-objetivo">Población objetivo</dt>
+<dd>Grupo de personas al que se aplicará el sistema. <span class="why"><strong>Por qué importa.</strong> La población es mixta, pública y privada. Un modelo entrenado en una distribución puede fallar en otra.</span></dd>
+
+<dt id="atencion-mixta">Atención mixta</dt>
+<dd>Prestación de servicios de salud que combina instituciones públicas y privadas. <span class="why"><strong>Por qué importa.</strong> El régimen de afiliación cambia el acceso, la facturación y el gasto; el modelo puede confundir esas diferencias con riesgo clínico.</span></dd>
+
+<dt id="afiliado">Afiliado</dt>
+<dd>Persona inscrita a un régimen de salud, con derechos y obligaciones dentro de ese régimen. <span class="why"><strong>Por qué importa.</strong> La afiliación determina la cobertura y la red de servicios, dos factores que el proxy de gasto captura.</span></dd>
+
+<dt id="arquitectura-algoritmo">Arquitectura de algoritmo</dt>
+<dd>Tipo de modelo y estructura interna con la que produce sus predicciones. <span class="why"><strong>Por qué importa.</strong> Determina si el modelo es interpretable por diseño y qué supuestos hace sobre los datos.</span></dd>
+
+<dt id="xgboost">XGBoost</dt>
+<dd>Implementación de <a class="term" href="#gradient-boosting">gradient boosting</a> sobre árboles de decisión, muy usada con datos tabulares. <span class="why"><strong>Por qué importa.</strong> Es la arquitectura del modelo auditado. Suele tener buen rendimiento, pero no es interpretable por diseño.</span></dd>
+
+<dt id="gradient-boosting">Gradient boosting</dt>
+<dd>Técnica que entrena muchos árboles pequeños de forma secuencial; cada árbol nuevo corrige parte del error del anterior. <span class="why"><strong>Por qué importa.</strong> Explica por qué el modelo puede ajustar patrones complejos y también por qué su decisión no se lee en una sola regla.</span></dd>
+
+<dt id="clasificador">Clasificador</dt>
+<dd>Modelo que asigna una observación a una clase, por ejemplo "alto riesgo" o "bajo riesgo". <span class="why"><strong>Por qué importa.</strong> El IRC-30 se usa como una clasificación binaria a partir de un umbral, no como una probabilidad neutral.</span></dd>
+
+<dt id="dataset-entrenamiento">Dataset de entrenamiento</dt>
+<dd>Conjunto de datos históricos con el que el modelo aprende la relación entre las variables de entrada y la variable objetivo. <span class="why"><strong>Por qué importa.</strong> 250.000 registros de 2018 a 2023. Si esos datos reflejan desigualdades de acceso, el modelo las aprende.</span></dd>
+
+<dt id="anonimizacion">Anonimización</dt>
+<dd>Proceso de eliminar o transformar identificadores para reducir la posibilidad de reidentificar a una persona. <span class="why"><strong>Por qué importa.</strong> Anonimizar no elimina el sesgo histórico ni garantiza que no haya reidentificación por combinación de variables.</span></dd>
+
+<dt id="variable-entrada">Variable de entrada (X)</dt>
+<dd>Característica que el modelo usa para hacer una predicción. <span class="why"><strong>Por qué importa.</strong> La lista de variables es una decisión de diseño. Incluir gasto y código postal introduce señales socioeconómicas.</span></dd>
+
+<dt id="variable-objetivo">Variable objetivo (Y)</dt>
+<dd>Lo que el modelo intenta predecir. <span class="why"><strong>Por qué importa.</strong> El dossier dice que Y es el riesgo de complicación, pero operativamente usa el gasto futuro. Esa sustitución es el hallazgo central.</span></dd>
+
+<dt id="riesgo-complicacion-real">Riesgo_Complicación_Real</dt>
+<dd>Nombre declarado de la variable objetivo del modelo. <span class="why"><strong>Por qué importa.</strong> El nombre suena clínico, pero la definición operativa es gasto futuro. La distancia entre el nombre y la medición es una lección de auditoría.</span></dd>
+
+<dt id="gasto-futuro">Gasto_Salud_Futuro_Anual</dt>
+<dd>Facturación acumulada en los 12 meses posteriores al ingreso. Su percentil 85 define la clase positiva. <span class="why"><strong>Por qué importa.</strong> Es el proxy que reemplaza a la complicación. Mide gasto, no necesariamente necesidad clínica.</span></dd>
+
+<dt id="proxy">Proxy</dt>
+<dd>Variable medible que sustituye a la variable que realmente interesa, porque esta última es difícil o costosa de observar. <span class="why"><strong>Por qué importa.</strong> El gasto futuro es un proxy del riesgo de complicación. Mide capacidad de gasto y acceso, no necesariamente necesidad clínica.</span></dd>
+
+<dt id="gasto-salud-anual">Gasto_Salud_Anual</dt>
+<dd>Facturación acumulada del paciente en los últimos 12 meses. <span class="why"><strong>Por qué importa.</strong> Es una variable administrativa. En un sistema mixto, dos pacientes igualmente enfermos pueden generar facturas muy distintas.</span></dd>
+
+<dt id="facturacion">Facturación</dt>
+<dd>Registro de los servicios cobrados a una entidad o a un paciente. <span class="why"><strong>Por qué importa.</strong> El gasto del dossier es facturación, no necesariamente costo clínico ni necesidad de salud.</span></dd>
+
+<dt id="percentil">Percentil</dt>
+<dd>Valor de una distribución por debajo del cual queda un porcentaje dado de las observaciones. <span class="why"><strong>Por qué importa.</strong> El percentil 85 define la clase positiva como el 15% que más gasta, no el 15% más enfermo.</span></dd>
+
+<dt id="codigo-postal">Código postal</dt>
+<dd>Identificador geográfico del lugar de residencia. <span class="why"><strong>Por qué importa.</strong> Puede funcionar como proxy de ingreso, segregación residencial y acceso a servicios. Es una variable aparentemente neutra con alto riesgo de discriminación indirecta.</span></dd>
+
+<dt id="comorbilidad">Comorbilidad</dt>
+<dd>Presencia de una o más enfermedades crónicas además de la condición principal. <span class="why"><strong>Por qué importa.</strong> Es una señal clínica válida, pero su registro depende del acceso al diagnóstico. Un paciente sin especialistas puede tener menos comorbilidades registradas.</span></dd>
+
+<dt id="patologia-cronica">Patología crónica</dt>
+<dd>Enfermedad de larga duración que requiere manejo continuo. <span class="why"><strong>Por qué importa.</strong> La queja del Comité Ético-Clínico habla de pacientes con múltiples patologías crónicas activas que reciben puntajes bajos.</span></dd>
+
+<dt id="visitas-urgencias">Visitas_Urgencias_Previas</dt>
+<dd>Número de ingresos a urgencias en el último año. <span class="why"><strong>Por qué importa.</strong> Es una señal clínica fuerte, pero en el modelo pesa solo 2%. Su bajo peso sugiere que el modelo prefiere variables administrativas.</span></dd>
+
+<dt id="tipo-afiliacion">Tipo_Afiliación_Salud</dt>
+<dd>Variable binaria que representa el régimen: 0 = subsidiado/público, 1 = contributivo/privado. <span class="why"><strong>Por qué importa.</strong> Es una variable protegida directa y, además, redundante: el gasto y el código postal ya la reconstruyen.</span></dd>
+
+<dt id="edad">Edad</dt>
+<dd>Años cumplidos del paciente. <span class="why"><strong>Por qué importa.</strong> Aporta 10% de la importancia SHAP. Puede ser un factor clínico legítimo o amplificar el sesgo contra los adultos mayores que menciona la queja.</span></dd>
+
+<dt id="presion-arterial">Presión_Arterial_Media</dt>
+<dd>Promedio de la presión arterial sistólica y diastólica registrada. <span class="why"><strong>Por qué importa.</strong> Es una medición clínica objetiva, pero aporta solo 3% de la importancia SHAP. El modelo se apoya más en el gasto y la geografía.</span></dd>
+
+<dt id="presion-sistolica-diastolica">Presión sistólica y diastólica</dt>
+<dd>La presión máxima durante la contracción del corazón y la mínima durante la relajación. <span class="why"><strong>Por qué importa.</strong> Es el insumo clínico de `Presión_Arterial_Media`; sirve para mostrar que el modelo tiene señales clínicas disponibles y las usa poco.</span></dd>
+
+<dt id="regimen-subsidiado">Régimen subsidiado</dt>
+<dd>Régimen de salud para personas sin capacidad de pago, financiado con recursos públicos. <span class="why"><strong>Por qué importa.</strong> Es el Grupo B. Sus pacientes suelen tener más barreras de acceso y menor gasto observado, aunque su necesidad clínica sea alta.</span></dd>
+
+<dt id="regimen-contributivo">Régimen contributivo</dt>
+<dd>Régimen de salud financiado por aportes de trabajadores y empleadores. <span class="why"><strong>Por qué importa.</strong> Es el Grupo A. Suele tener mejor acceso y facturas más altas por el mismo procedimiento.</span></dd>
+
+</dl>
+
+<h2 id="metricas">Documento A y B: las métricas</h2>
+
+<dl class="glossary">
+
+<dt id="metrica-global">Métrica global</dt>
+<dd>Medida calculada sobre todo el conjunto de datos, sin separar por subgrupo. <span class="why"><strong>Por qué importa.</strong> Puede ocultar que el modelo funciona bien en un grupo y mal en otro. El 88,5% de exactitud global es el ejemplo central.</span></dd>
+
+<dt id="dataset-prueba">Dataset de prueba</dt>
+<dd>Conjunto de datos que el modelo no vio durante el entrenamiento y que se usa para evaluar su desempeño. <span class="why"><strong>Por qué importa.</strong> El dossier reporta 50.000 registros de prueba, pero no muestra la matriz de confusión completa.</span></dd>
+
+<dt id="tamano-muestra">Tamaño de muestra (n)</dt>
+<dd>Número de casos que hay en un grupo o en un conjunto de datos. <span class="why"><strong>Por qué importa.</strong> El Grupo A tiene 30.000 casos y el Grupo B, 20.000. Una diferencia de métricas puede ser real o ruido; el tamaño y los intervalos de confianza ayudan a juzgarlo.</span></dd>
+
+<dt id="variable-xi">Variable Xi</dt>
+<dd>Notación genérica para una variable de entrada individual, la i-ésima columna de X. <span class="why"><strong>Por qué importa.</strong> El Documento B usa Xi para listar las variables del modelo y su importancia SHAP.</span></dd>
+
+<dt id="exactitud">Exactitud (accuracy)</dt>
+<dd>Proporción de predicciones correctas sobre el total de casos. <span class="why"><strong>Por qué importa.</strong> Es intuitiva pero engañosa con clases desbalanceadas. Si el 85% de los pacientes no tiene complicación, un modelo que diga "sin riesgo" a todos tendría 85% de exactitud.</span></dd>
+
+<dt id="precision">Precisión (valor predictivo positivo)</dt>
+<dd>De todos los pacientes que el modelo marca como de alto riesgo, qué proporción realmente lo son. <span class="why"><strong>Por qué importa.</strong> Mide la calidad de las alertas que el modelo da. No mide a los pacientes que deja pasar.</span></dd>
+
+<dt id="recall">Recall (sensibilidad)</dt>
+<dd>De todos los pacientes que realmente tendrán una complicación, qué proporción detecta el modelo. <span class="why"><strong>Por qué importa.</strong> Es la métrica que protege al paciente en un tamizaje. El Grupo B tiene 58%, frente a 89% del Grupo A.</span></dd>
+
+<dt id="fnr">Tasa de falsos negativos (FNR)</dt>
+<dd>Proporción de pacientes que realmente tienen la condición y el modelo clasifica como negativos. Es igual a 1 menos el recall. <span class="why"><strong>Por qué importa.</strong> El Grupo B tiene 42% de FNR: el modelo deja pasar a 42 de cada 100 pacientes de alto riesgo.</span></dd>
+
+<dt id="fpr">Tasa de falsos positivos (FPR)</dt>
+<dd>Proporción de pacientes que no tienen la condición y el modelo clasifica como positivos. <span class="why"><strong>Por qué importa.</strong> El Grupo B también tiene más falsas alarmas: 12% frente a 8,5%. El grupo desfavorecido recibe más omisiones y más alertas innecesarias.</span></dd>
+
+<dt id="matriz-confusion">Matriz de confusión</dt>
+<dd>Tabla que cruza la clase real con la clase predicha y muestra verdaderos positivos, falsos positivos, falsos negativos y verdaderos negativos. <span class="why"><strong>Por qué importa.</strong> Sin ella no se pueden reconstruir el FNR, el FPR ni la prevalencia. El dossier no la incluye.</span></dd>
+
+<dt id="tp-fp-fn-tn">Verdadero positivo, falso positivo, falso negativo y verdadero negativo</dt>
+<dd>TP: enfermo y detectado. FP: sano y marcado como enfermo. FN: enfermo y no detectado. TN: sano y no marcado. <span class="why"><strong>Por qué importa.</strong> Son las cuatro celdas de la matriz de confusión. El daño clínico se concentra en los FN.</span></dd>
+
+<dt id="f1">F1-score</dt>
+<dd>Media armónica entre precisión y recall. Resume ambos en un solo número. <span class="why"><strong>Por qué importa.</strong> Un F1 de 0,83 puede verse bien, pero no dice si el modelo es justo entre grupos. El F1 global no sustituye el análisis por subgrupo.</span></dd>
+
+<dt id="roc-auc">ROC-AUC</dt>
+<dd>Área bajo la curva ROC. Se interpreta como la probabilidad de que el modelo ordene a un positivo aleatorio por encima de un negativo aleatorio. <span class="why"><strong>Por qué importa.</strong> Un AUC de 0,89 indica buena capacidad de ordenamiento global, pero no garantiza calibración, equidad ni utilidad clínica en cada grupo.</span></dd>
+
+<dt id="umbral">Umbral</dt>
+<dd>Punto de corte que convierte una probabilidad o puntaje en una decisión binaria. <span class="why"><strong>Por qué importa.</strong> El dossier menciona un puntaje menor a 40 como rechazo. Cambiar el umbral cambia el recall, el FPR y el daño.</span></dd>
+
+<dt id="prevalencia">Prevalencia</dt>
+<dd>Proporción de personas con la condición en una población o muestra. <span class="why"><strong>Por qué importa.</strong> Sin prevalencia no se puede reconstruir cuántos falsos negativos hay en términos absolutos, solo la tasa.</span></dd>
+
+<dt id="calibracion">Calibración</dt>
+<dd>Grado en que las probabilidades que predice el modelo coinciden con las frecuencias observadas. <span class="why"><strong>Por qué importa.</strong> Un modelo puede ordenar bien (buen AUC) y estar mal calibrado. El dossier no reporta calibración.</span></dd>
+
+<dt id="metrica-desagregada">Métrica desagregada</dt>
+<dd>Métrica calculada por separado para cada subgrupo, en lugar de solo para el total. <span class="why"><strong>Por qué importa.</strong> Es la evidencia que revela la brecha entre el Grupo A y el Grupo B. Sin desagregación, la disparidad es invisible.</span></dd>
+
+</dl>
+
+<h2 id="doc-b">Documento B: la queja y la evidencia</h2>
+
+<dl class="glossary">
+
+<dt id="comite-etico-clinico">Comité Ético-Clínico</dt>
+<dd>Órgano que revisa conflictos éticos y clínicos en la atención de pacientes. <span class="why"><strong>Por qué importa.</strong> Su queja es la señal de alarma que activa la auditoría: los pacientes de bajo ingreso reciben puntajes bajos y reingresan graves.</span></dd>
+
+<dt id="subgrupo">Subgrupo</dt>
+<dd>Grupo de pacientes definido por una característica común, como régimen de salud, ingreso o condición clínica. <span class="why"><strong>Por qué importa.</strong> Comparar métricas por subgrupo es la forma de detectar discriminación que el promedio global esconde.</span></dd>
+
+<dt id="grupo-a">Grupo A</dt>
+<dd>Subgrupo de régimen privado o ingreso medio-alto, con 30.000 casos en el conjunto de prueba. <span class="why"><strong>Por qué importa.</strong> Es el grupo de referencia contra el que se compara al Grupo B. Su FNR es 11%.</span></dd>
+
+<dt id="grupo-b">Grupo B</dt>
+<dd>Subgrupo de régimen subsidiado, ingreso bajo y minorías, con 20.000 casos en el conjunto de prueba. <span class="why"><strong>Por qué importa.</strong> Concentra la brecha: su FNR es 42%. El dossier agrupa "minorías" con el régimen subsidiado, una categoría amplia que no equivale a un solo atributo protegido.</span></dd>
+
+<dt id="estrato-socioeconomico">Estrato socioeconómico</dt>
+<dd>Clasificación del hogar según ingreso, vivienda y condiciones de vida. En Colombia se usa una escala de estratos. <span class="why"><strong>Por qué importa.</strong> El dossier agrupa a los estratos bajos con el régimen subsidiado. Es una categoría social, no una variable clínica.</span></dd>
+
+<dt id="puntaje-irc-30">Puntaje IRC-30</dt>
+<dd>Valor numérico que el modelo asigna a cada paciente para expresar su riesgo. <span class="why"><strong>Por qué importa.</strong> La queja dice que los pacientes de estratos bajos reciben sistemáticamente puntajes menores a 40/100.</span></dd>
+
+<dt id="reingreso">Reingreso</dt>
+<dd>Nuevo ingreso hospitalario después de un alta previa. <span class="why"><strong>Por qué importa.</strong> Es la consecuencia visible de un falso negativo: el paciente no recibe prevención y vuelve con una complicación.</span></dd>
+
+<dt id="uci">Unidad de Cuidados Intensivos (UCI)</dt>
+<dd>Servicio hospitalario para pacientes graves que requieren monitoreo y tratamiento intensivo. <span class="why"><strong>Por qué importa.</strong> El reingreso en UCI es el costo clínico y económico del fallo del modelo.</span></dd>
+
+<dt id="programa-alto-valor">Programa preventivo de alto valor</dt>
+<dd>Programa de cuidado intensivo que busca evitar complicaciones en pacientes de alto riesgo. <span class="why"><strong>Por qué importa.</strong> Es el recurso escaso que el modelo distribuye. Un sesgo en la asignación se convierte en desigualdad en salud.</span></dd>
+
+<dt id="disparidad">Disparidad</dt>
+<dd>Diferencia sistemática en resultados o errores entre grupos. <span class="why"><strong>Por qué importa.</strong> El FNR de 11% en el Grupo A y 42% en el Grupo B es una disparidad grande y clínicamente relevante.</span></dd>
+
+<dt id="sesgo">Sesgo</dt>
+<dd>Error sistemático que favorece o perjudica a un grupo de manera consistente. No es lo mismo que un error aleatorio. <span class="why"><strong>Por qué importa.</strong> El modelo no falla al azar: falla más en el grupo con menos acceso.</span></dd>
+
+<dt id="equidad">Equidad</dt>
+<dd>Justicia en la distribución de beneficios y daños de un sistema. No es lo mismo que igualdad numérica. <span class="why"><strong>Por qué importa.</strong> Un modelo puede ser exacto en promedio y profundamente inequitativo en la distribución de sus errores.</span></dd>
+
+<dt id="discriminacion-indirecta">Discriminación indirecta</dt>
+<dd>Práctica aparentemente neutral que produce un efecto desproporcionadamente adverso sobre un grupo protegido. <span class="why"><strong>Por qué importa.</strong> El modelo no usa raza ni ingreso de forma directa, pero usa gasto y código postal, que los representan.</span></dd>
+
+<dt id="redlining">Redlining algorítmico</dt>
+<dd>Uso de la geografía como proxy de raza, ingreso o riesgo social para negar o limitar servicios. <span class="why"><strong>Por qué importa.</strong> `Codigo_Postal` aporta 18% de la importancia SHAP y puede reproducir la segregación residencial.</span></dd>
+
+<dt id="proxy-discrimination">Discriminación por proxy</dt>
+<dd>Discriminación que ocurre a través de una variable correlacionada con un atributo protegido, aunque esa variable no sea el atributo en sí. <span class="why"><strong>Por qué importa.</strong> El gasto y el código postal son los proxies centrales del dossier.</span></dd>
+
+<dt id="label-bias">Sesgo de etiqueta</dt>
+<dd>Sesgo que entra por la forma en que se define o mide la variable objetivo. <span class="why"><strong>Por qué importa.</strong> La variable objetivo no mide complicación; mide gasto futuro. El sesgo está en la etiqueta, no solo en los datos.</span></dd>
+
+<dt id="bucle-retroalimentacion">Bucle de retroalimentación</dt>
+<dd>Situación en la que las decisiones del modelo modifican los datos futuros y el modelo aprende de esos datos ya alterados. <span class="why"><strong>Por qué importa.</strong> Si el modelo niega prevención a los pacientes de bajo gasto, estos pueden complicarse y generar más gasto, reforzando el patrón.</span></dd>
+
+</dl>
+
+<h2 id="shap-explicabilidad">Documento B: SHAP y explicabilidad</h2>
+
+<dl class="glossary">
+
+<dt id="shap">SHAP</dt>
+<dd>Método de explicabilidad basado en valores de Shapley, tomados de la teoría de juegos, que reparte la predicción de un modelo entre sus variables de entrada. <span class="why"><strong>Por qué importa.</strong> El dossier usa SHAP para decir qué variables pesan. Es una herramienta de atribución, no una prueba de causalidad.</span></dd>
+
+<dt id="shapley">Valor de Shapley</dt>
+<dd>Contribución marginal promedio de una variable a una predicción, considerando todas las combinaciones posibles de variables. <span class="why"><strong>Por qué importa.</strong> Es la base matemática de SHAP. Explica una predicción concreta, no el funcionamiento causal del mundo.</span></dd>
+
+<dt id="shap-averaged">SHAP averaged</dt>
+<dd>Promedio de los valores SHAP de una variable sobre muchos casos. <span class="why"><strong>Por qué importa.</strong> El dossier reporta importancia promedio, no explicaciones por paciente. Un promedio puede ocultar que el modelo se apoya en el gasto solo para el Grupo B.</span></dd>
+
+<dt id="importancia-relativa">Importancia relativa</dt>
+<dd>Peso porcentual de una variable frente al total de la importancia de las demás. <span class="why"><strong>Por qué importa.</strong> `Gasto_Salud_Anual` aporta 42% y `Codigo_Postal` 18%: juntos suman 60% del peso.</span></dd>
+
+<dt id="explicabilidad-global">Explicabilidad global</dt>
+<dd>Explicación de qué variables pesan en el modelo en promedio, para el conjunto de casos. <span class="why"><strong>Por qué importa.</strong> No explica por qué un paciente específico recibió 38/100. Para eso hace falta una explicación local.</span></dd>
+
+<dt id="explicacion-local">Explicación local</dt>
+<dd>Explicación de una predicción individual: qué variables empujaron ese caso hacia arriba o hacia abajo. <span class="why"><strong>Por qué importa.</strong> Es lo que un clínico necesita para discutir una decisión con el paciente. El dossier no la reporta.</span></dd>
+
+<dt id="interpretabilidad">Interpretabilidad</dt>
+<dd>Capacidad de entender y explicar cómo un modelo produce sus resultados. <span class="why"><strong>Por qué importa.</strong> XGBoost no es interpretable por diseño; la explicabilidad hay que construirla y validarla.</span></dd>
+
+</dl>
+
+<h2 id="doc-c">Documento C: EU AI Act</h2>
+
+<dl class="glossary">
+
+<dt id="marco-normativo">Marco normativo</dt>
+<dd>Conjunto de normas y estándares que definen obligaciones y criterios de evaluación. <span class="why"><strong>Por qué importa.</strong> El Documento C no es un adorno: es el criterio con el que se juzga si el modelo puede desplegarse.</span></dd>
+
+<dt id="eu-ai-act">EU AI Act</dt>
+<dd>Reglamento de la Unión Europea que clasifica los sistemas de IA por nivel de riesgo y establece obligaciones para cada nivel. <span class="why"><strong>Por qué importa.</strong> El dossier lo usa como marco principal. El sistema cae en la categoría de alto riesgo.</span></dd>
+
+<dt id="riesgo-alto">Sistema de alto riesgo</dt>
+<dd>Sistema de IA que puede afectar la salud, la seguridad o los derechos fundamentales y debe cumplir requisitos estrictos antes de usarse. <span class="why"><strong>Por qué importa.</strong> Activa obligaciones de datos, transparencia, supervisión humana y precisión.</span></dd>
+
+<dt id="clasificacion-riesgo">Clasificación de riesgo</dt>
+<dd>Categoría que el reglamento asigna a un sistema de IA según el impacto potencial de su uso. <span class="why"><strong>Por qué importa.</strong> Determina si el sistema es de alto riesgo y, por tanto, qué obligaciones debe cumplir.</span></dd>
+
+<dt id="anexo-iii">Anexo III</dt>
+<dd>Lista del EU AI Act que enumera los sistemas de alto riesgo. <span class="why"><strong>Por qué importa.</strong> La categoría 5 incluye el acceso a servicios esenciales, incluida la salud, y el triaje de urgencias.</span></dd>
+
+<dt id="categoria-5">Categoría 5 del Anexo III</dt>
+<dd>Apartado sobre acceso y disfrute de servicios privados y públicos esenciales y prestaciones. <span class="why"><strong>Por qué importa.</strong> Es la base para clasificar a SaludPrioriza-AI como alto riesgo.</span></dd>
+
+<dt id="servicio-esencial">Servicio esencial</dt>
+<dd>Servicio del que depende la vida, la salud o la subsistencia de una persona. <span class="why"><strong>Por qué importa.</strong> La salud es un servicio esencial; negar acceso a un programa preventivo no es una decisión menor.</span></dd>
+
+<dt id="priorizacion">Priorización</dt>
+<dd>Ordenar a las personas según riesgo o necesidad para asignar recursos escasos. <span class="why"><strong>Por qué importa.</strong> El modelo no solo predice: prioriza quién entra al programa. Es una decisión distributiva.</span></dd>
+
+<dt id="asignacion-acceso">Asignación de acceso</dt>
+<dd>Decisión sobre quién recibe un servicio, un beneficio o un cupo en un programa. <span class="why"><strong>Por qué importa.</strong> El modelo asigna acceso a un programa preventivo; un falso negativo se convierte en una negación de acceso.</span></dd>
+
+<dt id="gobernanza-datos">Gobernanza de datos</dt>
+<dd>Reglas y prácticas sobre el origen, la calidad, la representatividad, los sesgos y el uso de los datos. <span class="why"><strong>Por qué importa.</strong> El Artículo 10 exige que los datos sean pertinentes, representativos y estén libres de sesgos evitables.</span></dd>
+
+<dt id="pertinencia">Pertinencia</dt>
+<dd>Grado en que los datos y la variable objetivo miden lo que el propósito del sistema requiere. <span class="why"><strong>Por qué importa.</strong> Una variable objetivo de gasto no es pertinente para un propósito clínico de complicación.</span></dd>
+
+<dt id="representatividad">Representatividad</dt>
+<dd>Grado en que la muestra refleja a la población a la que se aplicará el sistema. <span class="why"><strong>Por qué importa.</strong> Si el régimen subsidiado está subrepresentado o mal etiquetado, el modelo no aprende su riesgo real.</span></dd>
+
+<dt id="completitud">Completitud</dt>
+<dd>Grado en que los datos no tienen vacíos relevantes para el propósito. <span class="why"><strong>Por qué importa.</strong> La falta de diagnósticos registrados en pacientes sin acceso puede parecer "ausencia de enfermedad".</span></dd>
+
+<dt id="sesgo-contexto">Sesgo específico del contexto</dt>
+<dd>Sesgo que depende del uso, la población y el entorno concreto, no de una regla universal. <span class="why"><strong>Por qué importa.</strong> El mismo modelo puede ser sesgado en un hospital mixto y no serlo en otro contexto.</span></dd>
+
+<dt id="transparencia">Transparencia</dt>
+<dd>Grado en que la información del sistema permite entender qué hace, cómo se usa y cuáles son sus límites. <span class="why"><strong>Por qué importa.</strong> El Artículo 13 exige instrucciones de uso e información suficiente para interpretar la salida.</span></dd>
+
+<dt id="supervision-humana">Supervisión humana</dt>
+<dd>Mecanismos que permiten a personas capacitadas vigilar, corregir, anular o detener el sistema. <span class="why"><strong>Por qué importa.</strong> El Artículo 14 la exige. Un rechazo automático con puntaje menor a 40 no es supervisión humana.</span></dd>
+
+<dt id="human-in-the-loop">Human-in-the-loop</dt>
+<dd>Una persona revisa cada decisión, o al menos las decisiones críticas, antes de que se ejecuten. <span class="why"><strong>Por qué importa.</strong> Es el nivel de supervisión que un triaje clínico de alto riesgo necesita.</span></dd>
+
+<dt id="human-on-the-loop">Human-on-the-loop</dt>
+<dd>Una persona monitorea el sistema y puede intervenir, pero no revisa cada caso individual. <span class="why"><strong>Por qué importa.</strong> Puede ser suficiente para funciones de bajo riesgo, no para negar acceso a un programa preventivo.</span></dd>
+
+<dt id="mecanismo-interactividad">Mecanismo de interactividad</dt>
+<dd>Interfaz y procedimientos que permiten a la persona supervisora entender, cuestionar y corregir al sistema. <span class="why"><strong>Por qué importa.</strong> No basta con que exista un botón: la persona debe tener información, competencia y autoridad para usarlo.</span></dd>
+
+<dt id="persona-cualificada">Persona cualificada</dt>
+<dd>Persona con formación, competencia y autoridad para supervisar el sistema. <span class="why"><strong>Por qué importa.</strong> La supervisión humana no puede ser un trámite firmado por alguien que no entiende el modelo.</span></dd>
+
+<dt id="articulo-10">Artículo 10 del EU AI Act</dt>
+<dd>Obligación de gobernanza de datos: datos pertinentes, representativos, completos y con examen y mitigación de sesgos. <span class="why"><strong>Por qué importa.</strong> Es el artículo que mejor describe el fallo de la variable objetivo y de la muestra.</span></dd>
+
+<dt id="articulo-13">Artículo 13 del EU AI Act</dt>
+<dd>Obligación de transparencia e instrucciones de uso para que el despliegador interprete la salida. <span class="why"><strong>Por qué importa.</strong> El dossier no muestra explicación local ni advertencia sobre el proxy.</span></dd>
+
+<dt id="articulo-14">Artículo 14 del EU AI Act</dt>
+<dd>Obligación de supervisión humana efectiva, con capacidad de anular o detener el sistema. <span class="why"><strong>Por qué importa.</strong> El rechazo automático de pacientes con puntaje menor a 40 incumple este artículo.</span></dd>
+
+<dt id="articulo-15">Artículo 15 del EU AI Act</dt>
+<dd>Obligación de precisión, robustez y ciberseguridad adecuadas al propósito, con métricas declaradas. <span class="why"><strong>Por qué importa.</strong> La exactitud global no demuestra precisión clínica ni equidad por subgrupo.</span></dd>
+
+</dl>
+
+<h2 id="nist">Documento C: NIST AI RMF</h2>
+
+<dl class="glossary">
+
+<dt id="nist-ai-rmf">NIST AI RMF 1.0</dt>
+<dd>Marco voluntario de gestión de riesgos de IA del National Institute of Standards and Technology. Organiza el trabajo en cuatro funciones: Govern, Map, Measure y Manage. <span class="why"><strong>Por qué importa.</strong> Es el estándar de referencia del dossier para evaluar el proceso de gestión, no solo el resultado del modelo.</span></dd>
+
+<dt id="govern">Govern (gobernar)</dt>
+<dd>Función que establece políticas, roles, cultura y tolerancia al riesgo. <span class="why"><strong>Por qué importa.</strong> Si no hay una política de equidad ni un límite de riesgo, la brecha puede llegar a producción sin que nadie la frene.</span></dd>
+
+<dt id="politica-gobernanza">Política de gobernanza</dt>
+<dd>Reglas formales sobre quién decide, cómo se decide y con qué límites. <span class="why"><strong>Por qué importa.</strong> Sin política, la equidad depende de la buena voluntad del equipo, no de un control.</span></dd>
+
+<dt id="cultura-organizacional">Cultura organizacional</dt>
+<dd>Valores y prácticas que orientan las decisiones cotidianas de una organización. <span class="why"><strong>Por qué importa.</strong> Una cultura que prioriza el promedio sobre el subgrupo vulnerable produce auditorías ciegas.</span></dd>
+
+<dt id="tolerancia-riesgo">Tolerancia al riesgo</dt>
+<dd>Nivel de riesgo que una organización acepta antes de actuar. <span class="why"><strong>Por qué importa.</strong> Un FNR de 42% en un grupo vulnerable no debería estar dentro de ninguna tolerancia razonable.</span></dd>
+
+<dt id="map">Map (mapear)</dt>
+<dd>Función que contextualiza el sistema, identifica actores, usos y riesgos interdependientes. <span class="why"><strong>Por qué importa.</strong> El riesgo de proxy discriminatorio debió identificarse antes de entrenar, no después de la queja.</span></dd>
+
+<dt id="contextualizacion">Contextualización</dt>
+<dd>Entender el entorno, la población, el flujo de trabajo y las condiciones de uso del sistema. <span class="why"><strong>Por qué importa.</strong> El modelo se usa en urgencias y en una red mixta; ignorar ese contexto oculta el daño.</span></dd>
+
+<dt id="riesgo-interdependiente">Riesgo interdependiente</dt>
+<dd>Riesgo que se conecta con otros, como sesgo, privacidad y seguridad. <span class="why"><strong>Por qué importa.</strong> Un código postal puede ser a la vez un riesgo de privacidad y un proxy de segregación.</span></dd>
+
+<dt id="privacidad">Privacidad</dt>
+<dd>Protección de los datos personales y control sobre su uso. <span class="why"><strong>Por qué importa.</strong> El modelo usa datos de salud y geografía; la anonimización no elimina todos los riesgos.</span></dd>
+
+<dt id="seguridad">Seguridad</dt>
+<dd>Protección contra accesos no autorizados, manipulaciones o fallas del sistema. <span class="why"><strong>Por qué importa.</strong> Un modelo clínico manipulado o mal actualizado puede producir decisiones dañinas.</span></dd>
+
+<dt id="measure">Measure (medir)</dt>
+<dd>Función que mide y monitorea precisión, disparidad de sesgo, robustez y deriva. <span class="why"><strong>Por qué importa.</strong> Es la falla principal del caso: solo se reportan métricas globales, no por subgrupo.</span></dd>
+
+<dt id="analisis-cuantitativo">Análisis cuantitativo</dt>
+<dd>Medición con números y métricas, como exactitud, recall o FNR. <span class="why"><strong>Por qué importa.</strong> Es necesario, pero no suficiente: también hace falta interpretar el contexto y el daño.</span></dd>
+
+<dt id="analisis-cualitativo">Análisis cualitativo</dt>
+<dd>Juicio experto, revisión de casos, entrevistas y análisis del contexto. <span class="why"><strong>Por qué importa.</strong> La queja del Comité Ético-Clínico es evidencia cualitativa que el reporte global no captura.</span></dd>
+
+<dt id="metrica-precision">Métrica de precisión</dt>
+<dd>Medida de qué tan bien el modelo acierta. No existe una sola métrica que resuma todo. <span class="why"><strong>Por qué importa.</strong> Elegir exactitud, precisión o recall cambia la historia que se cuenta.</span></dd>
+
+<dt id="disparidad-sesgo">Disparidad de sesgo</dt>
+<dd>Diferencia de errores o resultados entre grupos. <span class="why"><strong>Por qué importa.</strong> Es la métrica que el NIST exige medir y que el dossier solo muestra después de la queja.</span></dd>
+
+<dt id="robustez">Robustez</dt>
+<dd>Capacidad del modelo de mantener un desempeño razonable ante perturbaciones, errores o cambios. <span class="why"><strong>Por qué importa.</strong> Un modelo que solo funciona en el promedio puede fallar cuando cambia la población o el flujo de atención.</span></dd>
+
+<dt id="deriva">Deriva (drift)</dt>
+<dd>Cambio en la distribución de los datos o en la relación entre variables y resultado a lo largo del tiempo. <span class="why"><strong>Por qué importa.</strong> Un modelo entrenado con datos de 2018 a 2023 puede perder validez si cambian la práctica clínica o la población.</span></dd>
+
+<dt id="manage">Manage (gestionar)</dt>
+<dd>Función que prioriza, mitiga y monitorea los riesgos identificados. <span class="why"><strong>Por qué importa.</strong> Detectar la brecha no basta; hay que asignar recursos, corregir y volver a medir.</span></dd>
+
+<dt id="priorizar">Priorizar</dt>
+<dd>Ordenar los riesgos según su severidad, probabilidad e impacto para decidir qué se atiende primero. <span class="why"><strong>Por qué importa.</strong> Manage exige una decisión explícita; no todos los riesgos se corrigen al mismo tiempo.</span></dd>
+
+<dt id="asignacion-recursos">Asignación de recursos</dt>
+<dd>Decisión sobre dónde invertir tiempo, personal y presupuesto para reducir un riesgo. <span class="why"><strong>Por qué importa.</strong> Un plan de auditoría sin recursos es una lista de buenos deseos.</span></dd>
+
+<dt id="mitigacion">Mitigación</dt>
+<dd>Medida técnica u organizativa que reduce la probabilidad o el impacto de un riesgo. <span class="why"><strong>Por qué importa.</strong> Cambiar la variable objetivo, quitar el código postal o añadir revisión humana son formas de mitigación.</span></dd>
+
+<dt id="monitoreo-continuo">Monitoreo continuo</dt>
+<dd>Vigilancia periódica del desempeño y de los riesgos después del despliegue. <span class="why"><strong>Por qué importa.</strong> La equidad no se demuestra una vez; se vigila mientras el sistema cambia.</span></dd>
+
+</dl>
+
+<h2 id="contexto">Conceptos de contexto</h2>
+
+<p class="small">Estos términos no aparecen literalmente en el dossier, pero son necesarios para entender las métricas y los argumentos de auditoría.</p>
+
+<dl class="glossary">
+
+<dt id="clasificacion-binaria">Clasificación binaria</dt>
+<dd>Problema en el que el modelo debe elegir entre dos clases, normalmente positivo y negativo. <span class="why"><strong>Por qué importa.</strong> El IRC-30 se usa para decidir "alto riesgo" o "bajo riesgo" a partir de un umbral.</span></dd>
+
+<dt id="clase-positiva">Clase positiva</dt>
+<dd>La clase que el modelo intenta detectar. En este caso, el paciente que tendrá una complicación. <span class="why"><strong>Por qué importa.</strong> Definir qué cuenta como positivo cambia todas las métricas y el daño.</span></dd>
+
+<dt id="clase-negativa">Clase negativa</dt>
+<dd>La clase que el modelo considera ausencia de la condición. En este caso, el paciente que no tendrá una complicación. <span class="why"><strong>Por qué importa.</strong> Los falsos negativos son pacientes de la clase positiva que el modelo manda a la negativa.</span></dd>
+
+<dt id="sobreajuste">Sobreajuste (overfitting)</dt>
+<dd>Situación en la que el modelo memoriza el entrenamiento y pierde capacidad de generalizar a datos nuevos. <span class="why"><strong>Por qué importa.</strong> Un AUC alto en prueba no garantiza que el modelo funcione en una población distinta.</span></dd>
+
+<dt id="subajuste">Subajuste (underfitting)</dt>
+<dd>Situación en la que el modelo es demasiado simple para capturar el patrón real. <span class="why"><strong>Por qué importa.</strong> Es el riesgo opuesto al sobreajuste; ambos producen modelos poco confiables.</span></dd>
+
+<dt id="validacion-cruzada">Validación cruzada</dt>
+<dd>Técnica que divide los datos en varios pliegues para evaluar el modelo en distintas particiones. <span class="why"><strong>Por qué importa.</strong> Ayuda a estimar la generalización, pero no corrige una variable objetivo mal definida.</span></dd>
+
+<dt id="conjunto-entrenamiento">Conjunto de entrenamiento</dt>
+<dd>Datos que el modelo usa para aprender los parámetros. <span class="why"><strong>Por qué importa.</strong> El sesgo histórico de estos datos se incorpora al modelo.</span></dd>
+
+<dt id="conjunto-validacion">Conjunto de validación</dt>
+<dd>Datos que se usan para ajustar hiperparámetros y comparar modelos. <span class="why"><strong>Por qué importa.</strong> Si se usa mal, se contamina la evaluación y se pierde la capacidad de detectar fallos.</span></dd>
+
+<dt id="hiperparametro">Hiperparámetro</dt>
+<dd>Configuración que se elige antes del entrenamiento, como la profundidad de un árbol o la tasa de aprendizaje. <span class="why"><strong>Por qué importa.</strong> Cambiar hiperparámetros puede mejorar el promedio sin corregir la inequidad.</span></dd>
+
+<dt id="arbol-decision">Árbol de decisión</dt>
+<dd>Modelo que divide los datos con una serie de reglas en forma de árbol. <span class="why"><strong>Por qué importa.</strong> XGBoost combina muchos árboles pequeños; la decisión final no se lee en una sola regla.</span></dd>
+
+<dt id="ensemble">Ensemble</dt>
+<dd>Combinación de varios modelos para producir una predicción conjunta. <span class="why"><strong>Por qué importa.</strong> Un ensemble suele ser más preciso que un solo árbol, pero también menos interpretable.</span></dd>
+
+<dt id="funcion-perdida">Función de pérdida</dt>
+<dd>Medida del error que el entrenamiento intenta minimizar. <span class="why"><strong>Por qué importa.</strong> El modelo optimiza lo que la pérdida premia. Si la variable objetivo es gasto, optimiza gasto.</span></dd>
+
+<dt id="regularizacion">Regularización</dt>
+<dd>Penalización de la complejidad del modelo para reducir el sobreajuste. <span class="why"><strong>Por qué importa.</strong> Mejora la generalización, pero no resuelve un problema de sesgo en la etiqueta.</span></dd>
+
+<dt id="importancia-variable">Importancia de variable</dt>
+<dd>Medida de cuánto contribuye una variable a las predicciones del modelo. <span class="why"><strong>Por qué importa.</strong> Una variable puede ser importante sin ser causal, y puede ser importante solo para un subgrupo.</span></dd>
+
+<dt id="selection-bias">Sesgo de selección</dt>
+<dd>Sesgo que aparece cuando la muestra no representa a la población por cómo se seleccionaron los casos. <span class="why"><strong>Por qué importa.</strong> Los registros históricos de una red mixta pueden sobrerrepresentar a quienes ya tenían acceso.</span></dd>
+
+<dt id="confounding">Confusión (confounding)</dt>
+<dd>Situación en la que una tercera variable se asocia con la exposición y el resultado y distorsiona la relación observada. <span class="why"><strong>Por qué importa.</strong> El régimen de salud confunde la relación entre gasto y riesgo clínico.</span></dd>
+
+<dt id="data-leakage">Fuga de información (data leakage)</dt>
+<dd>Uso de información que no estaría disponible en el momento de la predicción, o que contiene el resultado. <span class="why"><strong>Por qué importa.</strong> El gasto futuro puede incluir el costo de la complicación que se quiere predecir.</span></dd>
+
+<dt id="fairness">Fairness (equidad algorítmica)</dt>
+<dd>Campo que estudia cómo distribuir beneficios y daños de un modelo entre grupos. Es un problema sociotécnico, no solo matemático. <span class="why"><strong>Por qué importa.</strong> No basta con una métrica: hay que decidir qué tipo de equidad importa en el contexto clínico.</span></dd>
+
+<dt id="demographic-parity">Paridad demográfica</dt>
+<dd>Criterio de equidad que exige que la tasa de positivos sea similar entre grupos. <span class="why"><strong>Por qué importa.</strong> Puede ser inapropiado si la prevalencia real difiere; por eso hay que elegir el criterio con cuidado.</span></dd>
+
+<dt id="equal-opportunity">Igualdad de oportunidad</dt>
+<dd>Criterio de equidad que exige que el recall o verdadero positivo sea similar entre grupos. <span class="why"><strong>Por qué importa.</strong> Es el criterio más relevante aquí: el Grupo B tiene 58% de recall frente a 89% del Grupo A.</span></dd>
+
+<dt id="disparate-impact">Impacto desproporcionado</dt>
+<dd>Efecto adverso que recae con más fuerza sobre un grupo protegido, aunque la regla sea neutral. <span class="why"><strong>Por qué importa.</strong> Es el puente legal entre las métricas del Documento B y la discriminación indirecta.</span></dd>
+
+<dt id="automation-bias">Sesgo de automatización</dt>
+<dd>Tendencia de las personas a confiar demasiado en la salida de un sistema automático. <span class="why"><strong>Por qué importa.</strong> Si el clínico acepta el puntaje sin revisarlo, el human-in-the-loop existe en el papel pero no en la práctica.</span></dd>
+
+<dt id="fria">Evaluación de impacto sobre derechos fundamentales (FRIA)</dt>
+<dd>Análisis exigido a ciertos despliegadores de sistemas de alto riesgo para evaluar cómo el sistema afecta derechos fundamentales. <span class="why"><strong>Por qué importa.</strong> Una red hospitalaria que presta un servicio público puede estar obligada a hacerla antes del despliegue.</span></dd>
+
+<dt id="proveedor">Proveedor</dt>
+<dd>Persona o entidad que desarrolla un sistema de IA o lo pone en el mercado con su nombre. <span class="why"><strong>Por qué importa.</strong> Las obligaciones del Artículo 10 recaen principalmente en el proveedor.</span></dd>
+
+<dt id="desplegador">Desplegador</dt>
+<dd>Persona o entidad que usa un sistema de IA bajo su autoridad. <span class="why"><strong>Por qué importa.</strong> El hospital que usa el modelo tiene obligaciones de supervisión, información y uso conforme a las instrucciones.</span></dd>
+
+<dt id="evaluacion-conformidad">Evaluación de conformidad</dt>
+<dd>Proceso para demostrar que un sistema de alto riesgo cumple los requisitos del reglamento. <span class="why"><strong>Por qué importa.</strong> Sin evaluación de conformidad, el sistema no debería comercializarse ni usarse como alto riesgo.</span></dd>
+
+<dt id="marcado-ce">Marcado CE</dt>
+<dd>Marca que indica que un producto cumple los requisitos aplicables de la Unión Europea. <span class="why"><strong>Por qué importa.</strong> Es una señal de conformidad, no una garantía de que el modelo sea justo en todos los contextos.</span></dd>
+
+<dt id="sistema-gestion-riesgos">Sistema de gestión de riesgos</dt>
+<dd>Proceso continuo para identificar, evaluar, mitigar y monitorear riesgos durante todo el ciclo de vida. <span class="why"><strong>Por qué importa.</strong> El Artículo 9 lo exige. Un modelo en preproducción con una brecha de 31 puntos no lo tiene.</span></dd>
+
+<dt id="documentacion-tecnica">Documentación técnica</dt>
+<dd>Registro de las características, el entrenamiento, la evaluación y los límites del sistema. <span class="why"><strong>Por qué importa.</strong> Sin documentación no se puede auditar ni reconstruir una decisión.</span></dd>
+
+<dt id="registro-eventos">Registro de eventos (logs)</dt>
+<dd>Registro automático de las operaciones y decisiones del sistema. <span class="why"><strong>Por qué importa.</strong> Permite reconstruir qué pasó con un paciente y detectar fallos.</span></dd>
+
+<dt id="post-comercializacion">Vigilancia poscomercialización</dt>
+<dd>Monitoreo del desempeño y de los incidentes después de que el sistema se usa en el mundo real. <span class="why"><strong>Por qué importa.</strong> La equidad y la seguridad no se demuestran solo en el conjunto de prueba.</span></dd>
+
+<dt id="incidente-grave">Incidente grave</dt>
+<dd>Evento que causa o puede causar daño grave a la salud, la seguridad o los derechos de las personas. <span class="why"><strong>Por qué importa.</strong> El reingreso en UCI de un paciente omitido es un candidato claro a incidente grave.</span></dd>
+
+<dt id="derecho-explicacion">Derecho a explicación</dt>
+<dd>Derecho de una persona a recibir una explicación comprensible sobre una decisión automatizada que la afecta. <span class="why"><strong>Por qué importa.</strong> Un puntaje de 38/100 sin explicación no permite discutir ni impugnar la decisión.</span></dd>
+
+</dl>
+
+<h2 id="fuentes">Fuentes para verificar</h2>
+
+<ul class="small">
+<li><a href="https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32024R1689">EU AI Act, texto oficial en español</a>, Anexo III y artículos 10, 13, 14 y 15.</li>
+<li><a href="https://artificialintelligenceact.eu/ai-act-explorer/">AI Act Explorer</a>, para leer el articulado por secciones.</li>
+<li><a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI RMF 1.0</a> y <a href="https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf">documento completo</a>.</li>
+<li><a href="https://xgboost.readthedocs.io/en/stable/tutorials/model.html">XGBoost: Introduction to Boosted Trees</a>.</li>
+<li><a href="https://shap.readthedocs.io/en/latest/">SHAP documentation</a>.</li>
+<li><a href="https://scikit-learn.org/stable/modules/model_evaluation.html">scikit-learn: Metrics and scoring</a>.</li>
+<li><a href="https://fairlearn.org/">Fairlearn</a>, para métricas de equidad y mitigación.</li>
+<li><a href="https://www.who.int/publications/i/item/9789240029200">WHO: Ethics and governance of AI for health</a>.</li>
+</ul>
+
+<footer class="lesson-footer">
+<p>Referencia creada para el espacio de estudio técnico de SaludPrioriza-AI v2.4. Si una definición no te cierra, pregunta al agente y pide un ejemplo del dossier.</p>
+<p><a href="../lessons/0001-dossier-saludprioriza.html">Volver a la lección 01: leer el dossier como un auditor</a> · <a href="mapa-dossier.html">Mapa del dossier</a></p>
+</footer>
+
+</article>
+</div>
+</body>
+</html>

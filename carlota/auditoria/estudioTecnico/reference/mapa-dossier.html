@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mapa del dossier | Estudio técnico</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="page">
+<article>
+
+<header class="lesson-header">
+<p class="kicker">Referencia · Estudio técnico</p>
+<h1>Mapa del dossier</h1>
+<p class="lede">Una página para recordar qué contiene cada documento, cómo se conectan y qué números sostienen el hallazgo. Úsala antes de una discusión o de un examen; no reemplaza la lectura del dossier.</p>
+<p class="byline">SaludPrioriza-AI v2.4 · Documentos A, B y C</p>
+</header>
+
+<h2 id="documentos">Qué contiene cada documento</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Documento</th>
+<th>Qué contiene</th>
+<th>Hallazgo clave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong><br>Ficha técnica</td>
+<td>Propósito, población, arquitectura XGBoost, 250.000 registros de 2018 a 2023, siete variables de entrada, variable objetivo y métricas globales.</td>
+<td>El propósito es clínico, pero la variable objetivo es gasto futuro por encima del percentil 85. El modelo aprende a predecir facturación, no complicación.</td>
+</tr>
+<tr>
+<td><strong>B</strong><br>Queja y métricas</td>
+<td>Queja del Comité Ético-Clínico, métricas por subgrupo socioeconómico y análisis SHAP de importancia global.</td>
+<td>El FNR del Grupo B es 42%, frente a 11% del Grupo A. El gasto y el código postal suman 60% de la importancia SHAP.</td>
+</tr>
+<tr>
+<td><strong>C</strong><br>Marco normativo</td>
+<td>EU AI Act: alto riesgo, Anexo III categoría 5, artículos 10, 13 y 14. NIST AI RMF 1.0: Govern, Map, Measure, Manage.</td>
+<td>El sistema incumple obligaciones de datos, transparencia y supervisión humana. En NIST, la falla principal está en Measure.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="cadena">La cadena en cuatro pasos</h2>
+
+<ol>
+<li><strong>A define la variable objetivo.</strong> El propósito es clínico, pero la etiqueta es gasto futuro. El proxy sustituye a la complicación.</li>
+<li><strong>B muestra el efecto.</strong> El modelo omite a 42 de cada 100 pacientes de alto riesgo del Grupo B y a 11 de cada 100 del Grupo A.</li>
+<li><strong>C nombra la obligación.</strong> El Artículo 10 exige datos representativos y sin sesgos evitables; el 13, transparencia; el 14, supervisión humana.</li>
+<li><strong>La auditoría emite un juicio.</strong> El modelo no debería desplegarse sin redefinir la variable objetivo, eliminar los proxies y añadir supervisión humana real.</li>
+</ol>
+
+<h2 id="numeros">Números para recordar</h2>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Dato</th>
+<th class="num">Valor</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Registros de entrenamiento</td>
+<td class="num">250.000</td>
+<td>Datos históricos de 2018 a 2023.</td>
+</tr>
+<tr>
+<td>Registros de prueba</td>
+<td class="num">50.000</td>
+<td>Conjunto global reportado en el Documento A.</td>
+</tr>
+<tr>
+<td>Tamaño de los grupos</td>
+<td class="num">30.000 / 20.000</td>
+<td>Grupo A privado y Grupo B subsidiado.</td>
+</tr>
+<tr>
+<td>Exactitud global</td>
+<td class="num">88,5%</td>
+<td>Puede ser alta aunque el modelo sea injusto por subgrupo.</td>
+</tr>
+<tr>
+<td>ROC-AUC</td>
+<td class="num">0,89</td>
+<td>Buena capacidad de ordenamiento global; no mide equidad ni calibración.</td>
+</tr>
+<tr>
+<td>Recall por grupo</td>
+<td class="num">89% / 58%</td>
+<td>El Grupo B detecta menos de la mitad de sus verdaderos positivos.</td>
+</tr>
+<tr>
+<td>FNR por grupo</td>
+<td class="num">11% / 42%</td>
+<td>El Grupo B tiene casi cuatro veces más probabilidad de ser omitido.</td>
+</tr>
+<tr>
+<td>FPR por grupo</td>
+<td class="num">8,5% / 12%</td>
+<td>El Grupo B también recibe más falsas alarmas.</td>
+</tr>
+<tr>
+<td>Peso SHAP: gasto + código postal</td>
+<td class="num">60%</td>
+<td>La decisión se apoya más en la posición socioeconómica que en la clínica.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="frases">Tres frases para el dictamen</h2>
+
+<div class="callout warn">
+<span class="label">Hallazgo 1</span>
+<p>El modelo no predice complicaciones: predice gasto futuro. El <a class="term" href="glosario-dossier.html#proxy">proxy</a> mide acceso y capacidad de pago, no necesidad clínica.</p>
+</div>
+
+<div class="callout warn">
+<span class="label">Hallazgo 2</span>
+<p>La brecha no es aleatoria. El <a class="term" href="glosario-dossier.html#fnr">FNR</a> del Grupo B es 42%, frente a 11% del Grupo A. El modelo falla más donde ya hay menos acceso.</p>
+</div>
+
+<div class="callout warn">
+<span class="label">Hallazgo 3</span>
+<p>El sistema incumple el <a class="term" href="glosario-dossier.html#articulo-10">Artículo 10</a> por datos y variable objetivo, el <a class="term" href="glosario-dossier.html#articulo-13">13</a> por transparencia y el <a class="term" href="glosario-dossier.html#articulo-14">14</a> por falta de supervisión humana. En NIST, falla <a class="term" href="glosario-dossier.html#measure">Measure</a>.</p>
+</div>
+
+<h2 id="enlaces">Sigue leyendo</h2>
+
+<ul>
+<li><a href="../lessons/0001-dossier-saludprioriza.html">Lección 01: leer el dossier como un auditor</a>, para la explicación completa.</li>
+<li><a href="glosario-dossier.html">Glosario del dossier</a>, para cada término técnico.</li>
+<li><a href="metricas-clasificacion.html">Métricas de clasificación</a>, para las fórmulas y la matriz de confusión.</li>
+</ul>
+
+<footer class="lesson-footer">
+<p>Referencia creada para el espacio de estudio técnico de SaludPrioriza-AI v2.4. Si un número no te cierra, vuelve al dossier o pregunta al agente.</p>
+</footer>
+
+</article>
+</div>
+</body>
+</html>

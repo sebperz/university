@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mesa 2. Explicabilidad, transparencia y gobernanza | SaludPrioriza-AI v2.4</title>
+<style>
+  :root {
+    --bg: #fbfbf8;
+    --text: #22262a;
+    --muted: #5c656b;
+    --line: #dfe4e0;
+    --accent: #2f5d50;
+    --soft: #f1f5f2;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 18px;
+    line-height: 1.68;
+    text-rendering: optimizeLegibility;
+  }
+
+  article {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 3rem 1.4rem 5rem;
+  }
+
+  h1, h2, h3 {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.25;
+    color: #17201c;
+  }
+
+  h1 {
+    font-size: 2.05rem;
+    margin: 0 0 0.4rem;
+    letter-spacing: -0.015em;
+  }
+
+  h2 {
+    font-size: 1.42rem;
+    margin: 3rem 0 1rem;
+    padding-bottom: 0.45rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  h3 {
+    font-size: 1.12rem;
+    margin: 2rem 0 0.6rem;
+  }
+
+  p { margin: 0 0 1.05rem; }
+
+  p, ul, ol, blockquote, .meta, .toc { max-width: 58rem; }
+
+  .meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    margin-bottom: 0.5rem;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--line);
+    margin: 2.4rem 0;
+  }
+
+  blockquote {
+    margin: 0 0 1.4rem;
+    padding: 0.85rem 1.1rem;
+    background: var(--soft);
+    border-left: 3px solid var(--accent);
+    color: #39423d;
+  }
+
+  blockquote p { margin: 0; }
+
+  code {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    font-size: 0.88em;
+    background: #edf1ee;
+    padding: 0.12em 0.32em;
+    border-radius: 3px;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    margin: 1.3rem 0 1.6rem;
+  }
+
+  table {
+    width: 100%;
+    min-width: 58rem;
+    border-collapse: collapse;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 0.84rem;
+    line-height: 1.5;
+  }
+
+  th:first-child, td:first-child { font-weight: 600; }
+
+  th, td {
+    border: 1px solid var(--line);
+    padding: 0.55rem 0.65rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--soft);
+    font-weight: 600;
+  }
+
+  tbody tr:nth-child(even) { background: #fcfdfc; }
+
+  .toc {
+    border: 1px solid var(--line);
+    background: #fff;
+    padding: 0.9rem 1.1rem;
+    margin: 1.8rem 0 2.2rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 0.92rem;
+  }
+
+  .toc p {
+    margin: 0 0 0.45rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+
+  .toc ol {
+    margin: 0;
+    padding-left: 1.3rem;
+  }
+
+  .toc li { margin: 0.2rem 0; }
+
+  a {
+    color: var(--accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+  }
+
+  a:hover { color: #1d3f36; }
+
+  @media (max-width: 640px) {
+    body { font-size: 16.5px; }
+    article { padding: 2rem 1rem 3.5rem; }
+    h1 { font-size: 1.65rem; }
+    h2 { font-size: 1.25rem; margin-top: 2.4rem; }
+    table { font-size: 0.78rem; min-width: 52rem; }
+    th, td { padding: 0.45rem 0.5rem; }
+  }
+
+  @media print {
+    body { background: #fff; font-size: 11pt; }
+    article { max-width: none; padding: 0; }
+    .toc { display: none; }
+    h2, h3 { break-after: avoid; }
+    table, blockquote { break-inside: avoid; }
+    a { color: inherit; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+<article>
+<h1>Mesa 2. Explicabilidad, transparencia y gobernanza (XAI)</h1>
+<p class="meta">Sistema auditado: SaludPrioriza-AI v2.4<br>Entidad: Red Hospitalaria San José<br>Mesa: 2, Auditores de Explicabilidad, Transparencia y Gobernanza<br>Fecha: 22 de octubre de 2026</p>
+<p>La guía de la mesa pide "evaluar la interpretabilidad del modelo XGBoost, la validez de la atribución de importancia y los mecanismos de supervisión médica". La revisión se apoya en los documentos A, B y C del dossier. Las citas entre comillas son textuales.</p>
+<hr>
+<nav class="toc" aria-label="Contenido"><p>Contenido</p><ol><li><a href="#p1">Matriz de hallazgos</a></li><li><a href="#p2">1. Atribución de importancia (SHAP)</a></li><li><a href="#p3">2. Transparencia clínico-paciente</a></li><li><a href="#p4">3. Mecanismo human-in-the-loop</a></li><li><a href="#p5">Cruce con el marco normativo y NIST</a></li><li><a href="#p6">Dictamen de la mesa</a></li><li><a href="#p7">Fuentes citadas</a></li></ol></nav>
+<h2 id="p1">Matriz de hallazgos</h2>
+<div class="table-wrap"><table><thead><tr><th>Dimensión evaluada</th><th>Hallazgo técnico detectado</th><th>Evidencia en Dossier</th><th>Métrica o criterio afectado</th><th>Propuesta de corrección</th></tr></thead><tbody><tr><td>Atribución de importancia (SHAP)</td><td>El reporte ofrece importancia global promedio, no explicaciones locales ni por subgrupo. El 60% del peso está en gasto y código postal, variables socioeconómicas. El modelo es un conjunto de árboles, así que la atribución es posterior y no causal.</td><td>"Análisis de Explicabilidad Global (Valores Importancia SHAP Averaged)"; "Gasto_Salud_Anual" 42.0%; "Codigo_Postal" 18.0%; "Gradient Boosted Decision Trees (XGBoost Classifier v1.7.1)".</td><td>Validez de la atribución; Artículo 13; NIST Measure; NIST Map.</td><td>SHAP local por paciente, SHAP por subgrupo, análisis de interacciones y validación con clínicos. Documentar método, fondo y signo. Retirar o transformar los proxies.</td></tr><tr><td>Transparencia clínico-paciente</td><td>El clínico recibe un puntaje y un umbral, pero no la definición de la variable objetivo, las limitaciones, el desempeño por subgrupo ni una explicación local. El 82% global de sensibilidad oculta el 58% del Grupo B. El dossier no documenta una explicación para el paciente rechazado.</td><td>Artículo 13: "suficiente transparencia para permitir a los usuarios interpretar sus resultados"; "Recall Global: 82.0%"; Grupo B: "Recall (Sensibilidad)" 58.0%; queja: "rechazados por el sistema".</td><td>Artículo 13; NIST Measure; NIST Govern; confianza clínica.</td><td>Ficha de modelo y manual de uso con propósito, variable objetivo, umbral, métricas por subgrupo y limitaciones. Explicación local, guion de comunicación al paciente y canal de reclamación.</td></tr><tr><td>Mecanismo human-in-the-loop</td><td>No hay evidencia de revisión humana, anulación, botón de parada ni protocolo de escalamiento. El sistema rechaza con puntaje menor a 40. Sin explicación local, el clínico no tiene información para contradecir el puntaje.</td><td>Artículo 14: "mecanismos de interactividad que permitan a personas cualificadas supervisar de manera efectiva la herramienta"; queja: "rechazados por el sistema"; "reingresando semanas después por complicaciones graves en unidades de cuidados intensivos".</td><td>Artículo 14; NIST Govern; NIST Manage; tasa de anulación, tiempo de revisión y proporción de decisiones revisadas.</td><td>Revisión obligatoria de puntajes bajos, anulación documentada, botón de parada, escalamiento y auditoría de decisiones. Capacitación en sesgo de automatización y responsable nombrado.</td></tr></tbody></table></div>
+<hr>
+<h2 id="p2">1. Atribución de importancia (SHAP)</h2>
+<h3>Hallazgo</h3>
+<p>El dossier presenta un análisis de explicabilidad global, no una explicación por paciente. La tabla muestra la importancia relativa promedio de cada variable. El gasto anual aporta 42.0% y el código postal 18.0%: juntos suman 60%. Las variables clínicas y demográficas suman 35%. El modelo se apoya más en la posición socioeconómica que en la clínica.</p>
+<p>El peso del gasto es una parte del problema. La otra es que el modelo es un XGBoost, un conjunto de árboles que no es interpretable por diseño. La atribución SHAP es una reconstrucción posterior, no una descripción de cómo razona el modelo. Sin el método, el conjunto de fondo y el signo de los valores, la tabla no es reproducible. Tampoco hay SHAP por subgrupo, así que el promedio puede ocultar que en el Grupo B el gasto pesa todavía más.</p>
+<h3>Evidencia directa</h3>
+<blockquote><p>"Análisis de Explicabilidad Global (Valores Importancia SHAP Averaged)" (Documento B, sección de explicabilidad)</p></blockquote>
+<blockquote><p>"Gasto_Salud_Anual" 42.0%; "Comorbilidades" 20.0%; "Codigo_Postal" 18.0%; "Edad" 10.0%; "Tipo_Afiliación_Salud" 5.0%; "Presión_Arterial_Media" 3.0%; "Visitas_Urgencias_Previas" 2.0%. (Documento B, tabla de importancia SHAP)</p></blockquote>
+<blockquote><p>"Gradient Boosted Decision Trees (XGBoost Classifier v1.7.1)." (Documento A, ficha técnica, fila "Arquitectura de Algoritmo")</p></blockquote>
+<blockquote><p>"Riesgo_Complicación_Real: Definido operativamente mediante el proxy <em>Y_{proxy}</em> = Gasto_Salud_Futuro_Anual (Percentil &gt; 85 en los 12 meses posteriores al ingreso)." (Documento A, ficha técnica, fila "Variable Objetivo")</p></blockquote>
+<h3>Lectura de auditoría</h3>
+<p>El reporte responde "qué variables pesan en promedio", no "por qué este paciente recibió 38/100". Esa diferencia es decisiva en un contexto clínico. Un clínico no puede discutir con un porcentaje global. Necesita saber qué factores empujaron el puntaje de su paciente y si esos factores son clínicos o administrativos.</p>
+<p>La atribución también es válida solo para el modelo y la población con los que se calculó. Si el modelo se aplica a un grupo con otra distribución de gasto, la importancia puede cambiar. El dossier no muestra esa verificación. Tampoco muestra si el 42% corresponde a valores absolutos o con signo, ni si se usó TreeSHAP. Sin esos detalles, la tabla sirve como pista, no como prueba.</p>
+<h3>Corrección</h3>
+<p>Entregar un anexo de explicabilidad con SHAP local para cada decisión, SHAP por subgrupo y análisis de interacciones. Documentar el método, el conjunto de fondo, el signo y la incertidumbre. Validar las explicaciones con clínicos que conozcan el caso. Retirar <code>Gasto_Salud_Anual</code> y <code>Codigo_Postal</code> o justificar su uso con una prueba de necesidad clínica. Mientras la variable objetivo siga siendo gasto, la explicación más honesta es decir que el modelo predice facturación.</p>
+<hr>
+<h2 id="p3">2. Transparencia clínico-paciente</h2>
+<h3>Hallazgo</h3>
+<p>El Artículo 13 exige que el sistema sea transparente para que los usuarios interpreten la salida. El dossier reporta métricas globales y un SHAP promedio, pero no muestra instrucciones de uso, advertencias sobre el proxy, desempeño por subgrupo ni explicación local. El clínico ve un puntaje y un umbral, no el contexto que necesita para decidir.</p>
+<p>La transparencia falla en dos niveles. Para el clínico, el 82% global de sensibilidad puede sonar aceptable, pero el Grupo B tiene 58%. Esa diferencia de 24 puntos no aparece en el resumen ejecutivo. Para el paciente, el dossier no documenta por qué fue rechazado, qué alternativas tiene ni cómo puede reclamar. Un puntaje menor a 40 se convierte en una decisión opaca.</p>
+<h3>Evidencia directa</h3>
+<blockquote><p>"Obliga a que los sistemas funcionen con suficiente transparencia para permitir a los usuarios interpretar sus resultados y utilizarlos de manera adecuada." (Documento C, Artículo 13)</p></blockquote>
+<blockquote><p>"Accuracy Global: 88.5%"; "ROC-AUC: 0.89"; "Precision Global: 84.0%"; "Recall Global: 82.0%"; "F1-Score Global: 0.83." (Documento A, métricas globales)</p></blockquote>
+<blockquote><p>"Grupo B: Régimen Subsidiado / Ingreso Bajo / Minorías ... Recall (Sensibilidad) 58.0% ... FNR 42.0%." (Documento B, métricas desagregadas)</p></blockquote>
+<blockquote><p>"Médicos de la Red de Hospitales Públicos reportan que pacientes adultos mayores pertenecientes a estratos socioeconómicos bajos y con múltiples patologías crónicas activas reciben sistemáticamente puntajes IRC-30 bajos (&lt; 40/100). Debido a esto, son rechazados por el sistema para ingresar a los programas preventivos de alto valor, reingresando semanas después por complicaciones graves en unidades de cuidados intensivos." (Documento B, queja del Comité Ético-Clínico)</p></blockquote>
+<h3>Lectura de auditoría</h3>
+<p>El reporte global no es neutral. Al mostrar 82% de sensibilidad sin la tabla por subgrupo, sugiere un desempeño que el Grupo B no tiene. El clínico que confía en el promedio puede dejar pasar a pacientes que el modelo no detecta. Esa es una falla de transparencia con consecuencia clínica.</p>
+<p>La transparencia tampoco se resuelve con un tablero de importancia de variables. El clínico necesita saber qué mide el modelo, cuál es la variable objetivo real, cuál es el umbral, qué errores son más probables y qué hacer cuando el puntaje es bajo. El paciente necesita una explicación comprensible y un camino de revisión. El dossier no muestra ninguna de las dos cosas.</p>
+<h3>Corrección</h3>
+<p>Publicar una ficha de modelo y un manual de uso clínico con propósito, variable objetivo, umbral, métricas globales y por subgrupo, limitaciones, riesgos conocidos y medidas de supervisión. Añadir una explicación local en lenguaje claro para cada decisión. Diseñar un guion de comunicación al paciente y un canal de reclamación. Entrenar al personal en el uso y en los límites del modelo. No mostrar un puntaje sin la advertencia de que el modelo predice gasto, no complicación.</p>
+<hr>
+<h2 id="p4">3. Mecanismo human-in-the-loop</h2>
+<h3>Hallazgo</h3>
+<p>El Artículo 14 exige mecanismos para que personas cualificadas supervisen el sistema. El dossier describe un rechazo por el sistema de los pacientes con puntaje menor a 40 y no documenta revisión médica, anulación, botón de parada ni escalamiento. La queja del Comité Ético-Clínico confirma el resultado: los pacientes son rechazados y reingresan graves a UCI.</p>
+<p>La supervisión humana no puede ser una firma al final del flujo. Para que sea efectiva, el clínico necesita información, tiempo, autoridad y un registro de su decisión. Aquí no hay explicación local, no hay tabla por subgrupo y no hay evidencia de que el clínico pueda contradecir el puntaje. Sin esas condiciones, el human-in-the-loop existe en el papel pero no en la práctica.</p>
+<h3>Evidencia directa</h3>
+<blockquote><p>"Exige el diseño de mecanismos de interactividad que permitan a personas cualificadas supervisar de manera efectiva la herramienta (Human-in-the-loop / Human-on-the-loop)." (Documento C, Artículo 14)</p></blockquote>
+<blockquote><p>"Debido a esto, son rechazados por el sistema para ingresar a los programas preventivos de alto valor, reingresando semanas después por complicaciones graves en unidades de cuidados intensivos." (Documento B, queja del Comité Ético-Clínico)</p></blockquote>
+<blockquote><p>"pacientes adultos mayores ... reciben sistemáticamente puntajes IRC-30 bajos (&lt; 40/100)." (Documento B, queja del Comité Ético-Clínico)</p></blockquote>
+<h3>Lectura de auditoría</h3>
+<p>El sistema decide quién entra a un programa preventivo. También estima una probabilidad, pero la decisión de acceso es la que importa. Esa decisión tiene efecto directo sobre la salud. Dejar que un puntaje menor a 40 cierre la puerta sin revisión humana convierte al modelo en el decisor real. El clínico queda como testigo, no como supervisor.</p>
+<p>La ausencia de explicación local agrava el problema. Si el clínico no sabe por qué el modelo dio 38, no puede evaluar si el puntaje es razonable. La supervisión se vuelve una aceptación ciega. El sesgo de automatización aparece justo ahí: el número parece objetivo y el clínico tiene poco tiempo para cuestionarlo.</p>
+<h3>Corrección</h3>
+<p>Establecer revisión obligatoria por un clínico antes de excluir a un paciente del programa. Permitir anulación con justificación escrita y registrar la decisión. Añadir un botón de parada y un protocolo de escalamiento. Auditar una muestra de decisiones y medir la tasa de anulación, el tiempo de revisión y la proporción de casos revisados. Capacitar al personal en sesgo de automatización. Nombrar un responsable de la supervisión y documentar su autoridad.</p>
+<hr>
+<h2 id="p5">Cruce con el marco normativo y NIST</h2>
+<div class="table-wrap"><table><thead><tr><th>Criterio</th><th>Qué exige el dossier</th><th>Qué muestra la v2.4</th></tr></thead><tbody><tr><td>Artículo 13</td><td>Transparencia para interpretar la salida y usarla bien.</td><td>Métricas globales y SHAP promedio; sin explicación local ni desempeño por subgrupo.</td></tr><tr><td>Artículo 14</td><td>Supervisión humana efectiva por personas cualificadas.</td><td>Rechazo por el sistema con puntaje menor a 40; sin revisión, anulación ni parada documentados.</td></tr><tr><td>NIST Measure</td><td>"Análisis cuantitativo y cualitativo de métricas de precisión, disparidad de sesgo, robustez y deriva (drift)."</td><td>Solo métricas globales y SHAP promedio; sin disparidad, calibración, robustez ni deriva.</td></tr><tr><td>NIST Govern</td><td>"Establecimiento de políticas de gobernanza, cultura organizacional e identificación de tolerancias al riesgo."</td><td>No se documenta una política de transparencia ni de supervisión humana.</td></tr><tr><td>NIST Map</td><td>"Contextualización del sistema, identificación de riesgos interdependientes de sesgo, privacidad y seguridad."</td><td>No se identifica el riesgo del proxy ni el flujo clínico de decisión.</td></tr><tr><td>NIST Manage</td><td>"Asignación de recursos para priorizar y mitigar los riesgos identificados de manera continua."</td><td>No hay plan de mitigación, reversión ni monitoreo continuo.</td></tr></tbody></table></div>
+<p>La falla principal está en Measure. Sin medición desagregada, la organización no puede ver la brecha. Govern no fija un límite, Map no identifica el riesgo y Manage no corrige. La explicabilidad y la supervisión quedan como declaraciones, no como controles.</p>
+<hr>
+<h2 id="p6">Dictamen de la mesa</h2>
+<p>La Mesa 2 no aprueba el despliegue clínico de la versión 2.4 en su estado actual. El modelo puede predecir el gasto, pero no ofrece explicaciones locales, el reporte del modelo no declara su desempeño por subgrupo y no documenta un mecanismo verificable de supervisión humana. Sin esas tres piezas, el clínico no puede usar el puntaje de forma segura y el paciente no tiene un camino documentado para impugnar la decisión.</p>
+<p>Las correcciones son condición para cualquier piloto: explicabilidad local y por subgrupo, ficha de modelo y manual de uso, revisión humana obligatoria con anulación y auditoría. La Mesa 2 debe coordinar con la Mesa 1 la redefinición de la variable objetivo y con la Mesa 4 el monitoreo de deriva y desempeño. Mientras la variable objetivo siga siendo gasto futuro, la explicación más honesta del sistema es que predice facturación, no riesgo clínico.</p>
+<hr>
+<h2 id="p7">Fuentes citadas</h2>
+<ul><li>Documento A: Ficha Técnica y Reporte del Modelo, filas "Propósito Intencionado", "Arquitectura de Algoritmo" y "Variable Objetivo"; métricas globales.</li><li>Documento B: Reporte de Quejas y Métricas Desagregadas, queja del Comité Ético-Clínico, tabla de métricas por subgrupo y tabla de importancia SHAP.</li><li>Documento C: Marco Normativo y Estándares de Referencia, artículos 13 y 14 del EU AI Act, y funciones Measure, Govern, Map y Manage del NIST AI RMF 1.0.</li></ul>
+</article>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 01: leer el dossier como un auditor | Estudio técnico</title>
+<link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+<div class="page lesson">
+<article>
+
+<header class="lesson-header">
+<p class="kicker">Lección 01 · Estudio técnico</p>
+<h1>Leer el dossier como un auditor</h1>
+<p class="lede">El dossier no son tres documentos sueltos. Es una cadena: el Documento A dice qué promete el modelo, el B muestra qué hace cuando se aplica a personas reales y el C da el criterio para juzgarlo. Si entiendes esa cadena, puedes auditar cualquier sistema con la misma lógica.</p>
+<p class="byline">SaludPrioriza-AI v2.4 · Red Hospitalaria San José · 20 minutos</p>
+</header>
+
+<div class="callout">
+<span class="label">Lo que vas a lograr</span>
+<p>Al terminar esta lección podrás explicar qué contiene cada documento, ubicar el hallazgo central y nombrar la obligación normativa que se incumple. No vas a memorizar definiciones: vas a aprender a leer un dossier técnico con preguntas de auditor.</p>
+</div>
+
+<nav class="toc" aria-label="Contenido">
+<p>Ruta</p>
+<ol>
+<li><a href="#cadena">La cadena de auditoría</a></li>
+<li><a href="#documento-a">Documento A: la promesa</a></li>
+<li><a href="#documento-b">Documento B: la evidencia</a></li>
+<li><a href="#documento-c">Documento C: el criterio</a></li>
+<li><a href="#conexion">Cómo se conectan</a></li>
+<li><a href="#palabras">Las palabras que más pesan</a></li>
+<li><a href="#practica">Practica</a></li>
+</ol>
+</nav>
+
+<h2 id="cadena">La cadena de auditoría</h2>
+
+<p>Cada documento responde una pregunta distinta. No los leas como tres textos independientes; léelos como tres lados del mismo caso.</p>
+
+<div class="card-grid">
+<div class="card">
+<span class="tag">Documento A</span>
+<h3>La promesa</h3>
+<p>Qué dice el sistema que es: propósito, población, algoritmo, variables, etiqueta y métricas globales.</p>
+</div>
+<div class="card">
+<span class="tag">Documento B</span>
+<h3>La evidencia</h3>
+<p>Qué hace cuando se aplica: queja del Comité Ético-Clínico, métricas por subgrupo y SHAP.</p>
+</div>
+<div class="card">
+<span class="tag">Documento C</span>
+<h3>El criterio</h3>
+<p>Contra qué se juzga: EU AI Act, NIST AI RMF y las obligaciones de un sistema de alto riesgo.</p>
+</div>
+</div>
+
+<p>La auditoría vive en la brecha entre A y B. A dice "predigo riesgo clínico"; B muestra que el modelo deja pasar a 42 de cada 100 pacientes de alto riesgo del grupo subsidiado. C permite nombrar esa brecha como un incumplimiento, no solo como una molestia.</p>
+
+<h2 id="documento-a">Documento A: la promesa</h2>
+
+<p>La ficha técnica se lee como una promesa. El sistema dice: voy a clasificar el <a class="term" href="../reference/glosario-dossier.html#irc-30">IRC-30</a> en pacientes adultos que llegan a urgencias o consulta prioritaria, para asignarles un programa de manejo preventivo intensivo.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Qué dice</th>
+<th>Qué debes preguntar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Propósito</td>
+<td>Clasificar el riesgo de complicación a 30 días.</td>
+<td>¿La variable objetivo mide realmente una complicación?</td>
+</tr>
+<tr>
+<td>Población</td>
+<td>Adultos de una red mixta, pública y privada.</td>
+<td>¿Está representado el régimen subsidiado?</td>
+</tr>
+<tr>
+<td>Algoritmo</td>
+<td><a class="term" href="../reference/glosario-dossier.html#xgboost">XGBoost</a>, un conjunto de árboles potenciados.</td>
+<td>¿Es interpretable por diseño?</td>
+</tr>
+<tr>
+<td>Datos</td>
+<td>250.000 registros anonimizados de 2018 a 2023.</td>
+<td>¿Qué desigualdades de acceso quedaron en esos datos?</td>
+</tr>
+<tr>
+<td>Variables X</td>
+<td>Edad, gasto, comorbilidades, visitas, código postal, afiliación, presión arterial.</td>
+<td>¿Cuáles son clínicas y cuáles administrativas?</td>
+</tr>
+<tr>
+<td>Variable Y</td>
+<td>Gasto futuro anual por encima del percentil 85.</td>
+<td>¿Eso es una complicación o una factura?</td>
+</tr>
+<tr>
+<td>Métricas</td>
+<td>Exactitud 88,5%, AUC 0,89, precisión 84%, recall 82%, F1 0,83.</td>
+<td>¿Cómo se comporta por subgrupo?</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p><a class="term" href="../reference/glosario-dossier.html#xgboost">XGBoost</a> combina muchos árboles pequeños. Cada árbol hace preguntas simples ("¿edad mayor a 65?", "¿gasto mayor a cierto valor?") y el modelo suma las respuestas. Es potente con datos tabulares y detecta interacciones, pero no es interpretable por diseño. Por eso el dossier recurre a <a class="term" href="../reference/glosario-dossier.html#shap">SHAP</a>. La <a href="https://xgboost.readthedocs.io/en/stable/tutorials/model.html">documentación oficial de XGBoost</a> describe la mecánica de los árboles potenciados.</p>
+
+<div class="callout warn">
+<span class="label">El hallazgo central</span>
+<p>El propósito es clínico, pero la variable objetivo es gasto futuro. El modelo aprende a predecir quién gastará más, no quién se complicará. Eso es un <a class="term" href="../reference/glosario-dossier.html#proxy">proxy</a>. Un proxy no es inútil, pero hay que probar que mide lo que se quiere medir. Aquí no lo hace: el gasto depende del acceso, la cobertura y la facturación.</p>
+</div>
+
+<p>Las métricas globales pueden verse bien y aun así esconder el problema. Un modelo puede ser excelente prediciendo el proxy y malo prediciendo la complicación. El AUC de 0,89 no contradice la crítica: solo dice que el modelo ordena bien el gasto. Para entender qué mide cada métrica, usa la referencia de <a href="../reference/metricas-clasificacion.html">métricas de clasificación</a>.</p>
+
+<h2 id="documento-b">Documento B: la evidencia</h2>
+
+<p>El Documento B es la evidencia. El Comité Ético-Clínico reporta que pacientes adultos mayores, de estratos bajos y con múltiples patologías crónicas reciben puntajes menores a 40/100. Por eso son rechazados del programa preventivo y semanas después reingresan con complicaciones graves en la UCI.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Indicador</th>
+<th class="num">Grupo A: privado</th>
+<th class="num">Grupo B: subsidiado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tamaño de muestra</td>
+<td class="num">30.000</td>
+<td class="num">20.000</td>
+</tr>
+<tr>
+<td>Precisión (VPP)</td>
+<td class="num">86%</td>
+<td class="num">81%</td>
+</tr>
+<tr>
+<td>Recall (sensibilidad)</td>
+<td class="num">89%</td>
+<td class="num">58%</td>
+</tr>
+<tr>
+<td>FNR</td>
+<td class="num">11%</td>
+<td class="num">42%</td>
+</tr>
+<tr>
+<td>FPR</td>
+<td class="num">8,5%</td>
+<td class="num">12%</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p>La precisión es parecida. La diferencia está en el <a class="term" href="../reference/glosario-dossier.html#recall">recall</a>: 89% frente a 58%. El <a class="term" href="../reference/glosario-dossier.html#fnr">FNR</a> pasa de 11% a 42%. El modelo deja pasar a 42 de cada 100 pacientes de alto riesgo del Grupo B. En el Grupo A deja pasar a 11. Esa es la brecha que el promedio global no muestra.</p>
+
+<p>El Grupo B también tiene un <a class="term" href="../reference/glosario-dossier.html#fpr">FPR</a> más alto: 12% frente a 8,5%. El grupo desfavorecido recibe más falsos negativos y más falsos positivos. No hay una compensación: los dos errores lo perjudican.</p>
+
+<p>El análisis <a class="term" href="../reference/glosario-dossier.html#shap">SHAP</a> muestra por qué. La importancia promedio se reparte así: gasto 42%, comorbilidades 20%, código postal 18%, edad 10%, afiliación 5%, presión arterial 3% y visitas previas 2%. El gasto y el código postal suman 60%. Las variables clínicas y demográficas suman 35%. El modelo se apoya más en la posición socioeconómica que en la clínica.</p>
+
+<div class="callout">
+<span class="label">El hallazgo en una frase</span>
+<p>El modelo no falla al azar. Falla más en el grupo que ya tiene menos acceso, y las variables que más pesan son las que codifican ese acceso: el gasto y la geografía.</p>
+</div>
+
+<p>SHAP es una atribución, no una prueba de causalidad. Un valor alto no significa que la variable cause el resultado; significa que el modelo la usa. Y el promedio global puede ocultar que, para el Grupo B, el modelo depende todavía más del gasto. Para una explicación más fina, mira el <a href="../reference/glosario-dossier.html#shap">glosario</a>.</p>
+
+<h2 id="documento-c">Documento C: el criterio</h2>
+
+<p>El Documento C no dice si el modelo es bueno. Dice contra qué estándar se juzga. El sistema es de <a class="term" href="../reference/glosario-dossier.html#riesgo-alto">alto riesgo</a> por el <a class="term" href="../reference/glosario-dossier.html#anexo-iii">Anexo III</a>, categoría 5, porque prioriza el acceso a un servicio esencial de salud. Los artículos se citan según el <a href="https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32024R1689">texto oficial del EU AI Act</a>.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Artículo</th>
+<th>Qué exige</th>
+<th>Qué muestra el dossier</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#articulo-10">Artículo 10</a></td>
+<td>Datos pertinentes, representativos y con examen y mitigación de sesgos.</td>
+<td>Variable objetivo de gasto, brecha de 42% frente a 11% y ningún análisis por subgrupo en el reporte del modelo.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#articulo-13">Artículo 13</a></td>
+<td>Transparencia e instrucciones para interpretar la salida.</td>
+<td>Solo métricas globales y SHAP global. No hay explicación local ni advertencia sobre el proxy.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#articulo-14">Artículo 14</a></td>
+<td>Supervisión humana efectiva, con capacidad de anular o detener el sistema.</td>
+<td>El paciente con puntaje menor a 40 es rechazado por el sistema. No se documenta una revisión humana que corrija la decisión.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#articulo-15">Artículo 15</a></td>
+<td>Precisión, robustez y ciberseguridad adecuadas al propósito.</td>
+<td>Exactitud global de 88,5%, sin métricas por subgrupo, calibración ni pruebas de robustez.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<p>El <a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI RMF 1.0</a> organiza la gestión en cuatro funciones: <a class="term" href="../reference/glosario-dossier.html#govern">Govern</a>, <a class="term" href="../reference/glosario-dossier.html#map">Map</a>, <a class="term" href="../reference/glosario-dossier.html#measure">Measure</a> y <a class="term" href="../reference/glosario-dossier.html#manage">Manage</a>. La falla principal es Measure: el sistema mide el promedio y no mide la disparidad. El reporte desagregado aparece después de la queja, no como parte de un monitoreo continuo.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Función</th>
+<th>Pregunta</th>
+<th>Falla en este caso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Govern</td>
+<td>¿Hay políticas y tolerancia al riesgo?</td>
+<td>No se documenta un límite de equidad ni una revisión independiente.</td>
+</tr>
+<tr>
+<td>Map</td>
+<td>¿Se entendió el contexto?</td>
+<td>No se identificó el riesgo del proxy ni al grupo vulnerable antes de entrenar.</td>
+</tr>
+<tr>
+<td>Measure</td>
+<td>¿Se midió el sesgo?</td>
+<td>Solo métricas globales; sin subgrupo, calibración ni deriva.</td>
+</tr>
+<tr>
+<td>Manage</td>
+<td>¿Se mitigó?</td>
+<td>No hay plan de mitigación, reversión ni monitoreo continuo.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="conexion">Cómo se conectan</h2>
+
+<p>La auditoría se construye en cuatro pasos. Si puedes explicar esta cadena en voz alta, ya puedes leer el dossier.</p>
+
+<ol>
+<li><strong>A define la variable objetivo.</strong> El propósito es clínico, pero la etiqueta es gasto futuro por encima del percentil 85.</li>
+<li><strong>B muestra el efecto.</strong> El FNR del Grupo B es 42%, frente a 11% del Grupo A. El modelo omite a 420 de cada 1.000 pacientes de alto riesgo del grupo subsidiado.</li>
+<li><strong>C nombra la obligación.</strong> El Artículo 10 exige datos representativos y sin sesgos evitables; el 13, transparencia; el 14, supervisión humana.</li>
+<li><strong>La conclusión es una decisión.</strong> El modelo no debería desplegarse sin redefinir la variable objetivo, eliminar los proxies y añadir supervisión humana real.</li>
+</ol>
+
+<div class="callout ok">
+<span class="label">La idea que te llevas</span>
+<p>Un buen promedio no es una prueba de buen desempeño. La pregunta de auditoría no es "¿cuánto acierta en total?", sino "¿a quién deja fuera y por qué?".</p>
+</div>
+
+<h2 id="palabras">Las palabras que más pesan</h2>
+
+<p>El <a href="../reference/glosario-dossier.html">glosario</a> tiene todos los términos del dossier. Estas son las que más vas a usar al explicarlo:</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>Palabra</th>
+<th>En una frase</th>
+<th>Dónde aparece</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#proxy">Proxy</a></td>
+<td>Variable que sustituye a la que realmente importa.</td>
+<td>Documento A, variable objetivo.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#variable-objetivo">Variable objetivo</a></td>
+<td>Lo que el modelo aprende a predecir.</td>
+<td>Documento A.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#xgboost">XGBoost</a></td>
+<td>Conjunto de árboles que se corrigen entre sí.</td>
+<td>Documento A, algoritmo.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#shap">SHAP</a></td>
+<td>Reparte una predicción entre las variables.</td>
+<td>Documento B, explicabilidad.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#fnr">FNR</a></td>
+<td>Porcentaje de enfermos que el modelo deja pasar.</td>
+<td>Documento B, métricas.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#riesgo-alto">Alto riesgo</a></td>
+<td>Categoría legal que activa obligaciones estrictas.</td>
+<td>Documento C, Anexo III.</td>
+</tr>
+<tr>
+<td><a class="term" href="../reference/glosario-dossier.html#human-in-the-loop">Human-in-the-loop</a></td>
+<td>Una persona revisa antes de ejecutar.</td>
+<td>Documento C, Artículo 14.</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<h2 id="practica">Practica</h2>
+
+<p>Responde sin volver atrás. La retroalimentación aparece al comprobar.</p>
+
+<div class="quiz" data-answer="b"
+     data-correct="Correcto."
+     data-incorrect="No exactamente."
+     data-explanation="El Documento A es la ficha técnica: allí están el propósito, las variables, la variable objetivo y las métricas globales. El B reporta la queja y las métricas por subgrupo; el C fija el marco normativo.">
+<h3>1. ¿Qué documento contiene la definición de la variable objetivo y las métricas globales?</h3>
+<div class="quiz-options">
+<label class="quiz-option"><input type="radio" name="q1" value="a"> El Documento B, que reporta la queja.</label>
+<label class="quiz-option"><input type="radio" name="q1" value="b"> El Documento A, que describe el modelo.</label>
+<label class="quiz-option"><input type="radio" name="q1" value="c"> El Documento C, que fija el estándar.</label>
+<label class="quiz-option"><input type="radio" name="q1" value="d"> La introducción, que resume el caso.</label>
+</div>
+<div class="quiz-actions">
+<button type="button" data-action="check">Comprobar</button>
+<button type="button" class="secondary" data-action="reset">Reintentar</button>
+</div>
+<p class="quiz-feedback" aria-live="polite"></p>
+</div>
+
+<div class="quiz" data-answer="c"
+     data-correct="Correcto."
+     data-incorrect="No exactamente."
+     data-explanation="FNR es la proporción de positivos reales que el modelo clasifica como negativos. Un 42% significa que de cada 100 pacientes que sí tendrán una complicación, 42 son enviados a casa con etiqueta de bajo riesgo.">
+<h3>2. El Grupo B tiene un FNR de 42%. ¿Qué significa?</h3>
+<div class="quiz-options">
+<label class="quiz-option"><input type="radio" name="q2" value="a"> Se marca al 42% de los pacientes de bajo riesgo.</label>
+<label class="quiz-option"><input type="radio" name="q2" value="b"> Se equivoca en el 42% de las predicciones.</label>
+<label class="quiz-option"><input type="radio" name="q2" value="c"> Se omite al 42% de los pacientes de alto riesgo.</label>
+<label class="quiz-option"><input type="radio" name="q2" value="d"> Se detecta al 42% de los pacientes de alto riesgo.</label>
+</div>
+<div class="quiz-actions">
+<button type="button" data-action="check">Comprobar</button>
+<button type="button" class="secondary" data-action="reset">Reintentar</button>
+</div>
+<p class="quiz-feedback" aria-live="polite"></p>
+</div>
+
+<div class="quiz" data-answer="d"
+     data-correct="Correcto."
+     data-incorrect="No exactamente."
+     data-explanation="El gasto anual es una variable administrativa. En un sistema mixto, mide acceso y capacidad de pago tanto como necesidad clínica; por eso funciona como proxy socioeconómico.">
+<h3>3. ¿Cuál de estas variables funciona como proxy socioeconómico?</h3>
+<div class="quiz-options">
+<label class="quiz-option"><input type="radio" name="q3" value="a"> La presión arterial, que mide estado hemodinámico.</label>
+<label class="quiz-option"><input type="radio" name="q3" value="b"> La edad, que mide tiempo de vida.</label>
+<label class="quiz-option"><input type="radio" name="q3" value="c"> Las visitas previas, que miden uso de urgencias.</label>
+<label class="quiz-option"><input type="radio" name="q3" value="d"> El gasto anual, que mide acceso y capacidad de pago.</label>
+</div>
+<div class="quiz-actions">
+<button type="button" data-action="check">Comprobar</button>
+<button type="button" class="secondary" data-action="reset">Reintentar</button>
+</div>
+<p class="quiz-feedback" aria-live="polite"></p>
+</div>
+
+<div class="quiz" data-answer="a"
+     data-correct="Correcto."
+     data-incorrect="No exactamente."
+     data-explanation="Measure es la función que mide y monitorea precisión, sesgo, robustez y deriva. Reportar solo promedios globales impide ver la disparidad entre el Grupo A y el Grupo B.">
+<h3>4. ¿Qué función del NIST falla cuando solo se reportan métricas globales?</h3>
+<div class="quiz-options">
+<label class="quiz-option"><input type="radio" name="q4" value="a"> Measure, porque no mide la disparidad por subgrupo.</label>
+<label class="quiz-option"><input type="radio" name="q4" value="b"> Govern, porque no fija políticas de equidad.</label>
+<label class="quiz-option"><input type="radio" name="q4" value="c"> Map, porque no contextualiza a los pacientes.</label>
+<label class="quiz-option"><input type="radio" name="q4" value="d"> Manage, porque no mitiga los riesgos detectados.</label>
+</div>
+<div class="quiz-actions">
+<button type="button" data-action="check">Comprobar</button>
+<button type="button" class="secondary" data-action="reset">Reintentar</button>
+</div>
+<p class="quiz-feedback" aria-live="polite"></p>
+</div>
+
+<h2 id="siguiente">Para llevarte</h2>
+
+<ul>
+<li>A define la promesa; B muestra la brecha; C da el criterio. La auditoría vive entre los tres.</li>
+<li>La variable objetivo es gasto, no complicación. Por eso el modelo falla más en el grupo con menos acceso.</li>
+<li>Un FNR de 42% no es un detalle: son 420 de cada 1.000 pacientes de alto riesgo que no reciben prevención.</li>
+<li>La falla de NIST está en Measure; la del EU AI Act, en los artículos 10, 13 y 14.</li>
+</ul>
+
+<div class="source">
+<span class="label">Fuente primaria recomendada</span>
+<p>Lee el <a href="https://eur-lex.europa.eu/legal-content/ES/TXT/?uri=CELEX:32024R1689">EU AI Act, Anexo III, punto 5, y el artículo 10</a>. Es el texto exacto que necesitas para citar la clasificación de alto riesgo y la gobernanza de datos. Para una lectura por secciones, usa el <a href="https://artificialintelligenceact.eu/annex/3/">AI Act Explorer</a>. Para el marco de gestión, consulta el <a href="https://www.nist.gov/itl/ai-risk-management-framework">NIST AI RMF 1.0</a>.</p>
+</div>
+
+<div class="callout">
+<span class="label">Pregunta al agente</span>
+<p>Si una palabra no te cierra, pídeme un ejemplo con este dossier. No sigas leyendo con una definición vaga: en una auditoría, una palabra mal entendida se convierte en un hallazgo mal argumentado.</p>
+</div>
+
+<footer class="lesson-footer">
+<p><strong>Referencias de consulta:</strong> <a href="../reference/mapa-dossier.html">Mapa del dossier</a> · <a href="../reference/glosario-dossier.html">Glosario del dossier</a> · <a href="../reference/metricas-clasificacion.html">Métricas de clasificación</a></p>
+<p><strong>Fuentes externas:</strong> <a href="https://xgboost.readthedocs.io/en/stable/tutorials/model.html">XGBoost</a> · <a href="https://shap.readthedocs.io/en/latest/">SHAP</a> · <a href="https://scikit-learn.org/stable/modules/model_evaluation.html">scikit-learn metrics</a> · <a href="https://fairlearn.org/">Fairlearn</a> · <a href="https://www.who.int/publications/i/item/9789240029200">WHO</a></p>
+<p>Lección 01 del espacio de estudio técnico. La próxima sesión profundiza en la matriz de confusión y en cómo detectar un promedio que engaña.</p>
+</footer>
+
+</article>
+</div>
+<script src="../assets/quiz.js" defer></script>
+</body>
+</html>
