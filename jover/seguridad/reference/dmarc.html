@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia · DMARC en una página</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/copy.js" defer></script>
+</head>
+<body>
+<div class="page wide">
+
+<nav class="crumbs">
+  <a href="../index.html">Curso</a><span>/</span>Referencia · DMARC
+</nav>
+
+<header>
+  <p class="eyebrow">Referencia</p>
+  <h1>DMARC en una página</h1>
+  <p class="lede">Dónde vive el registro, qué hace cada etiqueta, cómo se decide un mensaje y qué errores se repiten. Basado en el RFC 9989, que reemplazó al RFC 7489 en mayo de 2026.</p>
+</header>
+
+<main>
+
+<h2>Dónde y cómo se consulta</h2>
+
+<pre class="cmd" data-copy="dig +short TXT _dmarc.ejemplo.com"><code>$ dig +short TXT _dmarc.ejemplo.com</code></pre>
+
+<p>El registro es un TXT en <code>_dmarc.&lt;dominio&gt;</code>. Si el dominio no tiene registro propio, el receptor sube al dominio organizacional. Si tampoco hay, no hay DMARC. Un TXT partido en varias cadenas se concatena antes de leerlo.</p>
+
+<h2>Etiquetas</h2>
+
+<table>
+  <thead>
+    <tr><th>Etiqueta</th><th>Obligatoria</th><th>Valores</th><th>Qué hace</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="tag">v</span></td><td>Sí, primera</td><td><code>DMARC1</code></td><td>Identifica el registro. Si falta o no va primero, se ignora todo.</td></tr>
+    <tr><td><span class="tag">p</span></td><td>Recomendada</td><td><code>none</code> · <code>quarantine</code> · <code>reject</code></td><td>Política para el dominio del <code>From:</code>. Si falta, se trata como <code>none</code>.</td></tr>
+    <tr><td><span class="tag">sp</span></td><td>No</td><td>Los mismos tres</td><td>Política para subdominios existentes. Si falta, heredan <code>p</code>.</td></tr>
+    <tr><td><span class="tag">np</span></td><td>No</td><td>Los mismos tres</td><td>Política para subdominios que no existen. Nuevo en RFC 9989. Si falta, se usa <code>sp</code> o <code>p</code>.</td></tr>
+    <tr><td><span class="tag">adkim</span></td><td>No</td><td><code>r</code> · <code>s</code></td><td>Alineación DKIM relajada o estricta. Predeterminado <code>r</code>.</td></tr>
+    <tr><td><span class="tag">aspf</span></td><td>No</td><td><code>r</code> · <code>s</code></td><td>Alineación SPF relajada o estricta. Predeterminado <code>r</code>.</td></tr>
+    <tr><td><span class="tag">rua</span></td><td>No</td><td><code>mailto:</code>, lista separada por comas</td><td>Destino de informes agregados. Sin <code>rua</code> no hay informes.</td></tr>
+    <tr><td><span class="tag">ruf</span></td><td>No</td><td><code>mailto:</code>, lista</td><td>Destino de informes por mensaje fallido. Más detalle y más riesgo de privacidad.</td></tr>
+    <tr><td><span class="tag">fo</span></td><td>No</td><td><code>0</code> · <code>1</code> · <code>d</code> · <code>s</code></td><td>Cuándo generar informes de fallo. Solo aplica si hay <code>ruf</code>.</td></tr>
+    <tr><td><span class="tag">t</span></td><td>No</td><td><code>y</code> · <code>n</code></td><td>Modo prueba. <code>t=y</code> pide no aplicar aún la política declarada. Nuevo en RFC 9989.</td></tr>
+    <tr><td><span class="tag">psd</span></td><td>No</td><td><code>y</code> · <code>n</code> · <code>u</code></td><td>Marca de dominio de sufijo público. Solo para operadores de sufijos.</td></tr>
+    <tr><td><span class="tag">pct</span></td><td>No</td><td>0 a 100</td><td>Porcentaje de aplicación. Eliminada en RFC 9989. Si aparece, es legado.</td></tr>
+  </tbody>
+</table>
+
+<h2>Flujo de decisión</h2>
+
+<div class="flow">
+  <div>Llega el mensaje</div>
+  <div class="arrow">→</div>
+  <div>Extrae el dominio del From</div>
+  <div class="arrow">→</div>
+  <div>Busca _dmarc.dominio</div>
+  <div class="arrow">→</div>
+  <div>¿SPF o DKIM pasan y alinean?</div>
+</div>
+
+<p>Si la respuesta es sí, el mensaje pasa DMARC. Si es no, se aplica la política. La alineación se calcula sobre el dominio del <code>From:</code>, no sobre el nombre visible ni sobre el <code>Reply-To</code>.</p>
+
+<table>
+  <thead>
+    <tr><th>Resultado</th><th>Condición</th><th>Consecuencia</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Pass</td><td>SPF alineado o DKIM alineado, al menos uno</td><td>Se entrega. La política no se aplica.</td></tr>
+    <tr><td>Fail + <code>none</code></td><td>Ninguno alinea</td><td>Se entrega. Se puede reportar.</td></tr>
+    <tr><td>Fail + <code>quarantine</code></td><td>Ninguno alinea</td><td>Spam o marca de sospechoso, según el receptor.</td></tr>
+    <tr><td>Fail + <code>reject</code></td><td>Ninguno alinea</td><td>Rechazo, idealmente durante SMTP.</td></tr>
+  </tbody>
+</table>
+
+<h2>Escalera de despliegue</h2>
+
+<ol>
+  <li><code>p=none</code> y <code>rua</code> durante dos a cuatro semanas. Recolecta fuentes legítimas.</li>
+  <li>Corrige SPF y DKIM de cada fuente. La meta es que todo lo legítimo alinee.</li>
+  <li><code>p=quarantine</code>. Vigila los informes y los rebotes.</li>
+  <li><code>p=reject</code>, con <code>sp</code> y <code>np</code> si hay subdominios.</li>
+</ol>
+
+<p>Un dominio sin <code>rua</code> no debería saltar a <code>reject</code>. No sabrás qué rompiste hasta que los usuarios se quejen.</p>
+
+<h2>Informes</h2>
+
+<table>
+  <thead>
+    <tr><th>Tipo</th><th>Etiqueta</th><th>Formato</th><th>Uso</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Agregado</td><td><code>rua</code></td><td>XML comprimido, normalmente diario</td><td>Ver qué IPs y dominios envían correo en tu nombre, cuántos pasan y cuántos fallan. Definido en RFC 9990.</td></tr>
+    <tr><td>Por mensaje</td><td><code>ruf</code></td><td>Informe de fallo, formato AFRF</td><td>Depurar un emisor concreto. Puede incluir cabeceras y datos del mensaje. Definido en RFC 9991.</td></tr>
+  </tbody>
+</table>
+
+<p>Los informes agregados no traen el cuerpo del mensaje, pero sí IPs, dominios y asunto. Son datos personales en muchos contextos. Trátalos como tales.</p>
+
+<h2>Errores frecuentes</h2>
+
+<table>
+  <thead>
+    <tr><th>Síntoma</th><th>Causa probable</th><th>Arreglo</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>El TXT existe pero no hay DMARC</td><td><code>v=DMARC1</code> no está primero, tiene espacio o está mal escrito</td><td>Reescribir el registro y validarlo con una herramienta</td></tr>
+    <tr><td>Se bloquea correo legítimo</td><td>Un servicio envía sin SPF ni DKIM alineado</td><td>Volver a <code>none</code>, añadir el emisor, luego escalar</td></tr>
+    <tr><td>No llegan informes</td><td>Falta <code>rua</code> o el buzón rechaza el correo</td><td>Publicar <code>rua</code> y probar la recepción</td></tr>
+    <tr><td>El subdominio no hereda la política</td><td>Hay un registro propio en <code>_dmarc.subdominio</code></td><td>Revisar la cadena de descubrimiento y unificar</td></tr>
+    <tr><td><code>pct=100</code> no hace nada</td><td>Etiqueta eliminada en RFC 9989</td><td>Quitarla. La política aplica al 100% por definición actual</td></tr>
+  </tbody>
+</table>
+
+<h2>Validación</h2>
+
+<ul>
+  <li><a href="https://dmarcian.com/dmarc-inspector/">dmarcian DMARC Inspector</a>: pega un dominio y revisa sintaxis y política.</li>
+  <li><a href="https://toolbox.googleapps.com/apps/checkmx/">Google Admin Toolbox CheckMX</a>: revisa MX, SPF, DKIM y DMARC de un dominio.</li>
+  <li><a href="https://mxtoolbox.com/dmarc.aspx">MXToolbox DMARC Lookup</a>: consulta rápida y comparación de registros.</li>
+  <li><code>dig</code> sigue siendo la fuente. Las herramientas web son comodidad, no autoridad.</li>
+</ul>
+
+<div class="source">
+  <span class="label">Fuentes</span>
+  <p><a href="https://www.rfc-editor.org/rfc/rfc9989.html">RFC 9989</a>, DMARC, mayo de 2026. <a href="https://www.rfc-editor.org/rfc/rfc9990.html">RFC 9990</a>, informes agregados. <a href="https://www.rfc-editor.org/rfc/rfc9991.html">RFC 9991</a>, informes de fallo. <a href="https://support.google.com/a/answer/81126">Google, Email sender guidelines</a>, requisitos para remitentes masivos desde febrero de 2024.</p>
+</div>
+
+</main>
+
+<footer class="footer">
+  <p><a href="../index.html">Índice del curso</a> · <a href="herramientas-osint.html">Herramientas OSINT</a> · <a href="glosario.html">Glosario</a></p>
+</footer>
+
+</div>
+</body>
+</html>

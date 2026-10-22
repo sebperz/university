@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia · Herramientas OSINT del Laboratorio 1</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="page wide">
+
+<nav class="crumbs">
+  <a href="../index.html">Curso</a><span>/</span>Referencia · Herramientas OSINT
+</nav>
+
+<header>
+  <p class="eyebrow">Referencia</p>
+  <h1>Herramientas OSINT del Laboratorio 1</h1>
+  <p class="lede">Las diez herramientas de la diapositiva, ordenadas por la pregunta que responden. Qué entrega cada una, cuánto cuesta y dónde está el límite entre mirar y tocar.</p>
+</header>
+
+<main>
+
+<p>La lista del laboratorio no es una colección arbitraria. Cada herramienta cubre una etapa del mismo recorrido: identificar al dueño, mapear su infraestructura, encontrar nombres y relaciones, y revisar lo que publicó sin querer. Usarlas en otro orden produce datos sueltos y un informe que no se sostiene.</p>
+
+<h2>Tabla rápida</h2>
+
+<table>
+  <thead>
+    <tr><th>Herramienta</th><th>Pregunta que responde</th><th>Qué entrega</th><th>Acceso</th><th>Límite o cuidado</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Whois</strong></td>
+      <td>¿Quién registró el dominio?</td>
+      <td>Registrador, fechas, nameservers, estado. Datos personales casi siempre redactados.</td>
+      <td>Gratis, web o CLI</td>
+      <td>Formato libre por registro. Para datos estructurados usa RDAP.</td>
+    </tr>
+    <tr>
+      <td><strong>nslookup / dig / host</strong></td>
+      <td>¿Qué publica el dominio en DNS?</td>
+      <td>A, AAAA, MX, TXT, NS, CNAME, SOA. La materia prima de todo lo demás.</td>
+      <td>Gratis, incluido en el sistema</td>
+      <td>Muestra lo declarado, no lo que está abierto. <code>dig</code> es el más completo.</td>
+    </tr>
+    <tr>
+      <td><strong>Shodan</strong></td>
+      <td>¿Qué servicios están expuestos?</td>
+      <td>Banners, puertos, versiones, certificados, títulos HTTP, país y organización.</td>
+      <td>Cuenta gratuita limitada; membresía de pago</td>
+      <td>Datos de escaneos globales, pueden estar viejos. Los filtros avanzados suelen requerir pago.</td>
+    </tr>
+    <tr>
+      <td><strong>Censys</strong></td>
+      <td>¿Qué hosts y certificados existen?</td>
+      <td>Hosts, servicios, certificados TLS, puertos. Búsqueda con más peso en certificados.</td>
+      <td>Cuenta gratuita con visibilidad básica; planes de pago</td>
+      <td>Se complementa con Shodan. No lo uses como única fuente.</td>
+    </tr>
+    <tr>
+      <td><strong>theHarvester</strong></td>
+      <td>¿Qué correos, subdominios y hosts aparecen?</td>
+      <td>Hallazgos normalizados de buscadores, certificate transparency, DNS pasivo, código y filtraciones.</td>
+      <td>Open source, gratis</td>
+      <td>Pasivo por defecto, pero envía el dominio a proveedores externos. Las acciones DNS y HTTP son activas.</td>
+    </tr>
+    <tr>
+      <td><strong>Maltego</strong></td>
+      <td>¿Cómo se relacionan las entidades?</td>
+      <td>Grafo de dominios, IPs, correos, personas, organizaciones y certificados. Transforms que consultan fuentes.</td>
+      <td>Community Edition gratis con límites</td>
+      <td>El grafo no es evidencia por sí solo. Cada arista necesita fuente y fecha.</td>
+    </tr>
+    <tr>
+      <td><strong>FOCA</strong></td>
+      <td>¿Qué esconden los documentos públicos?</td>
+      <td>Metadatos de Office, PDF, imágenes y SVG: autores, rutas internas, software, usuarios, impresoras.</td>
+      <td>Gratis, código abierto</td>
+      <td>Solo Windows con .NET y SQL Server. Sin mantenimiento reciente. Alternativa: exiftool o metagoofil.</td>
+    </tr>
+    <tr>
+      <td><strong>Netcraft</strong></td>
+      <td>¿Dónde está alojado y qué tecnología usa?</td>
+      <td>Site report con hosting, sistema operativo, servidor web, certificado, historial y subdominios.</td>
+      <td>Site report gratis</td>
+      <td>La empresa se enfocó en protección de marca. El informe clásico sigue disponible, con menos profundidad.</td>
+    </tr>
+    <tr>
+      <td><strong>BuiltWith</strong></td>
+      <td>¿Con qué está construido el sitio?</td>
+      <td>CMS, frameworks, analytics, CDN, ecommerce, librerías y tecnologías de marketing.</td>
+      <td>Consulta básica gratis; detalle de pago</td>
+      <td>Detecta lo que se ve desde fuera. Puede fallar con sitios dinámicos o tras un CDN.</td>
+    </tr>
+    <tr>
+      <td><strong>Hunter.io</strong></td>
+      <td>¿Qué correos siguen el patrón del dominio?</td>
+      <td>Direcciones encontradas, patrón probable (<code>nombre.apellido@</code>), verificación y origen.</td>
+      <td>Gratis 50 créditos al mes; planes de pago</td>
+      <td>Datos personales. No recopiles ni publiques correos sin base legal y necesidad real.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>El orden importa</h2>
+
+<p>Un recorrido que funciona, de lo barato a lo caro y de lo público a lo que requiere más cuidado:</p>
+
+<ol>
+  <li><strong>RDAP o whois.</strong> Fechas, registrador, nameservers y estado. Te dice si el dominio es viejo, si está bloqueado para transferencia y quién lo administra.</li>
+  <li><strong>dig.</strong> MX, TXT, NS y DMARC. Aquí ya ves proveedor de correo, SPF, DMARC y verificaciones de terceros.</li>
+  <li><strong>Certificate transparency.</strong> <code>crt.sh</code> lista certificados emitidos y suele revelar subdominios que nadie documentó. Es gratis y pasivo.</li>
+  <li><strong>theHarvester.</strong> Corre correo y subdominios desde fuentes públicas. Empieza por fuentes pasivas sin API key: <code>crtsh</code>, <code>certspotter</code>, <code>commoncrawl</code>.</li>
+  <li><strong>Shodan o Censys.</strong> Toma las IPs resueltas y mira servicios. Contrasta fechas: un banner de hace ocho meses no prueba que el servicio siga ahí.</li>
+  <li><strong>BuiltWith y Netcraft.</strong> Tecnología, hosting e historial. Útil para elegir vectores y para el contexto del informe.</li>
+  <li><strong>Hunter.io.</strong> Solo si el ejercicio pide contactos y tienes base para tratarlos. El patrón de correo se puede inferir sin gastar créditos.</li>
+  <li><strong>FOCA o exiftool.</strong> Descarga documentos públicos y extrae metadatos. Aquí ya hay contacto con el servidor del objetivo: necesita alcance claro.</li>
+  <li><strong>Maltego.</strong> Al final, para ordenar entidades y relaciones. No reemplaza las fuentes; las visualiza.</li>
+</ol>
+
+<div class="note">
+  <span class="label">Regla práctica</span>
+  <p>Guarda cada hallazgo con tres datos: valor, fuente y fecha. Un informe sin fuente es una opinión. Un hallazgo sin fecha puede estar muerto.</p>
+</div>
+
+<h2>Pasivo, activo y la zona gris</h2>
+
+<p>theHarvester clasifica sus fuentes por comportamiento en la red, no por importancia. La distinción sirve para todo el laboratorio.</p>
+
+<table>
+  <thead>
+    <tr><th>Clase</th><th>Qué hace</th><th>Ejemplos</th><th>¿Permitido sin autorización?</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>P0</td><td>Consulta una fuente o dataset existente. No dirige tráfico al objetivo.</td><td>Buscadores, certificate transparency, DNS pasivo, repositorios</td><td>Sí, con criterio. El dominio igual sale hacia terceros.</td></tr>
+    <tr><td>P1</td><td>Consulta DNS sobre nombres del objetivo.</td><td>Resolución, fuerza bruta de subdominios, DNS inverso</td><td>Solo con dominio propio o autorización. La fuerza bruta genera tráfico y ruido.</td></tr>
+    <tr><td>P2</td><td>Contacta directamente el endpoint del objetivo.</td><td>HTTP, TLS, capturas, puertos, virtual hosts, rutas de API</td><td>No sin permiso escrito. Es escaneo.</td></tr>
+  </tbody>
+</table>
+
+<p>Shodan y Censys no escanean al objetivo cuando tú consultas. Leen un índice construido por escaneos globales. Eso los hace pasivos desde tu lado, pero la foto puede ser vieja y no elegiste qué se escaneó. Para un informe serio, verifica lo importante con una consulta directa autorizada.</p>
+
+<div class="warn">
+  <span class="label">Zona gris</span>
+  <p>Descargar documentos públicos con FOCA o exiftool parece pasivo porque son URLs abiertas. Aun así, golpeas el servidor del objetivo y almacenas datos de personas. Si el laboratorio no autoriza ese alcance, no lo hagas. Y nunca publiques metadatos con nombres, usuarios o rutas internas.</p>
+</div>
+
+<h2>Checklist de alcance</h2>
+
+<ul>
+  <li>Autorización escrita con dominio exacto, ventana de tiempo y acciones permitidas.</li>
+  <li>Lista de exclusiones: producción, terceros, subdominios de clientes, datos personales.</li>
+  <li>Límite de peticiones y de fuerza bruta. Sin excepciones “porque es rápido”.</li>
+  <li>Almacenamiento cifrado y acceso restringido. Los hallazgos son sensibles incluso sin explotar nada.</li>
+  <li>Registro de qué herramienta, qué fuente y qué fecha produjo cada dato.</li>
+  <li>Plan de borrado al terminar. Los datos de terceros no se guardan “por si acaso”.</li>
+</ul>
+
+<h2>Ficha para el laboratorio</h2>
+
+<p>Cuando tengas el dominio asignado, llena esto antes de abrir cualquier herramienta. Te ahorra media hora de clics sin rumbo.</p>
+
+<pre><code>Dominio asignado:
+Autorización (quién, hasta cuándo, qué permite):
+Registrador y fecha de creación:
+Nameservers:
+Proveedor de correo (MX):
+SPF:
+DMARC (p, sp, rua):
+Subdominios conocidos:
+IPs principales:
+Servicios vistos (Shodan/Censys):
+Tecnología (BuiltWith/Netcraft):
+Hallazgos que necesitan verificación:</code></pre>
+
+<h2>Qué está viejo y qué usar en su lugar</h2>
+
+<table>
+  <thead>
+    <tr><th>Herramienta</th><th>Estado</th><th>Alternativa práctica</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>FOCA</td><td>Repositorio público, sin actividad reciente desde 2022. Requiere Windows, .NET y SQL Server. El sitio del fabricante ya no responde.</td><td><code>exiftool</code> para metadatos, <code>metagoofil</code> para recolección. Ambos corren en Linux.</td></tr>
+    <tr><td>Netcraft</td><td>La empresa migró a protección de marca y antiphishing. El site report sigue en <code>sitereport.netcraft.com</code>.</td><td>Site report para hosting y historial, <code>crt.sh</code> para subdominios, <code>dig</code> para lo demás.</td></tr>
+    <tr><td>Whois</td><td>Sigue funcionando, pero el futuro es RDAP y los datos personales están redactados.</td><td><code>https://rdap.org/domain/&lt;dominio&gt;</code>, que devuelve JSON.</td></tr>
+    <tr><td>Shodan / Censys</td><td>Ambos vigentes. Censys tiene más foco en certificados; Shodan en banners y filtros.</td><td>Usa uno como principal y el otro para contraste. No pagues dos cuentas para un laboratorio.</td></tr>
+  </tbody>
+</table>
+
+<h2>Enlaces</h2>
+
+<ul>
+  <li><a href="https://github.com/laramies/theHarvester">theHarvester</a>, README con fuentes, clases P0/P1/P2 y uso responsable.</li>
+  <li><a href="https://www.shodan.io/">Shodan</a> y su <a href="https://developer.shodan.io/api">API</a>.</li>
+  <li><a href="https://docs.censys.com/">Censys, documentación</a>.</li>
+  <li><a href="https://www.maltego.com/">Maltego</a>, Community Edition.</li>
+  <li><a href="https://sitereport.netcraft.com/">Netcraft Site Report</a>.</li>
+  <li><a href="https://builtwith.com/">BuiltWith</a>.</li>
+  <li><a href="https://hunter.io/">Hunter.io</a>.</li>
+  <li><a href="https://github.com/ElevenPaths/FOCA">FOCA en GitHub</a>.</li>
+  <li><a href="https://www.icann.org/en/contracted-parties/registry-operators/resources/registration-data-access-protocol">ICANN, RDAP</a>.</li>
+  <li><a href="https://crt.sh/">crt.sh</a>, certificate transparency.</li>
+</ul>
+
+</main>
+
+<footer class="footer">
+  <p><a href="../index.html">Índice del curso</a> · <a href="dmarc.html">Chuleta DMARC</a> · <a href="glosario.html">Glosario</a></p>
+  <p>Precios y límites cambian. Verifica en la página oficial antes de pagar o de planear un ejercicio.</p>
+</footer>
+
+</div>
+</body>
+</html>

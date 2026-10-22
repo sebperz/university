@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Referencia · Glosario</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="page">
+
+<nav class="crumbs">
+  <a href="../index.html">Curso</a><span>/</span>Referencia · Glosario
+</nav>
+
+<header>
+  <p class="eyebrow">Referencia</p>
+  <h1>Glosario</h1>
+  <p class="lede">El vocabulario que usamos en todo el curso. Si una lección introduce una palabra nueva, aquí está su definición corta.</p>
+</header>
+
+<main>
+
+<h2>Fundamentos</h2>
+
+<dl class="glossary">
+  <dt>Dominio</dt>
+  <dd>Nombre registrado que identifica un espacio en DNS, como <code>example.com</code>. No es lo mismo que el sitio web que apunta a él.<span class="avoid">Evita: página, host</span></dd>
+
+  <dt>DNS</dt>
+  <dd>Base de datos distribuida y jerárquica que responde consultas sobre nombres. Guarda direcciones, servidores de correo, políticas y textos de verificación.<span class="avoid">Evita: directorio, guía telefónica</span></dd>
+
+  <dt>Registro DNS</dt>
+  <dd>Entrada tipada dentro de DNS. El tipo define qué dato contiene: una IP (A), un servidor de correo (MX), un texto (TXT) o un nameserver (NS).<span class="avoid">Evita: fila, entrada</span></dd>
+
+  <dt>Subdominio</dt>
+  <dd>Nombre que cuelga de un dominio, como <code>mail.example.com</code>. Puede tener su propia configuración y su propia política DMARC.</dd>
+
+  <dt>Dominio organizacional</dt>
+  <dd>El dominio que alguien registró bajo un sufijo público. Para <code>news.example.co.uk</code> es <code>example.co.uk</code>. DMARC lo usa para comparar alineación relajada y para buscar políticas heredadas.</dd>
+
+  <dt>Lista de sufijos públicos (PSL)</dt>
+  <dd>Lista que distingue qué parte de un nombre se puede registrar. Sin ella, <code>co.uk</code> parecería un dominio organizacional.</dd>
+
+  <dt>RDAP</dt>
+  <dd>Protocolo de consulta de datos de registro que devuelve JSON. Sustituye a whois en la práctica y usa URL predecible.<span class="avoid">Evita: whois 2.0</span></dd>
+
+  <dt>Whois</dt>
+  <dd>Consulta de texto sobre el registro de un dominio o una IP. Sigue funcionando, pero muchos datos personales aparecen redactados.</dd>
+
+  <dt>Registro TXT</dt>
+  <dd>Registro DNS que contiene texto libre. Ahí viven SPF, DMARC y las verificaciones de servicios externos.</dd>
+
+  <dt>Registro MX</dt>
+  <dd>Registro que indica qué servidores reciben el correo de un dominio y con qué prioridad. Menor número, mayor preferencia.</dd>
+</dl>
+
+<h2>Correo</h2>
+
+<dl class="glossary">
+  <dt>SMTP</dt>
+  <dd>Protocolo que transporta correo entre servidores. No verifica por sí solo que el remitente controle el dominio que escribe.</dd>
+
+  <dt>From (RFC5322.From)</dt>
+  <dd>Cabecera que el usuario ve como remitente. Es el identificador central de DMARC y el que se falsifica en un spoofing exacto.<span class="avoid">Evita: remitente, autor</span></dd>
+
+  <dt>MAIL FROM</dt>
+  <dd>Remitente del sobre SMTP. Casi nunca se muestra al usuario. SPF autentica este dominio, no el From visible.</dd>
+
+  <dt>SPF</dt>
+  <dd>Registro TXT que enumera qué IPs pueden enviar correo para un dominio. Autentica el dominio del sobre, no el From.<span class="avoid">Evita: lista blanca de correo</span></dd>
+
+  <dt>DKIM</dt>
+  <dd>Firma criptográfica añadida al mensaje. Declara un dominio firmante en <code>d=</code> y permite verificar que el contenido no cambió en tránsito.<span class="avoid">Evita: cifrado de correo</span></dd>
+
+  <dt>Alineación</dt>
+  <dd>Condición de que el dominio autenticado por SPF o DKIM coincida con el dominio del From. Sin alineación, un pase de SPF o DKIM no sirve para DMARC.</dd>
+
+  <dt>DMARC</dt>
+  <dd>Política publicada en DNS que indica qué hacer con el correo que usa un dominio en el From y no pasa SPF o DKIM alineados. También define dónde enviar informes.<span class="avoid">Evita: antispam, firewall de correo</span></dd>
+
+  <dt>Política DMARC</dt>
+  <dd>Valor de <code>p</code>, <code>sp</code> o <code>np</code>: <code>none</code>, <code>quarantine</code> o <code>reject</code>. Expresa una preferencia; el receptor puede apartarse y reportarlo.</dd>
+
+  <dt>p</dt>
+  <dd>Política para el dominio del From. Si falta, se trata como <code>none</code>.</dd>
+
+  <dt>sp</dt>
+  <dd>Política para subdominios existentes. No aplica al dominio raíz.</dd>
+
+  <dt>np</dt>
+  <dd>Política para subdominios que no existen. Etiqueta nueva del RFC 9989. Si falta, se usa <code>sp</code> o <code>p</code>.</dd>
+
+  <dt>rua</dt>
+  <dd>Dirección que recibe informes agregados. Sin <code>rua</code>, el dominio no recibe reportes y opera a ciegas.</dd>
+
+  <dt>ruf</dt>
+  <dd>Dirección que recibe informes por mensaje fallido. Da más detalle que <code>rua</code> y expone más datos personales.</dd>
+
+  <dt>Informe agregado</dt>
+  <dd>Resumen periódico, normalmente XML comprimido, con IPs, dominios y resultados de autenticación. Definido en el RFC 9990.</dd>
+
+  <dt>Informe de fallo</dt>
+  <dd>Reporte de un mensaje concreto que falló. Puede incluir cabeceras y datos del mensaje. Definido en el RFC 9991.</dd>
+
+  <dt>Spoofing exacto</dt>
+  <dd>Uso no autorizado del dominio exacto en el From. Es lo que DMARC puede frenar. No cubre dominios parecidos ni nombres visibles falsos.</dd>
+
+  <dt>Dominio primo</dt>
+  <dd>Dominio visualmente parecido al legítimo, como <code>tu-banco.co</code> frente a <code>tu-banco.com</code>. DMARC no lo detiene.<span class="avoid">Evita: dominio falso, typosquatting (no siempre es lo mismo)</span></dd>
+</dl>
+
+<h2>OSINT</h2>
+
+<dl class="glossary">
+  <dt>OSINT</dt>
+  <dd>Inteligencia obtenida de fuentes públicas. En este curso significa datos accesibles sin credenciales ni explotación.<span class="avoid">Evita: hacking, espionaje</span></dd>
+
+  <dt>Reconocimiento pasivo</dt>
+  <dd>Consulta de fuentes y registros existentes sin enviar tráfico al objetivo. Quien consulta no aparece en los logs del objetivo, aunque el proveedor de la fuente sí ve la consulta.</dd>
+
+  <dt>Reconocimiento activo</dt>
+  <dd>Interacción directa con la infraestructura del objetivo: resolución DNS propia, peticiones HTTP, escaneo de puertos. Requiere autorización.</dd>
+
+  <dt>Banner</dt>
+  <dd>Respuesta inicial de un servicio que revela software, versión o configuración. Shodan y Censys indexan banners.</dd>
+
+  <dt>Fingerprinting</dt>
+  <dd>Identificación de la tecnología de un sitio o servidor a partir de cabeceras, cookies, rutas y comportamiento.<span class="avoid">Evita: huella digital</span></dd>
+
+  <dt>Metadatos</dt>
+  <dd>Datos dentro de un archivo que no se ven al abrirlo: autor, software, ruta, fechas, usuarios. FOCA y exiftool los extraen.</dd>
+
+  <dt>Certificate transparency</dt>
+  <dd>Registro público de certificados TLS emitidos. Sirve para descubrir subdominios que no aparecen en DNS ni en el sitio principal.</dd>
+</dl>
+
+<div class="source">
+  <span class="label">Cómo se mantiene</span>
+  <p>Un término entra aquí cuando puedes usarlo correctamente, no cuando lo leíste. Si una definición te parece incompleta, dímelo y la corregimos. Las definiciones de DMARC siguen el <a href="https://www.rfc-editor.org/rfc/rfc9989.html">RFC 9989</a>.</p>
+</div>
+
+</main>
+
+<footer class="footer">
+  <p><a href="../index.html">Índice del curso</a> · <a href="dmarc.html">Chuleta DMARC</a> · <a href="herramientas-osint.html">Herramientas OSINT</a></p>
+</footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 01 · Mira un dominio desde fuera</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/copy.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+<nav class="crumbs">
+  <a href="../index.html">Curso</a><span>/</span>Lección 01
+</nav>
+
+<header>
+  <p class="eyebrow">Lección 01 · OSINT</p>
+  <h1>Mira un dominio desde fuera</h1>
+  <p class="lede">Antes de Shodan, Maltego o theHarvester hay una pregunta más simple: ¿qué publica este dominio sobre sí mismo? Con dos comandos empiezas a responderla.</p>
+  <div class="meta">
+    <span>25 minutos</span>
+    <span>Sin instalar nada</span>
+    <span>Prerrequisito: ninguno</span>
+  </div>
+</header>
+
+<main>
+
+<p>El laboratorio de la foto tiene diez herramientas. Parecen diez temas distintos, pero casi todas responden una de cinco preguntas sobre un dominio:</p>
+
+<table>
+  <thead>
+    <tr><th>Pregunta</th><th>Herramientas del laboratorio</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>¿Quién lo registró y cuándo?</td><td>Whois, RDAP</td></tr>
+    <tr><td>¿Cómo recibe correo y qué publica en DNS?</td><td>nslookup, dig, host</td></tr>
+    <tr><td>¿Qué servicios tiene expuestos en Internet?</td><td>Shodan, Censys</td></tr>
+    <tr><td>¿Qué subdominios, correos y personas aparecen?</td><td>theHarvester, Hunter.io, Maltego</td></tr>
+    <tr><td>¿Qué tecnología usa y qué esconden sus documentos?</td><td>BuiltWith, Netcraft, FOCA</td></tr>
+  </tbody>
+</table>
+
+<p>Hoy vas a dominar las dos primeras filas. Son las únicas que se resuelven con datos de registro público, sin tocar el servidor del objetivo.</p>
+
+<h2>La idea que ordena todo</h2>
+
+<p>Un dominio es una entrada en dos bases de datos distintas. Una dice quién lo registró. La otra dice qué servicios declara. Las dos son públicas y las dos se consultan sin permiso especial, porque están hechas para que Internet funcione.</p>
+
+<aside class="sidenote">
+  <strong>Pasivo no significa invisible.</strong> Consultar DNS o RDAP no envía tráfico al servidor del dominio. Pero algunas herramientas, como theHarvester, sí mandan el nombre del dominio a buscadores y servicios externos. Lo verás en la referencia de herramientas.
+</aside>
+
+<p>Quien registra un dominio deja datos en el registro. Ese es el territorio de <code>whois</code> y de su sucesor, RDAP. Quien opera el dominio publica registros DNS: direcciones, servidores de correo, políticas. Ese es el territorio de <code>dig</code>.</p>
+
+<h2>Cuatro registros que bastan</h2>
+
+<p>DNS tiene decenas de tipos de registro. Para reconocimiento, necesitas cuatro.</p>
+
+<table>
+  <thead>
+    <tr><th>Tipo</th><th>Qué contiene</th><th>Qué te dice</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="tag">A</span></td><td>Una dirección IPv4</td><td>Dónde vive el sitio web o un servicio</td></tr>
+    <tr><td><span class="tag">MX</span></td><td>Servidores de correo y prioridad</td><td>Quién recibe el correo del dominio</td></tr>
+    <tr><td><span class="tag">TXT</span></td><td>Texto libre</td><td>SPF, DMARC, verificaciones de terceros</td></tr>
+    <tr><td><span class="tag">NS</span></td><td>Servidores DNS autoritativos</td><td>Quién controla la zona</td></tr>
+  </tbody>
+</table>
+
+<p>El registro TXT es el más interesante para seguridad. Ahí vive la política de correo que verás en la próxima lección. Es texto libre solo en apariencia: cada servicio define su formato.</p>
+
+<h2>Manos al teclado</h2>
+
+<p>Elige un dominio público que no sea tuyo, por ejemplo <code>wikipedia.org</code>. Ejecuta estas consultas en una terminal.</p>
+
+<pre class="cmd" data-copy="dig +short MX wikipedia.org"><code>$ dig +short MX wikipedia.org
+10 mx-in1001.wikimedia.org.
+10 mx-in2001.wikimedia.org.</code></pre>
+
+<pre class="cmd" data-copy="dig +short TXT wikipedia.org"><code>$ dig +short TXT wikipedia.org
+"v=spf1 include:_cidrs.wikimedia.org ~all"</code></pre>
+
+<pre class="cmd" data-copy="dig +short NS wikipedia.org"><code>$ dig +short NS wikipedia.org
+ns0.wikimedia.org.
+ns1.wikimedia.org.
+ns2.wikimedia.org.</code></pre>
+
+<p>El número al inicio de cada MX es la prioridad. Menor gana. Los dos servidores tienen 10, así que el remitente puede usar cualquiera. Los puntos finales son parte del nombre, no decoración.</p>
+
+<pre class="cmd" data-copy="whois wikipedia.org | head -20"><code>$ whois wikipedia.org | head -20
+Domain Name: WIKIPEDIA.ORG
+Creation Date: 2001-01-13T00:12:14Z
+Registrar: MarkMonitor Inc.
+Name Server: ns0.wikimedia.org
+Name Server: ns1.wikimedia.org
+Name Server: ns2.wikimedia.org</code></pre>
+
+<p>Los datos personales del registrante suelen aparecer redactados por reglas de privacidad. Eso no es un fallo de la consulta. Es el estado normal desde que los registros aplicaron políticas de protección de datos.</p>
+
+<aside class="sidenote">
+  <strong>Si no tienes dig.</strong> En Windows, <code>nslookup -type=TXT dominio.com</code> hace la misma consulta. <code>host -t MX dominio.com</code> es otra variante. Las tres hablan con el mismo DNS; <code>dig</code> muestra la respuesta completa.
+</aside>
+
+<p>RDAP es la versión estructurada de whois. Devuelve JSON, se puede procesar con <code>jq</code> y tiene URL predecible.</p>
+
+<pre class="cmd" data-copy="curl -s https://rdap.org/domain/wikipedia.org | jq '{dominio: .ldhName, estado: .status}'"><code>$ curl -s https://rdap.org/domain/wikipedia.org \
+  | jq '{dominio: .ldhName, estado: .status}'
+{
+  "dominio": "WIKIPEDIA.ORG",
+  "estado": ["client delete prohibited", "client transfer prohibited"]
+}</code></pre>
+
+<p>Los estados te dicen qué está bloqueado en el registro. <code>client transfer prohibited</code> es común y sano: impide que alguien mueva el dominio a otro registrador sin permiso.</p>
+
+<h2>Ejercicio: la ficha de cinco líneas</h2>
+
+<p>Elige un dominio y escribe esto en un archivo. No hay respuesta única; el objetivo es que la ficha salga de datos que puedas citar.</p>
+
+<pre><code>Dominio:
+Registrador:
+Fecha de creación:
+Servidores de correo:
+Registros TXT:</code></pre>
+
+<p>Si el dominio es una universidad, una tienda o un banco, la ficha ya te dice algo útil: quién controla su correo y si publica políticas. Guarda el archivo. La lección 02 lo usa.</p>
+
+<div class="quiz" data-quiz>
+  <h3>Comprueba que lo tienes</h3>
+  <p class="quiz__intro">Cuatro preguntas. Elige una; la explicación aparece al instante.</p>
+
+  <div class="quiz__q" data-answer="a">
+    <p class="quiz__prompt">En la salida <code>10 mx-in1001.wikimedia.org.</code>, ¿qué significa el 10?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">La prioridad del servidor</button>
+      <button class="choice" type="button" data-choice="b">El tiempo de vida en caché</button>
+      <button class="choice" type="button" data-choice="c">El puerto de escucha SMTP</button>
+      <button class="choice" type="button" data-choice="d">El peso del balanceador</button>
+    </div>
+    <p class="quiz__why" hidden>MX usa un número de preferencia. Cuanto menor, más se prefiere. El 10 no es un puerto ni un TTL.</p>
+  </div>
+
+  <div class="quiz__q" data-answer="c">
+    <p class="quiz__prompt">¿En qué tipo de registro se publica una política de correo como SPF o DMARC?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">MX</button>
+      <button class="choice" type="button" data-choice="b">NS</button>
+      <button class="choice" type="button" data-choice="c">TXT</button>
+      <button class="choice" type="button" data-choice="d">A</button>
+    </div>
+    <p class="quiz__why" hidden>Las políticas de correo son cadenas de texto. DNS las guarda como TXT. Por eso <code>dig TXT</code> es el comando que más vas a repetir.</p>
+  </div>
+
+  <div class="quiz__q" data-answer="b">
+    <p class="quiz__prompt">Una consulta whois muestra el registrante como <em>REDACTED FOR PRIVACY</em>. ¿Qué pasó?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">El dominio está vencido</button>
+      <button class="choice" type="button" data-choice="b">La ley protege esos datos</button>
+      <button class="choice" type="button" data-choice="c">El registrador borró la cuenta</button>
+      <button class="choice" type="button" data-choice="d">La consulta usó mal el comando</button>
+    </div>
+    <p class="quiz__why" hidden>Los registros redactan datos personales por normas de privacidad. La fecha, el registrador y los nameservers suelen seguir visibles.</p>
+  </div>
+
+  <div class="quiz__q" data-answer="d">
+    <p class="quiz__prompt">¿Cuál herramienta del laboratorio indexa servicios y dispositivos expuestos en Internet?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">Maltego</button>
+      <button class="choice" type="button" data-choice="b">Hunter.io</button>
+      <button class="choice" type="button" data-choice="c">FOCA</button>
+      <button class="choice" type="button" data-choice="d">Shodan</button>
+    </div>
+    <p class="quiz__why" hidden>Shodan mantiene un índice de banners y servicios vistos en Internet. Censys hace algo parecido, con más peso en certificados. Maltego relaciona entidades, Hunter busca correos y FOCA extrae metadatos de documentos.</p>
+  </div>
+
+  <p class="quiz__score" aria-live="polite"></p>
+  <button class="quiz__reset" type="button">Reiniciar</button>
+</div>
+
+<h2>Lo que estos comandos no te dicen</h2>
+
+<p>DNS te dice lo que el dominio declara, no lo que realmente tiene abierto. Puede publicar un MX y tener el servidor apagado. Puede no publicar nada y tener servicios en subdominios olvidados. Y no te dice quién trabaja allí ni qué documentos publicaron por error.</p>
+
+<p>Por eso el resto del laboratorio existe. Shodan y Censys miran servicios. theHarvester y Hunter buscan nombres. BuiltWith y Netcraft describen la tecnología. FOCA abre documentos. Maltego conecta los puntos. La <a href="../reference/herramientas-osint.html">referencia de herramientas</a> explica cuál usar según la pregunta y qué límite tiene cada una.</p>
+
+<div class="source">
+  <span class="label">Fuente primaria</span>
+  <p>La página de ICANN sobre <a href="https://www.icann.org/en/contracted-parties/registry-operators/resources/registration-data-access-protocol">Registration Data Access Protocol</a> explica qué es RDAP y por qué reemplaza a whois. Para dig, el manual de BIND es la referencia real: <code>man dig</code> en tu terminal o la <a href="https://bind9.readthedocs.io/en/latest/manpages.html">documentación de ISC</a>.</p>
+</div>
+
+<div class="warn">
+  <span class="label">Límite legal y ético</span>
+  <p>Consultar registros públicos de un dominio ajeno es normal. Escanear puertos, probar credenciales o descargar documentos masivamente no lo es sin autorización escrita. Si el laboratorio te asigna un dominio, ese es tu alcance. Si no, quédate en consultas pasivas y en dominios públicos.</p>
+</div>
+
+<div class="next">
+  <span class="label">Siguiente</span>
+  <p><a href="0002-dmarc-en-una-linea.html">Lección 02: DMARC, la política que cabe en un TXT</a>. Vas a leer el registro que decide qué pasa con un correo falsificado.</p>
+</div>
+
+</main>
+
+<footer class="footer">
+  <p>Curso de OSINT y DMARC · <a href="../index.html">índice</a> · <a href="../reference/glosario.html">glosario</a> · <a href="../reference/herramientas-osint.html">herramientas</a></p>
+  <p>¿Algo no cuadra? Pregúntale a tu profesor en el chat. Para eso está.</p>
+</footer>
+
+</div>
+</body>
+</html>

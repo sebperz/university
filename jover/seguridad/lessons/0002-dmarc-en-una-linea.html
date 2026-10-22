@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lección 02 · DMARC: la política que cabe en un TXT</title>
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/copy.js" defer></script>
+<script src="../assets/dmarc-decoder.js" defer></script>
+</head>
+<body>
+<div class="page">
+
+<nav class="crumbs">
+  <a href="../index.html">Curso</a><span>/</span>Lección 02
+</nav>
+
+<header>
+  <p class="eyebrow">Lección 02 · Correo</p>
+  <h1>DMARC: la política que cabe en un TXT</h1>
+  <p class="lede">Un dominio publica en DNS qué hacer con el correo que dice venir de él y no se autentica. Vas a leer ese registro y decidir si un mensaje falsificado entra, va a spam o rebota.</p>
+  <div class="meta">
+    <span>30 minutos</span>
+    <span>Requiere la lección 01</span>
+    <span>Práctica con dominios públicos</span>
+  </div>
+</header>
+
+<main>
+
+<p>El correo tiene un problema de diseño que nadie va a arreglar: el campo <code>From:</code> es texto libre. Cualquiera puede escribir <code>gerencia@tu-banco.com</code> y enviarlo. El protocolo SMTP no comprueba que quien envía controle ese dominio.</p>
+
+<p>Durante años se añadieron dos parches. SPF autoriza direcciones IP para el dominio del sobre, el que casi nunca ves. DKIM firma el mensaje y declara un dominio firmante. Ninguno de los dos mira el <code>From:</code> que muestra tu cliente de correo. Por eso un mensaje podía pasar SPF y DKIM y aun así ser un fraude.</p>
+
+<div class="flow">
+  <div>From: gerencia@tu-banco.com</div>
+  <div class="arrow">→</div>
+  <div>¿SPF pasa?</div>
+  <div class="arrow">+</div>
+  <div>¿DKIM pasa?</div>
+  <div class="arrow">→</div>
+  <div>¿Coincide el dominio?</div>
+  <div class="arrow">→</div>
+  <div>Política DMARC</div>
+</div>
+
+<p>DMARC une las piezas. Un mensaje pasa si SPF o DKIM pasan y además el dominio autenticado coincide con el dominio del <code>From:</code>. Si falla, el dominio decide qué hacer mediante una política publicada en DNS.</p>
+
+<h2>Dónde vive el registro</h2>
+
+<p>Siempre en el mismo sitio: un TXT en <code>_dmarc.</code> más el dominio. Para <code>example.com</code>, se consulta <code>_dmarc.example.com</code>.</p>
+
+<pre class="cmd" data-copy="dig +short TXT _dmarc.github.com"><code>$ dig +short TXT _dmarc.github.com
+"v=DMARC1; p=quarantine; sp=reject; pct=100; rua=mailto:dmarc@github.com; ruf=mailto:dmarc@github.com; fo=1"</code></pre>
+
+<p>Ese registro se lee de izquierda a derecha, separado por punto y coma. La primera etiqueta manda: si no empieza por <code>v=DMARC1</code>, el receptor ignora todo el registro. No es un detalle menor. Un espacio o un orden equivocado deja el dominio sin política, aunque el TXT exista.</p>
+
+<aside class="sidenote">
+  <strong>Un TXT puede venir partido.</strong> DNS permite varias cadenas en un mismo TXT. Los receptores las concatenan. Si tu terminal muestra varias líneas entre comillas, únelas antes de leer. Le pasó a <code>amazon.com</code>.
+</aside>
+
+<h2>Anatomía de un registro</h2>
+
+<table>
+  <thead>
+    <tr><th>Etiqueta</th><th>Qué controla</th><th>Valores</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><span class="tag">v</span></td><td>Versión. Obligatoria y primera</td><td><code>DMARC1</code></td></tr>
+    <tr><td><span class="tag">p</span></td><td>Política para el dominio</td><td><code>none</code>, <code>quarantine</code>, <code>reject</code></td></tr>
+    <tr><td><span class="tag">sp</span></td><td>Política para subdominios existentes</td><td>Los mismos tres valores</td></tr>
+    <tr><td><span class="tag">np</span></td><td>Política para subdominios inexistentes</td><td>Los mismos tres valores</td></tr>
+    <tr><td><span class="tag">adkim</span> <span class="tag">aspf</span></td><td>Alineación estricta o relajada</td><td><code>r</code> relajada, <code>s</code> estricta</td></tr>
+    <tr><td><span class="tag">rua</span></td><td>Destino de informes agregados</td><td>Lista de <code>mailto:</code></td></tr>
+    <tr><td><span class="tag">ruf</span></td><td>Destino de informes por mensaje fallido</td><td>Lista de <code>mailto:</code></td></tr>
+    <tr><td><span class="tag">fo</span></td><td>Cuándo generar informes de fallo</td><td><code>0</code>, <code>1</code>, <code>d</code>, <code>s</code></td></tr>
+  </tbody>
+</table>
+
+<p>El RFC 9989, publicado en mayo de 2026, cambió varias cosas. Eliminó <code>pct</code>, añadió <code>t</code> para pruebas y <code>np</code> para subdominios que no existen. Muchos dominios siguen publicando <code>pct</code> porque funciona en la práctica, pero ya es sintaxis heredada. La referencia de DMARC tiene la tabla completa, incluidas las etiquetas nuevas.</p>
+
+<h2>Las tres políticas</h2>
+
+<table>
+  <thead>
+    <tr><th>Política</th><th>Qué hace el receptor</th><th>Cuándo usarla</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>none</code></td><td>Entrega el mensaje y, si hay <code>rua</code>, te envía informes</td><td>Primeras semanas, para ver qué servicios envían correo en tu nombre</td></tr>
+    <tr><td><code>quarantine</code></td><td>Lo marca como sospechoso o lo manda a spam</td><td>Cuando ya identificaste los emisores legítimos</td></tr>
+    <tr><td><code>reject</code></td><td>Lo rechaza antes de entregarlo</td><td>Cuando el correo legítimo está autenticado y no puedes permitir suplantación</td></tr>
+  </tbody>
+</table>
+
+<p>La secuencia sana es <code>none</code> con <code>rua</code>, leer informes, corregir emisores, pasar a <code>quarantine</code>, medir, y terminar en <code>reject</code>. Saltarse los informes es la causa habitual de bloquear correo propio: facturas, boletines o la herramienta de encuestas que nadie recordaba.</p>
+
+<div class="warn">
+  <span class="label">Ojo con la falsa protección</span>
+  <p><code>p=none</code> no impide nada. Si además no tiene <code>rua</code>, tampoco te cuenta nada. Es un adorno. Y <code>p=reject</code> sin <code>rua</code> protege, pero te deja ciego ante los fallos. Protección y visibilidad son decisiones separadas.</p>
+</div>
+
+<h2>Alineación, la palabra que decide</h2>
+
+<p>Que SPF pase no basta. El dominio que SPF autenticó tiene que coincidir con el <code>From:</code>. Esa coincidencia se llama alineación y tiene dos modos.</p>
+
+<p>En modo relajado (<code>r</code>, el predeterminado), basta con que compartan dominio organizacional. Si el <code>From:</code> es <code>alertas@news.example.com</code> y DKIM firma con <code>d=example.com</code>, están alineados. En modo estricto (<code>s</code>), los nombres deben ser idénticos y ese caso falla.</p>
+
+<aside class="sidenote">
+  <strong>Dominio organizacional.</strong> Es el dominio que alguien registró, no el subdominio. Para <code>mail.example.co.uk</code> es <code>example.co.uk</code>, no <code>co.uk</code>. DMARC usa la lista de sufijos públicos para calcularlo. El RFC 9989 lo explica en la sección 3.2.14.
+</aside>
+
+<p>La alineación estricta es más segura y más frágil. Si tienes muchos subdominios y servicios externos, empieza relajado. Si tu dominio es pequeño y controlas todos los emisores, estricto evita que un subdominio comprometido herede la confianza del dominio principal.</p>
+
+<h2>Lo que DMARC no detiene</h2>
+
+<p>Un dominio parecido sigue funcionando: <code>tu-banco.co</code> no está cubierto por la política de <code>tu-banco.com</code>. El nombre visible del remitente tampoco se valida, así que un correo puede mostrar “Soporte de tu banco” con una dirección distinta. Y si roban una cuenta legítima, el mensaje pasa todas las pruebas porque realmente salió de tu infraestructura.</p>
+
+<p>El RFC 9989 lo dice en la sección 2.2 y en las consideraciones de seguridad. Citar esto en un informe te evita la frase incorrecta “DMARC elimina el phishing”. DMARC elimina un tipo concreto de suplantación: el uso no autorizado de tu dominio exacto en el <code>From:</code>.</p>
+
+<h2>Practica con tres dominios</h2>
+
+<p>Ejecuta estas consultas y pega cada registro en el lector. Compara las políticas y fíjate en quién recibe los informes.</p>
+
+<pre class="cmd" data-copy="for d in google.com github.com amazon.com; do echo &quot;## $d&quot;; dig +short TXT _dmarc.$d; done"><code>$ for d in google.com github.com amazon.com; do
+    echo "## $d"; dig +short TXT _dmarc.$d
+  done
+## google.com
+"v=DMARC1; p=reject; rua=mailto:mailauth-reports@google.com"
+## github.com
+"v=DMARC1; p=quarantine; sp=reject; pct=100; rua=mailto:dmarc@github.com; ..."
+## amazon.com
+"v=DMARC1;" "p=quarantine;" "pct=100;" "rua=mailto:report@dmarc.amazon.com;" ...</code></pre>
+
+<div class="decoder" data-decoder>
+  <label for="dmarc-input">Pega un registro DMARC completo</label>
+  <textarea id="dmarc-input" spellcheck="false">v=DMARC1; p=quarantine; sp=reject; adkim=r; aspf=r; rua=mailto:dmarc@example.com</textarea>
+  <button type="button">Leer registro</button>
+  <div class="decoder__out" aria-live="polite"></div>
+</div>
+
+<h2>Qué has ganado</h2>
+
+<p>Puedes tomar cualquier dominio, encontrar su política, traducir cada etiqueta y explicar qué le pasa a un correo que falla. Eso es exactamente lo que se espera en la parte de correo del laboratorio, y es la base para interpretar los informes agregados que verás más adelante.</p>
+
+<div class="quiz" data-quiz>
+  <h3>Comprueba que lo tienes</h3>
+  <p class="quiz__intro">Cuatro decisiones. Elige una; la explicación aparece al instante.</p>
+
+  <div class="quiz__q" data-answer="b">
+    <p class="quiz__prompt">Un mensaje falla SPF y DKIM. El dominio del <code>From:</code> publica <code>p=quarantine</code>. ¿Qué hace el receptor?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">Lo rechaza en la conexión</button>
+      <button class="choice" type="button" data-choice="b">Lo marca como sospechoso</button>
+      <button class="choice" type="button" data-choice="c">Lo entrega sin cambios</button>
+      <button class="choice" type="button" data-choice="d">Lo firma de nuevo</button>
+    </div>
+    <p class="quiz__why" hidden><code>quarantine</code> pide tratar el mensaje como sospechoso: spam o marca visible. Solo <code>reject</code> pide rechazo.</p>
+  </div>
+
+  <div class="quiz__q" data-answer="c">
+    <p class="quiz__prompt">Un dominio publica <code>v=DMARC1; p=none; rua=mailto:dmarc@dominio.com</code>. ¿Qué obtiene?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">Rechazo y cifrado</button>
+      <button class="choice" type="button" data-choice="b">Firma y reputación</button>
+      <button class="choice" type="button" data-choice="c">Visibilidad sin bloqueo</button>
+      <button class="choice" type="button" data-choice="d">Bloqueo de suplantación</button>
+    </div>
+    <p class="quiz__why" hidden><code>p=none</code> no pide bloquear. Con <code>rua</code>, recibe informes sobre el correo que falla. Es monitoreo, no protección.</p>
+  </div>
+
+  <div class="quiz__q" data-answer="a">
+    <p class="quiz__prompt">DKIM firma con <code>d=example.com</code>. El <code>From:</code> es <code>alertas@news.example.com</code>. Con <code>adkim=r</code>, ¿hay alineación?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">Sí, comparten dominio organizacional</button>
+      <button class="choice" type="button" data-choice="b">No, los nombres son distintos</button>
+      <button class="choice" type="button" data-choice="c">Solo si SPF también pasa</button>
+      <button class="choice" type="button" data-choice="d">Solo si existe el subdominio</button>
+    </div>
+    <p class="quiz__why" hidden>La alineación relajada compara el dominio organizacional. <code>news.example.com</code> y <code>example.com</code> comparten <code>example.com</code>. En modo estricto, no.</p>
+  </div>
+
+  <div class="quiz__q" data-answer="d">
+    <p class="quiz__prompt">¿A qué aplica la etiqueta <code>sp=reject</code>?</p>
+    <div class="quiz__options">
+      <button class="choice" type="button" data-choice="a">Al dominio raíz</button>
+      <button class="choice" type="button" data-choice="b">A todos los TLD</button>
+      <button class="choice" type="button" data-choice="c">A los correos entrantes</button>
+      <button class="choice" type="button" data-choice="d">A los subdominios</button>
+    </div>
+    <p class="quiz__why" hidden><code>sp</code> fija la política de los subdominios existentes. El dominio raíz se rige por <code>p</code>. Para subdominios inexistentes está <code>np</code>.</p>
+  </div>
+
+  <p class="quiz__score" aria-live="polite"></p>
+  <button class="quiz__reset" type="button">Reiniciar</button>
+</div>
+
+<div class="source">
+  <span class="label">Fuente primaria</span>
+  <p>Lee la sección 4.7 del <a href="https://www.rfc-editor.org/rfc/rfc9989.html#section-4.7">RFC 9989</a>, que define cada etiqueta, y la 4.10.1, que explica cómo se descubre la política subiendo por el árbol DNS. Es más corto de lo que parece y resuelve casi todas las dudas que aparezcan. Para el contexto práctico, las <a href="https://support.google.com/a/answer/81126">reglas de remitentes de Gmail</a> explican por qué los dominios grandes publican DMARC desde 2024.</p>
+</div>
+
+<div class="next">
+  <span class="label">Para seguir</span>
+  <p>La <a href="../reference/dmarc.html">chuleta de DMARC</a> tiene todas las etiquetas y el flujo de decisión en una página. La <a href="../reference/herramientas-osint.html">referencia de herramientas</a> cubre el resto del laboratorio. Cuando tengas dominio asignado, el siguiente paso es ejecutar theHarvester y Shodan sobre él, con alcance escrito.</p>
+</div>
+
+</main>
+
+<footer class="footer">
+  <p>Curso de OSINT y DMARC · <a href="../index.html">índice</a> · <a href="../reference/glosario.html">glosario</a> · <a href="../reference/dmarc.html">chuleta DMARC</a></p>
+  <p>¿Alguna etiqueta no te cuadra? Pregúntale a tu profesor en el chat.</p>
+</footer>
+
+</div>
+</body>
+</html>
